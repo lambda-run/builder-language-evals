@@ -1,0 +1,112 @@
+id: t01_email_router
+name: "Email importance router with multi-signal scoring"
+why_complex: |
+  Combines three independent scoring signals (sender allowlist, keyword match, recency)
+  with weighted aggregation, then routes by threshold band. Has nested conditional logic
+  (VIP override beats keyword warn beats recency warn) and is exactly the kind of spec
+  where prose phrasing easily becomes ambiguous.
+
+# Gold builder spec — hand-written. The English versions are derived from this.
+gold_builder: |
+  EmailRouter
+    .fetch(source: "inbox", filter: "unread")
+    .score(Importance
+        .from_list(senders: vip_allowlist, weight: 0.5)         // VIP senders dominate
+        .keyword_match(patterns: urgent_words, weight: 0.3)     // urgent/asap/blocker in subject
+        .reply_window(threshold_hours: 24, weight: 0.2))        // older = more important
+    .aggregate(method: "weighted_sum")
+    .route(
+        critical: ">= 0.7",     // immediate sms
+        warn:     ">= 0.4",     // email
+        info:     "< 0.4")      // skip / digest
+
+# Function signature the executor must implement
+function_signature: |
+  def categorize_email(email: dict) -> str:
+      """
+      Args:
+          email: {
+              "from": str,
+              "subject": str,
+              "hours_unread": int,
+              "vip_allowlist": list[str],
+              "urgent_words": list[str]
+          }
+      Returns:
+          One of "critical", "warn", "info"
+      """
+
+# Hidden test cases — the agent's function is called with each input,
+# output compared to expected. Score = pass count / total.
+test_cases:
+  - name: "vip + urgent + old → critical (all signals fire)"
+    input:
+      from: "ceo@acme.com"
+      subject: "URGENT: outage in prod"
+      hours_unread: 48
+      vip_allowlist: ["ceo@acme.com", "cto@acme.com"]
+      urgent_words: ["urgent", "asap", "blocker", "outage"]
+    expected: "critical"
+
+  - name: "vip alone → critical (0.5 weight tips it)"
+    input:
+      from: "ceo@acme.com"
+      subject: "lunch tomorrow?"
+      hours_unread: 2
+      vip_allowlist: ["ceo@acme.com"]
+      urgent_words: ["urgent", "asap"]
+    expected: "warn"  # 0.5 weight = 0.5, just above 0.4 threshold
+
+  - name: "urgent keyword + recent + non-vip → warn"
+    input:
+      from: "random@x.com"
+      subject: "ASAP question"
+      hours_unread: 1
+      vip_allowlist: ["ceo@acme.com"]
+      urgent_words: ["urgent", "asap"]
+    expected: "info"  # 0.3 only = below 0.4
+
+  - name: "old + non-vip + no keywords → info"
+    input:
+      from: "newsletter@x.com"
+      subject: "weekly digest"
+      hours_unread: 72
+      vip_allowlist: ["ceo@acme.com"]
+      urgent_words: ["urgent"]
+    expected: "info"  # 0.2 weight alone < 0.4 threshold
+
+  - name: "vip + recent → critical (vip dominates)"
+    input:
+      from: "cto@acme.com"
+      subject: "fyi"
+      hours_unread: 1
+      vip_allowlist: ["ceo@acme.com", "cto@acme.com"]
+      urgent_words: ["urgent"]
+    expected: "warn"  # 0.5 weight = 0.5, in warn band
+
+  - name: "all three signals at max → critical"
+    input:
+      from: "ceo@acme.com"
+      subject: "urgent asap blocker"
+      hours_unread: 36
+      vip_allowlist: ["ceo@acme.com"]
+      urgent_words: ["urgent", "asap", "blocker"]
+    expected: "critical"  # 0.5 + 0.3 + 0.2 = 1.0
+
+  - name: "no signals → info"
+    input:
+      from: "random@x.com"
+      subject: "hi"
+      hours_unread: 4
+      vip_allowlist: ["ceo@acme.com"]
+      urgent_words: ["urgent"]
+    expected: "info"  # 0 → info
+
+  - name: "keyword match in subject is case-insensitive"
+    input:
+      from: "vendor@x.com"
+      subject: "URGENT update needed"
+      hours_unread: 1
+      vip_allowlist: ["ceo@acme.com"]
+      urgent_words: ["urgent"]
+    expected: "info"  # 0.3 weight only → info

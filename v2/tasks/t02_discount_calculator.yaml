@@ -1,0 +1,55 @@
+id: t02_discount_calculator
+name: "Tiered discount with stacking rules"
+why_complex: |
+  Multi-tier discount logic with conditional stacking. The order of evaluation matters:
+  promo code applies first (if valid), then tier discount, then loyalty bonus, then
+  cap at maximum. Easy to mis-order in prose; explicit in builder.
+
+gold_builder: |
+  DiscountCalculator
+    .input(cart: Cart, customer: Customer, promo_code: optional)
+    .sequence(
+        validate_promo(code: promo_code, customer: customer),  // returns 0-20% or null if invalid
+        apply_tier_discount(tier: customer.tier),              // bronze: 0%, silver: 5%, gold: 10%, platinum: 15%
+        apply_loyalty_bonus(years: customer.years_active),     // +1% per year, max 5%
+        cap_at_maximum(max_total: 0.30))                       // total discount never exceeds 30%
+    .output(final_discount_pct: float)
+
+function_signature: |
+  def calculate_discount(cart: dict, customer: dict, promo_code: str | None) -> float:
+      """
+      Args:
+          cart: { "subtotal": float, "items": int }
+          customer: {
+              "tier": "bronze" | "silver" | "gold" | "platinum",
+              "years_active": int
+          }
+          promo_code: str or None
+      Returns:
+          Final discount percentage as a float.
+      """
+
+test_cases:
+  - name: "no promo, bronze, 0 years → 0%"
+    input: { cart: { subtotal: 100, items: 1 }, customer: { tier: "bronze", years_active: 0 }, promo_code: null }
+    expected: 0.0
+
+  - name: "SAVE10, silver, 2 years → 0.17"
+    input: { cart: { subtotal: 100, items: 1 }, customer: { tier: "silver", years_active: 2 }, promo_code: "SAVE10" }
+    expected: 0.17  # 0.10 + 0.05 + 0.02 = 0.17
+
+  - name: "SAVE20, platinum, 10 years → cap at 0.30"
+    input: { cart: { subtotal: 100, items: 1 }, customer: { tier: "platinum", years_active: 10 }, promo_code: "SAVE20" }
+    expected: 0.30  # 0.20 + 0.15 + 0.05 = 0.40, cap at 0.30
+
+  - name: "invalid promo, gold, 3 years → 0.13"
+    input: { cart: { subtotal: 100, items: 1 }, customer: { tier: "gold", years_active: 3 }, promo_code: "FAKEPROMO" }
+    expected: 0.13  # 0 + 0.10 + 0.03
+
+  - name: "no promo, platinum, 1 year → 0.16"
+    input: { cart: { subtotal: 100, items: 1 }, customer: { tier: "platinum", years_active: 1 }, promo_code: null }
+    expected: 0.16  # 0 + 0.15 + 0.01
+
+  - name: "SAVE10, bronze, 7 years → 0.15 (loyalty caps at 0.05)"
+    input: { cart: { subtotal: 100, items: 1 }, customer: { tier: "bronze", years_active: 7 }, promo_code: "SAVE10" }
+    expected: 0.15  # 0.10 + 0 + 0.05 (capped from 0.07)

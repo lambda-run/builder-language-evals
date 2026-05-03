@@ -1,0 +1,1460 @@
+{
+  "ran_at": "2026-05-03T21:21:17.527Z",
+  "cells": [
+    {
+      "task_id": "t01_email_router",
+      "condition": "builder",
+      "extracted": true,
+      "passed": 8,
+      "total": 8,
+      "cases": [
+        {
+          "name": "vip + urgent + old → critical (all signals fire)",
+          "passed": true,
+          "actual": "critical",
+          "expected": "critical"
+        },
+        {
+          "name": "vip alone → critical (0.5 weight tips it)",
+          "passed": true,
+          "actual": "warn",
+          "expected": "warn"
+        },
+        {
+          "name": "urgent keyword + recent + non-vip → warn",
+          "passed": true,
+          "actual": "info",
+          "expected": "info"
+        },
+        {
+          "name": "old + non-vip + no keywords → info",
+          "passed": true,
+          "actual": "info",
+          "expected": "info"
+        },
+        {
+          "name": "vip + recent → critical (vip dominates)",
+          "passed": true,
+          "actual": "warn",
+          "expected": "warn"
+        },
+        {
+          "name": "all three signals at max → critical",
+          "passed": true,
+          "actual": "critical",
+          "expected": "critical"
+        },
+        {
+          "name": "no signals → info",
+          "passed": true,
+          "actual": "info",
+          "expected": "info"
+        },
+        {
+          "name": "keyword match in subject is case-insensitive",
+          "passed": true,
+          "actual": "info",
+          "expected": "info"
+        }
+      ]
+    },
+    {
+      "task_id": "t01_email_router",
+      "condition": "markdown",
+      "extracted": true,
+      "passed": 8,
+      "total": 8,
+      "cases": [
+        {
+          "name": "vip + urgent + old → critical (all signals fire)",
+          "passed": true,
+          "actual": "critical",
+          "expected": "critical"
+        },
+        {
+          "name": "vip alone → critical (0.5 weight tips it)",
+          "passed": true,
+          "actual": "warn",
+          "expected": "warn"
+        },
+        {
+          "name": "urgent keyword + recent + non-vip → warn",
+          "passed": true,
+          "actual": "info",
+          "expected": "info"
+        },
+        {
+          "name": "old + non-vip + no keywords → info",
+          "passed": true,
+          "actual": "info",
+          "expected": "info"
+        },
+        {
+          "name": "vip + recent → critical (vip dominates)",
+          "passed": true,
+          "actual": "warn",
+          "expected": "warn"
+        },
+        {
+          "name": "all three signals at max → critical",
+          "passed": true,
+          "actual": "critical",
+          "expected": "critical"
+        },
+        {
+          "name": "no signals → info",
+          "passed": true,
+          "actual": "info",
+          "expected": "info"
+        },
+        {
+          "name": "keyword match in subject is case-insensitive",
+          "passed": true,
+          "actual": "info",
+          "expected": "info"
+        }
+      ]
+    },
+    {
+      "task_id": "t01_email_router",
+      "condition": "plain",
+      "extracted": true,
+      "passed": 8,
+      "total": 8,
+      "cases": [
+        {
+          "name": "vip + urgent + old → critical (all signals fire)",
+          "passed": true,
+          "actual": "critical",
+          "expected": "critical"
+        },
+        {
+          "name": "vip alone → critical (0.5 weight tips it)",
+          "passed": true,
+          "actual": "warn",
+          "expected": "warn"
+        },
+        {
+          "name": "urgent keyword + recent + non-vip → warn",
+          "passed": true,
+          "actual": "info",
+          "expected": "info"
+        },
+        {
+          "name": "old + non-vip + no keywords → info",
+          "passed": true,
+          "actual": "info",
+          "expected": "info"
+        },
+        {
+          "name": "vip + recent → critical (vip dominates)",
+          "passed": true,
+          "actual": "warn",
+          "expected": "warn"
+        },
+        {
+          "name": "all three signals at max → critical",
+          "passed": true,
+          "actual": "critical",
+          "expected": "critical"
+        },
+        {
+          "name": "no signals → info",
+          "passed": true,
+          "actual": "info",
+          "expected": "info"
+        },
+        {
+          "name": "keyword match in subject is case-insensitive",
+          "passed": true,
+          "actual": "info",
+          "expected": "info"
+        }
+      ]
+    },
+    {
+      "task_id": "t02_discount_calculator",
+      "condition": "builder",
+      "extracted": true,
+      "passed": 1,
+      "total": 6,
+      "cases": [
+        {
+          "name": "no promo, bronze, 0 years → 0%",
+          "passed": true,
+          "actual": 0,
+          "expected": 0
+        },
+        {
+          "name": "SAVE10, silver, 2 years → 0.17",
+          "passed": false,
+          "actual": 17,
+          "expected": 0.17
+        },
+        {
+          "name": "SAVE20, platinum, 10 years → cap at 0.30",
+          "passed": false,
+          "actual": 30,
+          "expected": 0.3
+        },
+        {
+          "name": "invalid promo, gold, 3 years → 0.13",
+          "passed": false,
+          "actual": 13,
+          "expected": 0.13
+        },
+        {
+          "name": "no promo, platinum, 1 year → 0.16",
+          "passed": false,
+          "actual": 16,
+          "expected": 0.16
+        },
+        {
+          "name": "SAVE10, bronze, 7 years → 0.15 (loyalty caps at 0.05)",
+          "passed": false,
+          "actual": 15,
+          "expected": 0.15
+        }
+      ]
+    },
+    {
+      "task_id": "t02_discount_calculator",
+      "condition": "markdown",
+      "extracted": true,
+      "passed": 1,
+      "total": 6,
+      "cases": [
+        {
+          "name": "no promo, bronze, 0 years → 0%",
+          "passed": true,
+          "actual": 0,
+          "expected": 0
+        },
+        {
+          "name": "SAVE10, silver, 2 years → 0.17",
+          "passed": false,
+          "actual": 17,
+          "expected": 0.17
+        },
+        {
+          "name": "SAVE20, platinum, 10 years → cap at 0.30",
+          "passed": false,
+          "actual": 30,
+          "expected": 0.3
+        },
+        {
+          "name": "invalid promo, gold, 3 years → 0.13",
+          "passed": false,
+          "actual": 13,
+          "expected": 0.13
+        },
+        {
+          "name": "no promo, platinum, 1 year → 0.16",
+          "passed": false,
+          "actual": 16,
+          "expected": 0.16
+        },
+        {
+          "name": "SAVE10, bronze, 7 years → 0.15 (loyalty caps at 0.05)",
+          "passed": false,
+          "actual": 15,
+          "expected": 0.15
+        }
+      ]
+    },
+    {
+      "task_id": "t02_discount_calculator",
+      "condition": "plain",
+      "extracted": true,
+      "passed": 1,
+      "total": 6,
+      "cases": [
+        {
+          "name": "no promo, bronze, 0 years → 0%",
+          "passed": true,
+          "actual": 0,
+          "expected": 0
+        },
+        {
+          "name": "SAVE10, silver, 2 years → 0.17",
+          "passed": false,
+          "actual": 17,
+          "expected": 0.17
+        },
+        {
+          "name": "SAVE20, platinum, 10 years → cap at 0.30",
+          "passed": false,
+          "actual": 30,
+          "expected": 0.3
+        },
+        {
+          "name": "invalid promo, gold, 3 years → 0.13",
+          "passed": false,
+          "actual": 13,
+          "expected": 0.13
+        },
+        {
+          "name": "no promo, platinum, 1 year → 0.16",
+          "passed": false,
+          "actual": 16,
+          "expected": 0.16
+        },
+        {
+          "name": "SAVE10, bronze, 7 years → 0.15 (loyalty caps at 0.05)",
+          "passed": false,
+          "actual": 15,
+          "expected": 0.15
+        }
+      ]
+    },
+    {
+      "task_id": "t03_form_validator",
+      "condition": "builder",
+      "extracted": true,
+      "passed": 7,
+      "total": 7,
+      "cases": [
+        {
+          "name": "all valid",
+          "passed": true,
+          "actual": {
+            "valid": true,
+            "errors": []
+          },
+          "expected": {
+            "valid": true,
+            "errors": []
+          }
+        },
+        {
+          "name": "bad email + bad age",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "age",
+              "email"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "age",
+              "email"
+            ]
+          }
+        },
+        {
+          "name": "passwords don't match",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "password_confirm"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "password_confirm"
+            ]
+          }
+        },
+        {
+          "name": "weak password (no digit)",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "password"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "password"
+            ]
+          }
+        },
+        {
+          "name": "end date before start",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "end_date"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "end_date"
+            ]
+          }
+        },
+        {
+          "name": "paid account but no terms accepted",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "accepted_terms"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "accepted_terms"
+            ]
+          }
+        },
+        {
+          "name": "multiple failures sorted",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "accepted_terms",
+              "age",
+              "email",
+              "end_date",
+              "password",
+              "password_confirm"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "accepted_terms",
+              "age",
+              "email",
+              "end_date",
+              "password",
+              "password_confirm"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "task_id": "t03_form_validator",
+      "condition": "markdown",
+      "extracted": true,
+      "passed": 7,
+      "total": 7,
+      "cases": [
+        {
+          "name": "all valid",
+          "passed": true,
+          "actual": {
+            "valid": true,
+            "errors": []
+          },
+          "expected": {
+            "valid": true,
+            "errors": []
+          }
+        },
+        {
+          "name": "bad email + bad age",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "age",
+              "email"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "age",
+              "email"
+            ]
+          }
+        },
+        {
+          "name": "passwords don't match",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "password_confirm"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "password_confirm"
+            ]
+          }
+        },
+        {
+          "name": "weak password (no digit)",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "password"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "password"
+            ]
+          }
+        },
+        {
+          "name": "end date before start",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "end_date"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "end_date"
+            ]
+          }
+        },
+        {
+          "name": "paid account but no terms accepted",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "accepted_terms"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "accepted_terms"
+            ]
+          }
+        },
+        {
+          "name": "multiple failures sorted",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "accepted_terms",
+              "age",
+              "email",
+              "end_date",
+              "password",
+              "password_confirm"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "accepted_terms",
+              "age",
+              "email",
+              "end_date",
+              "password",
+              "password_confirm"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "task_id": "t03_form_validator",
+      "condition": "plain",
+      "extracted": true,
+      "passed": 7,
+      "total": 7,
+      "cases": [
+        {
+          "name": "all valid",
+          "passed": true,
+          "actual": {
+            "valid": true,
+            "errors": []
+          },
+          "expected": {
+            "valid": true,
+            "errors": []
+          }
+        },
+        {
+          "name": "bad email + bad age",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "age",
+              "email"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "age",
+              "email"
+            ]
+          }
+        },
+        {
+          "name": "passwords don't match",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "password_confirm"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "password_confirm"
+            ]
+          }
+        },
+        {
+          "name": "weak password (no digit)",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "password"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "password"
+            ]
+          }
+        },
+        {
+          "name": "end date before start",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "end_date"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "end_date"
+            ]
+          }
+        },
+        {
+          "name": "paid account but no terms accepted",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "accepted_terms"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "accepted_terms"
+            ]
+          }
+        },
+        {
+          "name": "multiple failures sorted",
+          "passed": true,
+          "actual": {
+            "valid": false,
+            "errors": [
+              "accepted_terms",
+              "age",
+              "email",
+              "end_date",
+              "password",
+              "password_confirm"
+            ]
+          },
+          "expected": {
+            "valid": false,
+            "errors": [
+              "accepted_terms",
+              "age",
+              "email",
+              "end_date",
+              "password",
+              "password_confirm"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "task_id": "t04_order_router",
+      "condition": "builder",
+      "extracted": true,
+      "passed": 8,
+      "total": 8,
+      "cases": [
+        {
+          "name": "fragile heavy → reject",
+          "passed": true,
+          "actual": {
+            "action": "reject",
+            "carrier": null,
+            "service": null,
+            "reason": "fragile_too_heavy"
+          },
+          "expected": {
+            "action": "reject",
+            "carrier": null,
+            "service": null,
+            "reason": "fragile_too_heavy"
+          }
+        },
+        {
+          "name": "expedited beats international (service tier)",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "FastShip",
+            "service": "next_day",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "FastShip",
+            "service": "next_day",
+            "reason": null
+          }
+        },
+        {
+          "name": "international heavy → with_customs",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "GlobalPost",
+            "service": "with_customs",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "GlobalPost",
+            "service": "with_customs",
+            "reason": null
+          }
+        },
+        {
+          "name": "international light → standard",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "GlobalPost",
+            "service": "standard",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "GlobalPost",
+            "service": "standard",
+            "reason": null
+          }
+        },
+        {
+          "name": "domestic heavy → freight",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "DomFreight",
+            "service": "freight",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "DomFreight",
+            "service": "freight",
+            "reason": null
+          }
+        },
+        {
+          "name": "domestic light → local post",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "LocalPost",
+            "service": "standard",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "LocalPost",
+            "service": "standard",
+            "reason": null
+          }
+        },
+        {
+          "name": "fragile but light → not rejected",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "LocalPost",
+            "service": "standard",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "LocalPost",
+            "service": "standard",
+            "reason": null
+          }
+        },
+        {
+          "name": "expedited fragile heavy → STILL rejected (fragile-rule first)",
+          "passed": true,
+          "actual": {
+            "action": "reject",
+            "carrier": null,
+            "service": null,
+            "reason": "fragile_too_heavy"
+          },
+          "expected": {
+            "action": "reject",
+            "carrier": null,
+            "service": null,
+            "reason": "fragile_too_heavy"
+          }
+        }
+      ]
+    },
+    {
+      "task_id": "t04_order_router",
+      "condition": "markdown",
+      "extracted": true,
+      "passed": 8,
+      "total": 8,
+      "cases": [
+        {
+          "name": "fragile heavy → reject",
+          "passed": true,
+          "actual": {
+            "action": "reject",
+            "carrier": null,
+            "service": null,
+            "reason": "fragile_too_heavy"
+          },
+          "expected": {
+            "action": "reject",
+            "carrier": null,
+            "service": null,
+            "reason": "fragile_too_heavy"
+          }
+        },
+        {
+          "name": "expedited beats international (service tier)",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "FastShip",
+            "service": "next_day",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "FastShip",
+            "service": "next_day",
+            "reason": null
+          }
+        },
+        {
+          "name": "international heavy → with_customs",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "GlobalPost",
+            "service": "with_customs",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "GlobalPost",
+            "service": "with_customs",
+            "reason": null
+          }
+        },
+        {
+          "name": "international light → standard",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "GlobalPost",
+            "service": "standard",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "GlobalPost",
+            "service": "standard",
+            "reason": null
+          }
+        },
+        {
+          "name": "domestic heavy → freight",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "DomFreight",
+            "service": "freight",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "DomFreight",
+            "service": "freight",
+            "reason": null
+          }
+        },
+        {
+          "name": "domestic light → local post",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "LocalPost",
+            "service": "standard",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "LocalPost",
+            "service": "standard",
+            "reason": null
+          }
+        },
+        {
+          "name": "fragile but light → not rejected",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "LocalPost",
+            "service": "standard",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "LocalPost",
+            "service": "standard",
+            "reason": null
+          }
+        },
+        {
+          "name": "expedited fragile heavy → STILL rejected (fragile-rule first)",
+          "passed": true,
+          "actual": {
+            "action": "reject",
+            "carrier": null,
+            "service": null,
+            "reason": "fragile_too_heavy"
+          },
+          "expected": {
+            "action": "reject",
+            "carrier": null,
+            "service": null,
+            "reason": "fragile_too_heavy"
+          }
+        }
+      ]
+    },
+    {
+      "task_id": "t04_order_router",
+      "condition": "plain",
+      "extracted": true,
+      "passed": 8,
+      "total": 8,
+      "cases": [
+        {
+          "name": "fragile heavy → reject",
+          "passed": true,
+          "actual": {
+            "action": "reject",
+            "carrier": null,
+            "service": null,
+            "reason": "fragile_too_heavy"
+          },
+          "expected": {
+            "action": "reject",
+            "carrier": null,
+            "service": null,
+            "reason": "fragile_too_heavy"
+          }
+        },
+        {
+          "name": "expedited beats international (service tier)",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "FastShip",
+            "service": "next_day",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "FastShip",
+            "service": "next_day",
+            "reason": null
+          }
+        },
+        {
+          "name": "international heavy → with_customs",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "GlobalPost",
+            "service": "with_customs",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "GlobalPost",
+            "service": "with_customs",
+            "reason": null
+          }
+        },
+        {
+          "name": "international light → standard",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "GlobalPost",
+            "service": "standard",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "GlobalPost",
+            "service": "standard",
+            "reason": null
+          }
+        },
+        {
+          "name": "domestic heavy → freight",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "DomFreight",
+            "service": "freight",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "DomFreight",
+            "service": "freight",
+            "reason": null
+          }
+        },
+        {
+          "name": "domestic light → local post",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "LocalPost",
+            "service": "standard",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "LocalPost",
+            "service": "standard",
+            "reason": null
+          }
+        },
+        {
+          "name": "fragile but light → not rejected",
+          "passed": true,
+          "actual": {
+            "action": "dispatch",
+            "carrier": "LocalPost",
+            "service": "standard",
+            "reason": null
+          },
+          "expected": {
+            "action": "dispatch",
+            "carrier": "LocalPost",
+            "service": "standard",
+            "reason": null
+          }
+        },
+        {
+          "name": "expedited fragile heavy → STILL rejected (fragile-rule first)",
+          "passed": true,
+          "actual": {
+            "action": "reject",
+            "carrier": null,
+            "service": null,
+            "reason": "fragile_too_heavy"
+          },
+          "expected": {
+            "action": "reject",
+            "carrier": null,
+            "service": null,
+            "reason": "fragile_too_heavy"
+          }
+        }
+      ]
+    },
+    {
+      "task_id": "t05_permission_checker",
+      "condition": "builder",
+      "extracted": true,
+      "passed": 9,
+      "total": 9,
+      "cases": [
+        {
+          "name": "admin allowed on anything",
+          "passed": true,
+          "actual": {
+            "allowed": true,
+            "reason": "admin"
+          },
+          "expected": {
+            "allowed": true,
+            "reason": "admin"
+          }
+        },
+        {
+          "name": "admin DENIED if explicitly revoked (revocation beats role)",
+          "passed": true,
+          "actual": {
+            "allowed": false,
+            "reason": "revoked"
+          },
+          "expected": {
+            "allowed": false,
+            "reason": "revoked"
+          }
+        },
+        {
+          "name": "owner allowed even if guest role",
+          "passed": true,
+          "actual": {
+            "allowed": true,
+            "reason": "owner"
+          },
+          "expected": {
+            "allowed": true,
+            "reason": "owner"
+          }
+        },
+        {
+          "name": "reviewer read allowed",
+          "passed": true,
+          "actual": {
+            "allowed": true,
+            "reason": "reviewer_read"
+          },
+          "expected": {
+            "allowed": true,
+            "reason": "reviewer_read"
+          }
+        },
+        {
+          "name": "reviewer write denied",
+          "passed": true,
+          "actual": {
+            "allowed": false,
+            "reason": "default_deny"
+          },
+          "expected": {
+            "allowed": false,
+            "reason": "default_deny"
+          }
+        },
+        {
+          "name": "member of team can read team resource",
+          "passed": true,
+          "actual": {
+            "allowed": true,
+            "reason": "member_team"
+          },
+          "expected": {
+            "allowed": true,
+            "reason": "member_team"
+          }
+        },
+        {
+          "name": "member of team CANNOT delete team resource",
+          "passed": true,
+          "actual": {
+            "allowed": false,
+            "reason": "default_deny"
+          },
+          "expected": {
+            "allowed": false,
+            "reason": "default_deny"
+          }
+        },
+        {
+          "name": "member NOT in team denied",
+          "passed": true,
+          "actual": {
+            "allowed": false,
+            "reason": "default_deny"
+          },
+          "expected": {
+            "allowed": false,
+            "reason": "default_deny"
+          }
+        },
+        {
+          "name": "guest denied default",
+          "passed": true,
+          "actual": {
+            "allowed": false,
+            "reason": "default_deny"
+          },
+          "expected": {
+            "allowed": false,
+            "reason": "default_deny"
+          }
+        }
+      ]
+    },
+    {
+      "task_id": "t05_permission_checker",
+      "condition": "markdown",
+      "extracted": true,
+      "passed": 9,
+      "total": 9,
+      "cases": [
+        {
+          "name": "admin allowed on anything",
+          "passed": true,
+          "actual": {
+            "allowed": true,
+            "reason": "admin"
+          },
+          "expected": {
+            "allowed": true,
+            "reason": "admin"
+          }
+        },
+        {
+          "name": "admin DENIED if explicitly revoked (revocation beats role)",
+          "passed": true,
+          "actual": {
+            "allowed": false,
+            "reason": "revoked"
+          },
+          "expected": {
+            "allowed": false,
+            "reason": "revoked"
+          }
+        },
+        {
+          "name": "owner allowed even if guest role",
+          "passed": true,
+          "actual": {
+            "allowed": true,
+            "reason": "owner"
+          },
+          "expected": {
+            "allowed": true,
+            "reason": "owner"
+          }
+        },
+        {
+          "name": "reviewer read allowed",
+          "passed": true,
+          "actual": {
+            "allowed": true,
+            "reason": "reviewer_read"
+          },
+          "expected": {
+            "allowed": true,
+            "reason": "reviewer_read"
+          }
+        },
+        {
+          "name": "reviewer write denied",
+          "passed": true,
+          "actual": {
+            "allowed": false,
+            "reason": "default_deny"
+          },
+          "expected": {
+            "allowed": false,
+            "reason": "default_deny"
+          }
+        },
+        {
+          "name": "member of team can read team resource",
+          "passed": true,
+          "actual": {
+            "allowed": true,
+            "reason": "member_team"
+          },
+          "expected": {
+            "allowed": true,
+            "reason": "member_team"
+          }
+        },
+        {
+          "name": "member of team CANNOT delete team resource",
+          "passed": true,
+          "actual": {
+            "allowed": false,
+            "reason": "default_deny"
+          },
+          "expected": {
+            "allowed": false,
+            "reason": "default_deny"
+          }
+        },
+        {
+          "name": "member NOT in team denied",
+          "passed": true,
+          "actual": {
+            "allowed": false,
+            "reason": "default_deny"
+          },
+          "expected": {
+            "allowed": false,
+            "reason": "default_deny"
+          }
+        },
+        {
+          "name": "guest denied default",
+          "passed": true,
+          "actual": {
+            "allowed": false,
+            "reason": "default_deny"
+          },
+          "expected": {
+            "allowed": false,
+            "reason": "default_deny"
+          }
+        }
+      ]
+    },
+    {
+      "task_id": "t05_permission_checker",
+      "condition": "plain",
+      "extracted": true,
+      "passed": 9,
+      "total": 9,
+      "cases": [
+        {
+          "name": "admin allowed on anything",
+          "passed": true,
+          "actual": {
+            "allowed": true,
+            "reason": "admin"
+          },
+          "expected": {
+            "allowed": true,
+            "reason": "admin"
+          }
+        },
+        {
+          "name": "admin DENIED if explicitly revoked (revocation beats role)",
+          "passed": true,
+          "actual": {
+            "allowed": false,
+            "reason": "revoked"
+          },
+          "expected": {
+            "allowed": false,
+            "reason": "revoked"
+          }
+        },
+        {
+          "name": "owner allowed even if guest role",
+          "passed": true,
+          "actual": {
+            "allowed": true,
+            "reason": "owner"
+          },
+          "expected": {
+            "allowed": true,
+            "reason": "owner"
+          }
+        },
+        {
+          "name": "reviewer read allowed",
+          "passed": true,
+          "actual": {
+            "allowed": true,
+            "reason": "reviewer_read"
+          },
+          "expected": {
+            "allowed": true,
+            "reason": "reviewer_read"
+          }
+        },
+        {
+          "name": "reviewer write denied",
+          "passed": true,
+          "actual": {
+            "allowed": false,
+            "reason": "default_deny"
+          },
+          "expected": {
+            "allowed": false,
+            "reason": "default_deny"
+          }
+        },
+        {
+          "name": "member of team can read team resource",
+          "passed": true,
+          "actual": {
+            "allowed": true,
+            "reason": "member_team"
+          },
+          "expected": {
+            "allowed": true,
+            "reason": "member_team"
+          }
+        },
+        {
+          "name": "member of team CANNOT delete team resource",
+          "passed": true,
+          "actual": {
+            "allowed": false,
+            "reason": "default_deny"
+          },
+          "expected": {
+            "allowed": false,
+            "reason": "default_deny"
+          }
+        },
+        {
+          "name": "member NOT in team denied",
+          "passed": true,
+          "actual": {
+            "allowed": false,
+            "reason": "default_deny"
+          },
+          "expected": {
+            "allowed": false,
+            "reason": "default_deny"
+          }
+        },
+        {
+          "name": "guest denied default",
+          "passed": true,
+          "actual": {
+            "allowed": false,
+            "reason": "default_deny"
+          },
+          "expected": {
+            "allowed": false,
+            "reason": "default_deny"
+          }
+        }
+      ]
+    }
+  ]
+}

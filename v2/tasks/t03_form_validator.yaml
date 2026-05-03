@@ -1,0 +1,70 @@
+id: t03_form_validator
+name: "Multi-field form validation with cross-field rules"
+why_complex: |
+  Validation has both per-field rules AND cross-field rules (password matches confirm,
+  end date after start date). Cross-field rules are notoriously easy to lose in prose.
+
+gold_builder: |
+  FormValidator
+    .parallelize(
+        validate_email(field: "email", pattern: rfc5322_basic),
+        validate_password(field: "password", min_length: 8, requires: ["uppercase", "digit"]),
+        validate_age(field: "age", min: 18, max: 120),
+        validate_dates(start: "start_date", end: "end_date"))           // end >= start
+    .cross_field(
+        passwords_match(a: "password", b: "password_confirm"),
+        terms_required_when_paid(paid: "is_paid_account", terms: "accepted_terms"))
+    .aggregate(into: errors)
+    .output(valid: bool, errors: list[str])
+
+function_signature: |
+  def validate_form(form: dict) -> dict:
+      """
+      Args:
+          form: {
+              "email": str,
+              "password": str,
+              "password_confirm": str,
+              "age": int,
+              "start_date": str (ISO YYYY-MM-DD),
+              "end_date": str (ISO YYYY-MM-DD),
+              "is_paid_account": bool,
+              "accepted_terms": bool
+          }
+      Returns:
+          {
+              "valid": bool,
+              "errors": list[str]  -- list of failing field names, sorted alphabetically.
+                         The error keys are: "email", "password", "password_confirm",
+                         "age", "end_date", "accepted_terms".
+          }
+      """
+
+test_cases:
+  - name: "all valid"
+    input: { email: "a@b.co", password: "Secret123", password_confirm: "Secret123", age: 30, start_date: "2026-01-01", end_date: "2026-02-01", is_paid_account: false, accepted_terms: false }
+    expected: { valid: true, errors: [] }
+
+  - name: "bad email + bad age"
+    input: { email: "notanemail", password: "Secret123", password_confirm: "Secret123", age: 15, start_date: "2026-01-01", end_date: "2026-02-01", is_paid_account: false, accepted_terms: false }
+    expected: { valid: false, errors: ["age", "email"] }
+
+  - name: "passwords don't match"
+    input: { email: "a@b.co", password: "Secret123", password_confirm: "Different1", age: 30, start_date: "2026-01-01", end_date: "2026-02-01", is_paid_account: false, accepted_terms: false }
+    expected: { valid: false, errors: ["password_confirm"] }
+
+  - name: "weak password (no digit)"
+    input: { email: "a@b.co", password: "SecretAA", password_confirm: "SecretAA", age: 30, start_date: "2026-01-01", end_date: "2026-02-01", is_paid_account: false, accepted_terms: false }
+    expected: { valid: false, errors: ["password"] }
+
+  - name: "end date before start"
+    input: { email: "a@b.co", password: "Secret123", password_confirm: "Secret123", age: 30, start_date: "2026-03-01", end_date: "2026-02-01", is_paid_account: false, accepted_terms: false }
+    expected: { valid: false, errors: ["end_date"] }
+
+  - name: "paid account but no terms accepted"
+    input: { email: "a@b.co", password: "Secret123", password_confirm: "Secret123", age: 30, start_date: "2026-01-01", end_date: "2026-02-01", is_paid_account: true, accepted_terms: false }
+    expected: { valid: false, errors: ["accepted_terms"] }
+
+  - name: "multiple failures sorted"
+    input: { email: "bad", password: "weak", password_confirm: "different", age: 200, start_date: "2026-03-01", end_date: "2026-02-01", is_paid_account: true, accepted_terms: false }
+    expected: { valid: false, errors: ["accepted_terms", "age", "email", "end_date", "password", "password_confirm"] }

@@ -1,0 +1,83 @@
+id: t04_order_router
+name: "Order routing with parallel checks and conditional dispatch"
+why_complex: |
+  Independent classifiers (region, weight class, fragility, expedited) feed into a
+  routing decision tree with override rules. The expedited flag overrides region;
+  fragile + heavy is a forbidden combination; international + over-2kg requires customs.
+  Lots of conditional interactions that are subtle in prose.
+
+gold_builder: |
+  OrderRouter
+    .parallelize(
+        classify_region(country: order.country),               // domestic | international
+        classify_weight(grams: order.weight_g),                // light <500 | medium <2000 | heavy
+        check_fragile(items: order.items),                     // true if any item.fragile
+        check_expedited(flag: order.expedited))                // true if expedited shipping requested
+    .route(
+        // hard rejections first
+        fragile_AND_heavy: reject(reason: "fragile_too_heavy"),
+
+        // expedited overrides region for service tier
+        expedited: dispatch(carrier: "FastShip", service: "next_day"),
+
+        // international with weight needs customs
+        international_AND_(medium_OR_heavy): dispatch(carrier: "GlobalPost", service: "with_customs"),
+
+        // international light
+        international: dispatch(carrier: "GlobalPost", service: "standard"),
+
+        // domestic
+        heavy: dispatch(carrier: "DomFreight", service: "freight"),
+        default: dispatch(carrier: "LocalPost", service: "standard"))
+
+function_signature: |
+  def route_order(order: dict) -> dict:
+      """
+      Args:
+          order: {
+              "country": str (ISO 2-letter, "US" = domestic),
+              "weight_g": int,
+              "items": list[{ "fragile": bool, ... }],
+              "expedited": bool
+          }
+      Returns:
+          {
+              "action": "dispatch" | "reject",
+              "carrier": str | None,
+              "service": str | None,
+              "reason": str | None  -- only set on reject
+          }
+      """
+
+test_cases:
+  - name: "fragile heavy → reject"
+    input: { country: "US", weight_g: 3000, items: [{ fragile: true }], expedited: false }
+    expected: { action: "reject", carrier: null, service: null, reason: "fragile_too_heavy" }
+
+  - name: "expedited beats international (service tier)"
+    input: { country: "FR", weight_g: 800, items: [{ fragile: false }], expedited: true }
+    expected: { action: "dispatch", carrier: "FastShip", service: "next_day", reason: null }
+
+  - name: "international heavy → with_customs"
+    input: { country: "DE", weight_g: 1500, items: [{ fragile: false }], expedited: false }
+    expected: { action: "dispatch", carrier: "GlobalPost", service: "with_customs", reason: null }
+
+  - name: "international light → standard"
+    input: { country: "JP", weight_g: 200, items: [{ fragile: false }], expedited: false }
+    expected: { action: "dispatch", carrier: "GlobalPost", service: "standard", reason: null }
+
+  - name: "domestic heavy → freight"
+    input: { country: "US", weight_g: 5000, items: [{ fragile: false }], expedited: false }
+    expected: { action: "dispatch", carrier: "DomFreight", service: "freight", reason: null }
+
+  - name: "domestic light → local post"
+    input: { country: "US", weight_g: 100, items: [{ fragile: false }], expedited: false }
+    expected: { action: "dispatch", carrier: "LocalPost", service: "standard", reason: null }
+
+  - name: "fragile but light → not rejected"
+    input: { country: "US", weight_g: 300, items: [{ fragile: true }], expedited: false }
+    expected: { action: "dispatch", carrier: "LocalPost", service: "standard", reason: null }
+
+  - name: "expedited fragile heavy → STILL rejected (fragile-rule first)"
+    input: { country: "US", weight_g: 2500, items: [{ fragile: true }], expedited: true }
+    expected: { action: "reject", carrier: null, service: null, reason: "fragile_too_heavy" }

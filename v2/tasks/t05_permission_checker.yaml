@@ -1,0 +1,119 @@
+id: t05_permission_checker
+name: "Permission check with role + ownership + override hierarchy"
+why_complex: |
+  Permission rules with multiple grant paths: admins always; owners on their own
+  resources; reviewers in read-only mode; explicit revocations override grants.
+  Order of evaluation matters and prose loses it.
+
+gold_builder: |
+  PermissionChecker
+    .input(user: User, resource: Resource, action: Action)
+    .sequence(
+        // explicit revocations beat everything
+        check_revocations(user.revoked_scopes, resource.id, action) -> if_revoked: deny,
+
+        // admin always allowed (except revoked, handled above)
+        if_admin(user.role == "admin"): allow,
+
+        // owner allowed on their own stuff (any action)
+        if_owner(user.id == resource.owner_id): allow,
+
+        // reviewer: read-only
+        if_reviewer(user.role == "reviewer", action == "read"): allow,
+
+        // member: read or write on resources their team owns
+        if_member(user.role == "member",
+                  action in ["read", "write"],
+                  resource.team_id in user.teams): allow,
+
+        // default deny
+        default: deny)
+    .output(allowed: bool, reason: str)
+
+function_signature: |
+  def check_permission(user: dict, resource: dict, action: str) -> dict:
+      """
+      Args:
+          user: {
+              "id": str,
+              "role": "admin" | "reviewer" | "member" | "guest",
+              "teams": list[str],
+              "revoked_scopes": list[{ "resource_id": str, "action": str }]
+          }
+          resource: {
+              "id": str,
+              "owner_id": str,
+              "team_id": str
+          }
+          action: "read" | "write" | "delete"
+      Returns:
+          {
+              "allowed": bool,
+              "reason": str  -- one of: "revoked", "admin", "owner",
+                  "reviewer_read", "member_team", "default_deny"
+          }
+      """
+
+test_cases:
+  - name: "admin allowed on anything"
+    input:
+      user: { id: "u1", role: "admin", teams: [], revoked_scopes: [] }
+      resource: { id: "r1", owner_id: "u99", team_id: "t1" }
+      action: "delete"
+    expected: { allowed: true, reason: "admin" }
+
+  - name: "admin DENIED if explicitly revoked (revocation beats role)"
+    input:
+      user: { id: "u1", role: "admin", teams: [], revoked_scopes: [{ resource_id: "r1", action: "delete" }] }
+      resource: { id: "r1", owner_id: "u99", team_id: "t1" }
+      action: "delete"
+    expected: { allowed: false, reason: "revoked" }
+
+  - name: "owner allowed even if guest role"
+    input:
+      user: { id: "u1", role: "guest", teams: [], revoked_scopes: [] }
+      resource: { id: "r1", owner_id: "u1", team_id: "t1" }
+      action: "delete"
+    expected: { allowed: true, reason: "owner" }
+
+  - name: "reviewer read allowed"
+    input:
+      user: { id: "u1", role: "reviewer", teams: [], revoked_scopes: [] }
+      resource: { id: "r1", owner_id: "u99", team_id: "t1" }
+      action: "read"
+    expected: { allowed: true, reason: "reviewer_read" }
+
+  - name: "reviewer write denied"
+    input:
+      user: { id: "u1", role: "reviewer", teams: [], revoked_scopes: [] }
+      resource: { id: "r1", owner_id: "u99", team_id: "t1" }
+      action: "write"
+    expected: { allowed: false, reason: "default_deny" }
+
+  - name: "member of team can read team resource"
+    input:
+      user: { id: "u1", role: "member", teams: ["t1", "t2"], revoked_scopes: [] }
+      resource: { id: "r1", owner_id: "u99", team_id: "t1" }
+      action: "read"
+    expected: { allowed: true, reason: "member_team" }
+
+  - name: "member of team CANNOT delete team resource"
+    input:
+      user: { id: "u1", role: "member", teams: ["t1"], revoked_scopes: [] }
+      resource: { id: "r1", owner_id: "u99", team_id: "t1" }
+      action: "delete"
+    expected: { allowed: false, reason: "default_deny" }
+
+  - name: "member NOT in team denied"
+    input:
+      user: { id: "u1", role: "member", teams: ["t9"], revoked_scopes: [] }
+      resource: { id: "r1", owner_id: "u99", team_id: "t1" }
+      action: "read"
+    expected: { allowed: false, reason: "default_deny" }
+
+  - name: "guest denied default"
+    input:
+      user: { id: "u1", role: "guest", teams: [], revoked_scopes: [] }
+      resource: { id: "r1", owner_id: "u99", team_id: "t1" }
+      action: "read"
+    expected: { allowed: false, reason: "default_deny" }
