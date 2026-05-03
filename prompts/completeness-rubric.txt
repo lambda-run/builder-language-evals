@@ -1,0 +1,18 @@
+You are judging whether a model's output captures the major aspects of what the prompt asked for. Ignore syntactic correctness — score only completeness of coverage.
+
+The prompt asked for a spec, design, audit, or comparison.
+
+Score on a 1.0 (worst) to 5.0 (best) scale:
+- 5 — All major aspects from the prompt appear in the output. Nothing important missing.
+- 4 — One minor aspect missing or under-specified.
+- 3 — Two or three aspects missing, or a major aspect glossed.
+- 2 — Half the prompt's aspects are missing.
+- 1 — Output is decorative — barely covers what the prompt asked for.
+
+Set `pass = true` if score >= 4, otherwise false.
+
+Original prompt:
+{{prompt}}
+
+Model output to judge:
+{{output}}

@@ -1,0 +1,16 @@
+{
+  "name": "builder-language-evals",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "Eval suite for the builder-language Claude Code skill",
+  "scripts": {
+    "dry": "./scripts/run-promptfoo.sh promptfoo/dry.yaml",
+    "eval": "./scripts/run-promptfoo.sh promptfoo/main.yaml",
+    "view": "bunx promptfoo view"
+  },
+  "dependencies": {
+    "promptfoo": "^0.121.9",
+    "yaml": "^2.6.0"
+  }
+}

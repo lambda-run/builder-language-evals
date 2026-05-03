@@ -1,0 +1,24 @@
+You are judging the quality of inline comments in a builder-chain output.
+
+The skill asks for inline comments that explain WHY something exists, not WHAT it is.
+- GOOD: `permissions  // what I'm allowed to do`
+- BAD:  `permissions  // a list of permissions`
+
+Look at every inline `//` comment in the output. Score on a 1.0 to 5.0 scale:
+- 5 — All comments explain WHY; none restate the name.
+- 4 — Most comments are why; one or two are filler.
+- 3 — Roughly half-and-half.
+- 2 — Most comments restate the name or paraphrase the verb.
+- 1 — Comments are pure noise.
+
+If the output has no comments at all and the chain has fewer than ~5 verbs, score 4 (no comments needed).
+If the chain is large and has no comments, score 2.
+If the output has no chain at all, score `pass = true, score = 3, reason = "n/a — prose output"`.
+
+Set `pass = true` if score >= 4, otherwise false.
+
+Original prompt:
+{{prompt}}
+
+Model output to judge:
+{{output}}

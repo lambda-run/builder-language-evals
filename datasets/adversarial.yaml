@@ -1,0 +1,43 @@
+# Adversarial prompts. Designed to TRIGGER the skill (chain expected) but
+# also to tempt specific failure modes — lambda arrows, leading-dot sub-chains,
+# invented synonyms when standard verbs would fit.
+
+- description: "adv_01: lambda trap (filter-each-transform)"
+  vars:
+    user_input: |
+      Spec a pipeline that filters items where value > threshold, and for
+      each one transforms it by applying a function f. Each rule should
+      take a context and return a verdict.
+  metadata: { bucket: adversarial, expect_chain: yes, failure_mode: lambda }
+
+- description: "adv_02: lambda trap (callback-of-event)"
+  vars:
+    user_input: |
+      Design a webhook handler that for each incoming event, validates
+      the payload, then calls back with success or failure. Each handler
+      is a function of the event.
+  metadata: { bucket: adversarial, expect_chain: yes, failure_mode: lambda }
+
+- description: "adv_03: synonym creep"
+  vars:
+    user_input: |
+      Spec an agent that broadcasts updates over multiple paths to several
+      recipients, with retry and timeout. Be expressive with verb names —
+      use the most natural English you can.
+  metadata: { bucket: adversarial, expect_chain: yes, failure_mode: vocab }
+
+- description: "adv_04: drop the SubNoun capture"
+  vars:
+    user_input: |
+      Spec an importance scorer. Inside it, compose three sub-rules: a
+      sender allowlist, a keyword matcher, a recency check. Each sub-rule
+      must be its own thing.
+  metadata: { bucket: adversarial, expect_chain: yes, failure_mode: subnoun }
+
+- description: "adv_05: executable drift (returns/emits)"
+  vars:
+    user_input: |
+      Spec a guard that, given a request, returns either pass or fail.
+      On fail, emit an error with the reason. On pass, continue to the
+      next stage.
+  metadata: { bucket: adversarial, expect_chain: yes, failure_mode: executable }

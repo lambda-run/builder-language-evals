@@ -1,0 +1,141 @@
+description: |
+  builder-language skill — form-adherence eval suite.
+  4 models × 3 conditions × 25 prompts × N runs.
+
+prompts:
+  - "{{user_input}}"          # user message; system goes in each provider's config
+
+providers:
+  # ── opus-4.7 ──────────────────────────────────────────────────────────
+  - id: file://../providers/openrouter.cjs
+    label: opus-4.7/with-skill
+    config:
+      label: opus-4.7/with-skill
+      model: anthropic/claude-opus-4.7
+      system_file: prompts/with-skill-system.txt
+      system_template_var: SKILL_BODY
+      max_tokens: 2500
+
+  - id: file://../providers/openrouter.cjs
+    label: opus-4.7/with-naive
+    config:
+      label: opus-4.7/with-naive
+      model: anthropic/claude-opus-4.7
+      system_file: prompts/naive-prompt.txt
+      max_tokens: 2500
+
+  - id: file://../providers/openrouter.cjs
+    label: opus-4.7/without-skill
+    config:
+      label: opus-4.7/without-skill
+      model: anthropic/claude-opus-4.7
+      max_tokens: 2500
+
+  # ── sonnet-4.6 ────────────────────────────────────────────────────────
+  - id: file://../providers/openrouter.cjs
+    label: sonnet-4.6/with-skill
+    config:
+      label: sonnet-4.6/with-skill
+      model: anthropic/claude-sonnet-4.6
+      system_file: prompts/with-skill-system.txt
+      system_template_var: SKILL_BODY
+      max_tokens: 2500
+
+  - id: file://../providers/openrouter.cjs
+    label: sonnet-4.6/with-naive
+    config:
+      label: sonnet-4.6/with-naive
+      model: anthropic/claude-sonnet-4.6
+      system_file: prompts/naive-prompt.txt
+      max_tokens: 2500
+
+  - id: file://../providers/openrouter.cjs
+    label: sonnet-4.6/without-skill
+    config:
+      label: sonnet-4.6/without-skill
+      model: anthropic/claude-sonnet-4.6
+      max_tokens: 2500
+
+  # ── haiku-4.5 ─────────────────────────────────────────────────────────
+  - id: file://../providers/openrouter.cjs
+    label: haiku-4.5/with-skill
+    config:
+      label: haiku-4.5/with-skill
+      model: anthropic/claude-haiku-4.5
+      system_file: prompts/with-skill-system.txt
+      system_template_var: SKILL_BODY
+      max_tokens: 2500
+
+  - id: file://../providers/openrouter.cjs
+    label: haiku-4.5/with-naive
+    config:
+      label: haiku-4.5/with-naive
+      model: anthropic/claude-haiku-4.5
+      system_file: prompts/naive-prompt.txt
+      max_tokens: 2500
+
+  - id: file://../providers/openrouter.cjs
+    label: haiku-4.5/without-skill
+    config:
+      label: haiku-4.5/without-skill
+      model: anthropic/claude-haiku-4.5
+      max_tokens: 2500
+
+  # ── gpt-5.5 ───────────────────────────────────────────────────────────
+  - id: file://../providers/openrouter.cjs
+    label: gpt-5.5/with-skill
+    config:
+      label: gpt-5.5/with-skill
+      model: openai/gpt-5.5
+      system_file: prompts/with-skill-system.txt
+      system_template_var: SKILL_BODY
+      max_tokens: 2500
+
+  - id: file://../providers/openrouter.cjs
+    label: gpt-5.5/with-naive
+    config:
+      label: gpt-5.5/with-naive
+      model: openai/gpt-5.5
+      system_file: prompts/naive-prompt.txt
+      max_tokens: 2500
+
+  - id: file://../providers/openrouter.cjs
+    label: gpt-5.5/without-skill
+    config:
+      label: gpt-5.5/without-skill
+      model: openai/gpt-5.5
+      max_tokens: 2500
+
+defaultTest:
+  options:
+    provider:
+      id: file://../providers/gemini-judge.cjs
+      label: gemini-3.1-pro-judge
+      config:
+        label: gemini-3.1-pro-judge
+        model: gemini-3.1-pro-preview
+        max_tokens: 600
+  assert:
+    # ── deterministic, no LLM calls ──
+    - type: javascript
+      value: file://../assertions/has-chain.cjs
+    - type: javascript
+      value: file://../assertions/no-arrows.cjs
+    - type: javascript
+      value: file://../assertions/named-subnouns.cjs
+    - type: javascript
+      value: file://../assertions/vocab-discipline.cjs
+      config:
+        threshold: 0.5
+    # ── LLM-judged, structured-output Gemini ──
+    - type: llm-rubric
+      value: file://../prompts/adoption-rubric.txt
+    - type: llm-rubric
+      value: file://../prompts/completeness-rubric.txt
+
+tests:
+  - file://../datasets/should-use.yaml
+  - file://../datasets/should-skip.yaml
+  - file://../datasets/adversarial.yaml
+
+outputPath: artifacts/promptfoo-results.html

@@ -1,0 +1,5 @@
+You are an assistant. The following skill is loaded into your context. Decide whether to apply it based on the skill's own rules.
+
+--- SKILL: builder-language ---
+{{SKILL_BODY}}
+--- END SKILL ---

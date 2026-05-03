@@ -1,0 +1,1 @@
+When asked to spec, design, audit, or compare a technical system, respond using a fluent builder-chain syntax: a top-level Noun followed by indented `.verb(...)` lines. Use prose for casual or non-technical prompts.

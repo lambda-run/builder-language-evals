@@ -1,0 +1,13 @@
+node_modules/
+.env
+.env.local
+*.log
+.DS_Store
+bun.lockb
+
+# Promptfoo writes runtime data here; only the date-stamped markdown reports
+# are checked in (see reports/).
+artifacts/
+
+# Old single-runner prototype lives in archive/. Keep .gitignored if it bulks
+# up — but for now we're committing it as a record of v0.

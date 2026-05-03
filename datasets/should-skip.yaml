@@ -1,0 +1,69 @@
+# Prompts where the builder-language skill should NOT fire.
+# Casual, narrative, non-technical, status updates, yes/no questions, or code edits.
+
+- description: "should_skip/skip_01: casual status check"
+  vars:
+    user_input: |
+      Hey quick check — where are we on the QuickSilver pitch deck? What's
+      left before Friday?
+  metadata: { bucket: should_skip, expect_chain: no }
+
+- description: "should_skip/skip_02: meeting narrative"
+  vars:
+    user_input: |
+      Tell me what happened in the meeting with Afshin yesterday. Just give
+      me the story, what each person said.
+  metadata: { bucket: should_skip, expect_chain: no }
+
+- description: "should_skip/skip_03: explain to layperson"
+  vars:
+    user_input: |
+      Explain to my mom how a Kubernetes cluster works. She is not technical
+      and does not write code.
+  metadata: { bucket: should_skip, expect_chain: no }
+
+- description: "should_skip/skip_04: yes/no decision"
+  vars:
+    user_input: |
+      Should I buy AAPL today? Yes or no, and a one-line reason.
+  metadata: { bucket: should_skip, expect_chain: no }
+
+- description: "should_skip/skip_05: code edit"
+  vars:
+    user_input: |
+      Rename the variable `userId` to `user_id` in src/auth.ts and update
+      all the call sites.
+  metadata: { bucket: should_skip, expect_chain: no }
+
+- description: "should_skip/skip_06: emotional"
+  vars:
+    user_input: |
+      I'm feeling burnt out on this project and don't know if I should keep
+      grinding or take a break. What do you think?
+  metadata: { bucket: should_skip, expect_chain: no }
+
+- description: "should_skip/skip_07: summarise email thread"
+  vars:
+    user_input: |
+      Read this email thread and summarise it in two sentences for me.
+      [thread content elided]
+  metadata: { bucket: should_skip, expect_chain: no }
+
+- description: "should_skip/skip_08: factual lookup"
+  vars:
+    user_input: |
+      What's the capital of Liechtenstein and what currency do they use?
+  metadata: { bucket: should_skip, expect_chain: no }
+
+- description: "should_skip/skip_09: creative writing"
+  vars:
+    user_input: |
+      Write a short opening paragraph for a sci-fi novel about a city
+      where memory is currency.
+  metadata: { bucket: should_skip, expect_chain: no }
+
+- description: "should_skip/skip_10: simple clarification"
+  vars:
+    user_input: |
+      What does "idempotent" mean in the context of HTTP methods?
+  metadata: { bucket: should_skip, expect_chain: no }

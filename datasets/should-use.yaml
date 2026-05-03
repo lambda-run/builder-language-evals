@@ -1,0 +1,83 @@
+# Prompts where the builder-language skill SHOULD fire.
+# Topic is technical, reader is technical, 3+ aspects, side-by-side helps.
+
+- description: "should_use/use_01: spec an inbox watcher"
+  vars:
+    user_input: |
+      Spec an inbox watcher that pings me on important unreplied emails.
+      Pull from a Gmail account, judge importance by sender allowlist + keyword
+      triggers + reply-window heuristic, send via SMS or email depending on
+      severity.
+  metadata: { bucket: should_use, expect_chain: yes }
+
+- description: "should_use/use_02: design a research agent"
+  vars:
+    user_input: |
+      Design an autonomous research agent that takes a question, fans out
+      sub-tasks to specialised subagents (market, legal, technical), gates the
+      final synthesis on a human reviewer, and writes a markdown report.
+  metadata: { bucket: should_use, expect_chain: yes }
+
+- description: "should_use/use_03: spec a trading bot"
+  vars:
+    user_input: |
+      Spec a trading bot that pulls 4h BTC candles, scores setups with an
+      RSI + EMA confluence rule, debates the trade with a second model before
+      executing, and rolls or stops out at fixed thresholds.
+  metadata: { bucket: should_use, expect_chain: yes }
+
+- description: "should_use/use_04: audit an agent for missing pieces"
+  vars:
+    user_input: |
+      Audit this agent for missing pieces. It currently has: an LLM call, a
+      Slack notifier, a SQLite store. What is it missing to be production-ready?
+      Lay out the gaps as a structure, not a list.
+  metadata: { bucket: should_use, expect_chain: yes }
+
+- description: "should_use/use_05: compare two job-runner designs"
+  vars:
+    user_input: |
+      Compare two designs for a job-runner: (a) Redis queue + worker pool,
+      (b) Postgres LISTEN/NOTIFY + cron. Lay out each as a structure across
+      the same dimensions so they can be diffed.
+  metadata: { bucket: should_use, expect_chain: yes }
+
+- description: "should_use/use_06: spec a CI pipeline"
+  vars:
+    user_input: |
+      Spec a CI pipeline for a Bun + TypeScript project. Lint, type-check,
+      test, build, deploy to staging, smoke-test, promote to prod with
+      human approval.
+  metadata: { bucket: should_use, expect_chain: yes }
+
+- description: "should_use/use_07: design a data pipeline"
+  vars:
+    user_input: |
+      Design a data pipeline that ingests JSON events from S3 hourly,
+      validates against a schema, transforms into Parquet, partitions by
+      date, and exposes them to Athena. Include failure handling.
+  metadata: { bucket: should_use, expect_chain: yes }
+
+- description: "should_use/use_08: spec on-call alerting"
+  vars:
+    user_input: |
+      Spec an on-call alerting setup: how alerts get triaged by severity,
+      routed to channels (PagerDuty for critical, Slack for warn, ignored
+      for info), escalated when unacknowledged.
+  metadata: { bucket: should_use, expect_chain: yes }
+
+- description: "should_use/use_09: spec a RAG system"
+  vars:
+    user_input: |
+      Spec a RAG system for an internal docs corpus. Ingest, chunk, embed,
+      store, retrieve, rerank, generate, cite. Each stage should be named
+      and have a clear input/output.
+  metadata: { bucket: should_use, expect_chain: yes }
+
+- description: "should_use/use_10: design an agent-to-agent protocol"
+  vars:
+    user_input: |
+      Design an agent-to-agent protocol: how one agent hands a task to
+      another, what context travels with the handoff, how the receiver
+      confirms acceptance, how results return.
+  metadata: { bucket: should_use, expect_chain: yes }

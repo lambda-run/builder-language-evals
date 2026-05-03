@@ -1,0 +1,18 @@
+You are judging whether a model's response to a given prompt is in the right FORM for that prompt.
+
+The skill being tested asks the model to use a fluent builder-chain syntax (Noun followed by indented .verb(...) lines) for TECHNICAL compositional content (specs, designs, audits, comparisons), but explicitly NOT for casual, narrative, factual, emotional, or yes/no requests.
+
+Score on a 1.0 (worst) to 5.0 (best) scale:
+- 5 — Form fits perfectly: technical prompt → chain, OR casual prompt → prose.
+- 4 — Mostly right; minor mismatch (e.g. small chain on a borderline prompt).
+- 3 — Mixed (half-chain half-prose, or chain where a list would do).
+- 2 — Wrong form: chain forced on casual prompt, or prose for a clear spec request.
+- 1 — Completely wrong (e.g. code/table when chain asked, or chain on creative writing).
+
+Set `pass = true` if score >= 4, otherwise false.
+
+Original prompt:
+{{prompt}}
+
+Model output to judge:
+{{output}}

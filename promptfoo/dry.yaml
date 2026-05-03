@@ -1,0 +1,64 @@
+description: |
+  Dry-run config: 1 prompt × Haiku × 3 conditions = 3 cells.
+  Validates plumbing for ~$0.05.
+
+prompts:
+  - "{{user_input}}"
+
+providers:
+  - id: file://../providers/openrouter.cjs
+    label: haiku-4.5/with-skill
+    config:
+      label: haiku-4.5/with-skill   # belt-and-braces; some loaders pass only config
+      model: anthropic/claude-haiku-4.5
+      system_file: prompts/with-skill-system.txt
+      system_template_var: SKILL_BODY
+      max_tokens: 2500
+
+  - id: file://../providers/openrouter.cjs
+    label: haiku-4.5/with-naive
+    config:
+      label: haiku-4.5/with-naive
+      model: anthropic/claude-haiku-4.5
+      system_file: prompts/naive-prompt.txt
+      max_tokens: 2500
+
+  - id: file://../providers/openrouter.cjs
+    label: haiku-4.5/without-skill
+    config:
+      label: haiku-4.5/without-skill
+      model: anthropic/claude-haiku-4.5
+      max_tokens: 2500
+
+defaultTest:
+  options:
+    provider:
+      id: file://../providers/gemini-judge.cjs
+      label: gemini-3.1-pro-judge
+      config:
+        model: gemini-3.1-pro-preview
+        max_tokens: 600
+  assert:
+    - type: javascript
+      value: file://../assertions/has-chain.cjs
+    - type: javascript
+      value: file://../assertions/no-arrows.cjs
+    - type: javascript
+      value: file://../assertions/named-subnouns.cjs
+    - type: javascript
+      value: file://../assertions/vocab-discipline.cjs
+      config:
+        threshold: 0.5
+    - type: llm-rubric
+      value: file://../prompts/adoption-rubric.txt
+
+# Just one prompt for dry validation.
+tests:
+  - description: "should_use/use_01: spec an inbox watcher"
+    vars:
+      user_input: |
+        Spec an inbox watcher that pings me on important unreplied emails.
+        Pull from a Gmail account, judge importance by sender allowlist + keyword
+        triggers + reply-window heuristic, send via SMS or email depending on
+        severity.
+    metadata: { bucket: should_use, expect_chain: yes }
