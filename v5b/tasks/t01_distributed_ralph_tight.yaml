@@ -1,0 +1,126 @@
+id: t01_distributed_ralph_tight
+name: "Distributed Ralph loop spec — tight builder"
+domain: agent_orchestration_deep
+
+builder: |
+  DistributedRalph
+    .pool(6 implementer on "sonnet-4.6", 1 reviewer on "opus-4.7", max 2 per repo)
+    .backlog("fix_plan.md" in "github.com/lambda-run/ops")
+        .claim(branch lock, 10m ttl)
+        .release(on merge, abandon, or ttl expiry)
+    .protocol
+        .conflict(last write wins after rebase)
+        .escalate(3 rebase conflicts to reviewer pool)
+        .gossip("slack:#ralph-bus" on claim, merge, block)
+    .loop(while backlog has open tasks)
+        .stop_if(budget > $50, kill switch, error rate > 30%)
+    .on_crash(release claims, requeue with retry++, max 3 then park for human)
+    .observe(claim, commit, fail to "loki")
+        .metrics(success rate, p50 task seconds, claim contention)
+        .surface(error rate > 20% or queue stuck > 30m)
+    .terminate(backlog empty or budget exhausted or human signals done)
+
+markdown: |
+  # Distributed Ralph Loop
+
+  A pool of agents continuously consumes tasks from a shared backlog file in git.
+  Each agent claims a task, implements it, commits, and releases. The loop runs
+  until the backlog is empty, the budget is exhausted, or a human kills it.
+
+  ## Worker pool
+  - 6 implementer agents on `sonnet-4.6`
+  - 1 reviewer agent on `opus-4.7`
+  - At most 2 agents on the same repo concurrently (avoid file-lock thrash)
+
+  ## Backlog
+  - Source: `fix_plan.md` in `github.com/lambda-run/ops`
+  - Claim strategy: atomic branch lock with 10-minute TTL
+  - Release a claim on merge, abandon, or TTL expiry
+
+  ## Coordination protocol
+  - Conflict resolution: last-write-wins after rebase
+  - Escalation: 3 consecutive rebase conflicts on a task → hand to reviewer pool
+  - Gossip: emit `claim`, `merge`, and `block` events to Slack `#ralph-bus`
+
+  ## Loop conditions
+  - Continue while the backlog has open tasks
+  - Stop if any of: budget exceeds $50, human flips the kill switch, error rate > 30%
+
+  ## Crash recovery
+  - On worker crash: release any claims it held
+  - Re-queue the orphaned task with `retry_count++`
+  - Max 3 retries, then park the task for human review
+
+  ## Observability
+  - Log `claim`, `commit`, `fail` events to loki
+  - Metrics tracked: success_rate, p50 task seconds, claim contention
+  - Surface to human when error rate > 20% OR queue stuck > 30m
+
+  ## Termination
+  Loop ends when the backlog is empty, the budget is exhausted, or the human signals done.
+
+prose: |
+  Build a distributed ralph loop. A worker pool of 6 implementer agents running
+  sonnet-4.6 plus 1 reviewer agent running opus-4.7 continuously pulls tasks
+  from a shared backlog file (`fix_plan.md` in the `github.com/lambda-run/ops`
+  repo). At most 2 agents may work on the same repo concurrently to avoid
+  file-lock thrash.
+
+  Each agent claims a task using an atomic branch lock with a 10-minute TTL.
+  A claim is released when the task is merged, abandoned, or the TTL expires.
+  Conflicts resolve via last-write-wins after rebase. If a task hits 3
+  consecutive rebase conflicts, escalate it to the reviewer pool. Workers
+  gossip claim, merge, and block events to the `#ralph-bus` channel in Slack.
+
+  The loop continues while the backlog has open tasks. Stop conditions are:
+  the budget exceeds $50, the human flips the kill switch, or the error rate
+  climbs above 30%.
+
+  If a worker crashes, release any claims it held, re-queue the orphaned task
+  with its retry_count incremented, and after 3 retries park it for human
+  review.
+
+  Telemetry: log claim, commit, and fail events to loki. Track success_rate,
+  p50 task seconds, and claim contention. Surface to the human when the error
+  rate exceeds 20% or the queue is stuck for more than 30 minutes.
+
+  The loop terminates when the backlog is empty, the budget is exhausted, or
+  the human signals done.
+
+gold_elements:
+  - implementer
+  - reviewer
+  - sonnet
+  - opus
+  - "6"
+  - fix_plan
+  - lambda-run/ops
+  - claim
+  - branch lock
+  - "10m"
+  - merge
+  - abandon
+  - ttl
+  - rebase
+  - escalate
+  - reviewer pool
+  - gossip
+  - slack
+  - "#ralph-bus"
+  - backlog
+  - budget
+  - "$50"
+  - kill switch
+  - error rate
+  - "30"
+  - crash
+  - requeue
+  - retry
+  - "3"
+  - park
+  - loki
+  - success_rate
+  - p50
+  - claim contention
+  - "20"
+  - terminate
