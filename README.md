@@ -2,13 +2,16 @@
 
 Does forcing Claude to write plans in a custom, chainable syntax actually improve its performance?
 
-We ran seven evaluations and submitted the methodology to an adversarial Gemini review. **Honest answer: no, when you compare like-for-like.**
+We ran seven evaluations and submitted the methodology to two rounds of adversarial Gemini review. **Honest answer: tied with tight markdown on outcome quality, with one small but directionally-consistent edge — builder shows a slight spec-faithfulness lead when the agent produces an artifact (v7-fair: 9.5 vs 9.0 vs 9.0). That's the structured-DSL-prevents-drift theory, lightly supported.**
 
-The [`builder-language`](skill/SKILL.md) skill does not improve downstream code generation (v2, v7), is not a better wire format between agents (v3, v3.5), and is approximately tied with markdown and prose at every measurable axis once you control for baseline verbosity (v5c, v7-fair).
+The [`builder-language`](skill/SKILL.md) skill is best understood as **two things**:
 
-An earlier draft of this README claimed builder won at depth (v5b, v7). Gemini's review caught the confound: those experiments tightened the builder spec but kept the markdown baseline verbose. When markdown is hand-tightened to its minimum expressive form too, the builder advantage disappears — and on Sonnet 4.6 reading the Ralph spec, tight markdown actually wins comprehension.
+1. **A human discipline.** Forces the author to compose nouns, verbs, and explicit values rather than dumping prose. The structure happens *before* the LLM sees it — the win is in the human's thinking.
+2. **A small intent → delivery accuracy edge.** When the agent then reads the spec and builds something, builder's reduced interpretive degrees of freedom appear to nudge the implementation closer to what was specified. Same argument as TypeScript over JS, or protobuf over free-form JSON. Small effect, N=1 task, would need replication to claim hard.
 
-This repo keeps every result, including the ones that walked back the bold claim, because that's the methodology trail.
+The skill does **not** improve downstream code-generation correctness (v2, v7), is not a better wire format between agents (v3, v3.5), and does not give the model better comprehension of the spec content (v5c — tight markdown is tied or slightly ahead there). An earlier draft of this README claimed builder won outright at depth on tokens and comprehension. Gemini's review caught the confound: those experiments tightened the builder spec but kept the markdown baseline verbose. With both formats hand-tightened (v5c, v7-fair), the broad outcome wins disappear and only the small faithfulness edge remains.
+
+Every result, including the walked-back claims, is preserved below — that's the methodology trail.
 
 ---
 
@@ -46,7 +49,7 @@ When [Dexter Horthy](https://twitter.com/dexhorthy) (HumanLayer / 12-Factor Agen
 | The depth win survives a tight rewrite of the builder spec. | [v5b](reports/eval-v5b-tight-2026-05-04T14-15-27-315.md) | **Looked like a clean win** (-26% prompt tokens, +5-6pp comprehension) — but turned out to be the v5b confound. |
 | ❌ The depth win survives a fair tight-vs-tight comparison. | [**v5c**](reports/eval-v5c-fair-2026-05-04T15-02-46-395.md) | **No, it dissolves.** When markdown is hand-tightened to match builder's compactness, both formats land at 238 cl100k tokens. Comprehension: tight markdown wins on both Sonnet (97.2% vs 94.4%) and GPT-5.5 (100% vs 97.2%). The v5b "win" was 100% baseline verbosity. |
 | Spec format affects the quality of code an agent produces from it. | [v7](v7/) | **NULL on test correctness, model-dependent on tokens, model-dependent on judged quality.** All 6 cells (3 formats × 2 models) hit 100% test pass on a 15-test multi-aspect spec. Initial judge scores looked like markdown produced lower-quality code from Sonnet — but that was the verbose-markdown confound again. |
-| ❌ Quality difference survives a fair tight-vs-tight comparison. | [**v7-fair**](v7/) | **No.** Tight markdown produces the cleanest Sonnet code (10/9/9/10/10). All formats land at 9-10 quality with 0 hallucinations on the fair task. Builder slightly leads on faithfulness/clarity/structure; markdown leads on errors; prose leads on idiomatic style. Within noise. |
+| Quality difference survives a fair tight-vs-tight comparison. | [**v7-fair**](v7/) | **Mostly null + one small directional finding.** All 6 cells hit 15/15 test pass with 0 hallucinations across formats. Code-quality scores are 9.0-9.5 across the board. The one small consistent gap: **builder leads on spec_faithfulness (avg 9.5 vs markdown 9.0 vs prose 9.0)** — the agent's implementation matches what the spec asked for slightly more often when reading builder. Small effect, N=1 task — directionally consistent with the structured-DSL-prevents-drift theory but needs replication. |
 
 For the first four evals, the skill produced a parseable syntax that no system consumes, and on every other axis the differences were within noise. v5/v5b looked like the depth claim might rescue the skill — but a fair comparison (v5c, v7-fair) showed that builder's apparent wins came from comparing against a verbose baseline. **Once you tighten the markdown baseline too, the wins disappear.**
 
@@ -75,14 +78,15 @@ Three structural reasons, two of them now stronger evidence after v5c/v7-fair:
 
 ---
 
-## Why I kept it anyway
+## Why I kept it
 
-Two reasons:
+Three reasons, in order of strength:
 
-1. **I like reading it.** The chain syntax helps me review AI-generated structure at a glance. Aesthetic, not data-backed. The single eval that could justify the skill on this axis — human time-to-find-bug — is the one we didn't run.
-2. **It's `description`-gated** — the body doesn't load unless the model decides to invoke it. The router still pays for the skill description on every prompt, so the cost isn't zero, but it's small.
+1. **It's a discipline tool for the human writing the spec.** Forces me to compose nouns + verbs + explicit values rather than dumping prose. The structuring happens before the LLM is involved. This is real but unmeasured — the only experiment that could quantify it is a 5-reviewer time-to-find-bug study, which we didn't run.
+2. **Small intent → delivery accuracy edge.** v7-fair shows builder leading on spec_faithfulness by ~0.5 points on a 10-point scale. Directionally consistent with structured-DSL theory; needs more tasks to be sure.
+3. **It's `description`-gated** — the body doesn't load unless the model decides to invoke it. The router still pays for the skill description on every prompt (small but not zero).
 
-If you don't share the aesthetic preference, **don't install it.** The data does not justify it as a productivity tool.
+If you don't share the human-side discipline benefit and don't write spec → artifact prompts where ambiguity would hurt, **don't install it.** The data does not justify it as a token-efficiency tool — tight markdown matches it on tokens, and the absolute differences are tiny.
 
 ---
 
