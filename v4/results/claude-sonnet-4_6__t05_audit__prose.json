@@ -1,0 +1,11 @@
+{
+  "model": "anthropic/claude-sonnet-4.6",
+  "task_id": "t05_audit",
+  "format": "prose",
+  "prompt": "Declaration (in prose format):\n\nCompare three databases — postgres, mongodb, and redis — across six\ncriteria: their consistency model (strong or eventual), cost per GB per\nmonth (looking for under $0.10), write throughput in ops/sec (minimum\n50,000), schema flexibility on a 1-5 scale, operational complexity on\na 1-5 scale, and number of cloud providers they support (minimum 3).\nWeight the criteria as: consistency 0.3, cost 0.2, throughput 0.25,\nschema 0.1, ops 0.1, cloud 0.05. Recommend the top one with justification,\nand output as a markdown table.\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- Database candidate: postgres\n- Database candidate: mongodb\n- Database candidate: redis\n- Criterion: consistency model\n- Criterion: cost per GB per month\n- Criterion: write throughput in ops/sec\n- Criterion: schema flexibility\n- Criterion: operational complexity\n- Criterion: number of cloud providers supported\n- Consistency model values: strong or eventual\n- Cost threshold: under $0.10 per GB per month\n- Write throughput minimum: 50,000 ops/sec\n- Schema flexibility scale: 1 to 5\n- Operational complexity scale: 1 to 5\n- Cloud providers minimum: 3\n- Weight for consistency: 0.30\n- Weight for cost: 0.20\n- Weight for write throughput: 0.25\n- Weight for schema flexibility: 0.10\n- Weight for operational complexity: 0.10\n- Weight for cloud providers: 0.05\n- Sum of all weights: 1.00\n- Each criterion scored per database\n- Each criterion score multiplied by its weight\n- Weighted scores summed per database to produce total score\n- Database with highest total weighted score identified as top recommendation\n- Justification provided for top recommendation\n- Output format: markdown table\n- Markdown table includes all three databases as rows\n- Markdown table includes all six criteria as columns\n- Markdown table includes weighted scores or total scores per database\n- Top recommended database explicitly stated",
+  "prompt_tokens": 296,
+  "completion_tokens": 322,
+  "cost": 0.005718,
+  "ran_at": "2026-05-04T12:43:20.835Z"
+}

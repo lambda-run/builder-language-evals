@@ -1,0 +1,51 @@
+id: t02_email_intent
+name: "Email triage intent"
+domain: intent_over_collection
+
+builder: |
+  inbox.urgent
+    .(email ->
+      email.classify(model: "gpt-5.5")
+        .if(is_spam): archive()
+        .if(is_billing): route_to(team: "finance")
+        .if(is_vip and is_angry): notify(channel: "sms", to: "lyndon")
+        .else: leave_in_inbox())
+    .schedule(cadence: "every_15min")
+
+markdown: |
+  # Inbox Triage Rule
+
+  Apply to: urgent emails only
+
+  For each email:
+  1. Classify with gpt-5.5
+  2. Routing:
+     - If spam → archive
+     - If billing → route to finance team
+     - If sender is VIP AND tone is angry → SMS notify Lyndon
+     - Otherwise → leave in inbox
+
+  Schedule: every 15 minutes
+
+prose: |
+  Build an email triage rule that runs every 15 minutes against urgent emails
+  in my inbox. For each email, classify it using gpt-5.5. If it's spam,
+  archive it. If it's a billing email, route to the finance team. If the
+  sender is a VIP and the tone is angry, send me an SMS notification.
+  Otherwise, leave the email alone in the inbox.
+
+gold_elements:
+  - urgent
+  - classify
+  - gpt-5.5
+  - spam
+  - archive
+  - billing
+  - finance
+  - vip
+  - angry
+  - sms
+  - lyndon
+  - inbox
+  - "15"
+  - schedule

@@ -1,0 +1,11 @@
+{
+  "model": "openai/gpt-5.5",
+  "task_id": "t03_agent_def",
+  "format": "builder",
+  "prompt": "Declaration (in builder format):\n\nagent.new(\"research_assistant\")\n  .frame(question: \"should we acquire competitor X?\", decision_by: \"2026-06-15\")\n  .holdings(documents: [\"financials.pdf\", \"10K.pdf\", \"press.html\"], tools: [\"search\", \"calculator\"])\n  .behavior(\n    parallelize(\n      subagent(name: \"market\", task: \"size + growth\", context: market_docs),\n      subagent(name: \"legal\", task: \"antitrust risk\", context: legal_docs),\n      subagent(name: \"finance\", task: \"valuation model\", context: financials)),\n    synthesize(into: \"decision_memo\"),\n    human_in_loop(reviewer: \"Lyndon\"))\n  .output(format: \"markdown\", length: \"2 pages\")\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- Agent: `research_assistant`\n- Frame question: `should we acquire competitor X?`\n- Decision deadline: `2026-06-15`\n- Holding document: `financials.pdf`\n- Holding document: `10K.pdf`\n- Holding document: `press.html`\n- Available tool: `search`\n- Available tool: `calculator`\n- Behavior: parallelize subagent work\n- Subagent: `market`\n- Subagent `market` task: `size + growth`\n- Subagent `market` context: `market_docs`\n- Subagent: `legal`\n- Subagent `legal` task: `antitrust risk`\n- Subagent `legal` context: `legal_docs`\n- Subagent: `finance`\n- Subagent `finance` task: `valuation model`\n- Subagent `finance` context: `financials`\n- Behavior: synthesize results into `decision_memo`\n- Behavior: human-in-the-loop review\n- Human reviewer: `Lyndon`\n- Output format: `markdown`\n- Output length: `2 pages`",
+  "prompt_tokens": 301,
+  "completion_tokens": 292,
+  "cost": 0.010265,
+  "ran_at": "2026-05-04T12:42:15.013Z"
+}

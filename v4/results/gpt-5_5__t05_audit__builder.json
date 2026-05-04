@@ -1,0 +1,11 @@
+{
+  "model": "openai/gpt-5.5",
+  "task_id": "t05_audit",
+  "format": "builder",
+  "prompt": "Declaration (in builder format):\n\naudit.compare([\"postgres\", \"mongodb\", \"redis\"])\n  .on(criteria: [\n    consistency_model(values: [\"strong\", \"eventual\"]),\n    cost_per_gb_per_month(threshold: 0.10),\n    write_throughput(min: 50000, unit: \"ops_per_sec\"),\n    schema_flexibility(scale: 1-5),\n    operational_complexity(scale: 1-5),\n    cloud_providers(min_count: 3)])\n  .weight_by({consistency: 0.3, cost: 0.2, throughput: 0.25, schema: 0.1, ops: 0.1, cloud: 0.05})\n  .recommend(top: 1, justify: true)\n  .output(format: \"markdown_table\")\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- Audit comparison action\n- Compare target: postgres\n- Compare target: mongodb\n- Compare target: redis\n- Criterion: consistency_model\n- Consistency model allowed value: strong\n- Consistency model allowed value: eventual\n- Criterion: cost_per_gb_per_month\n- Cost per GB per month threshold: 0.10\n- Criterion: write_throughput\n- Write throughput minimum: 50000\n- Write throughput unit: ops_per_sec\n- Criterion: schema_flexibility\n- Schema flexibility scale: 1-5\n- Criterion: operational_complexity\n- Operational complexity scale: 1-5\n- Criterion: cloud_providers\n- Cloud providers minimum count: 3\n- Weight: consistency = 0.3\n- Weight: cost = 0.2\n- Weight: throughput = 0.25\n- Weight: schema = 0.1\n- Weight: ops = 0.1\n- Weight: cloud = 0.05\n- Recommendation count: top 1\n- Recommendation justification: true\n- Output format: markdown_table",
+  "prompt_tokens": 302,
+  "completion_tokens": 306,
+  "cost": 0.01069,
+  "ran_at": "2026-05-04T12:43:25.006Z"
+}

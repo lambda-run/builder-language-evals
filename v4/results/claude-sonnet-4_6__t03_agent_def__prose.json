@@ -1,0 +1,11 @@
+{
+  "model": "anthropic/claude-sonnet-4.6",
+  "task_id": "t03_agent_def",
+  "format": "prose",
+  "prompt": "Declaration (in prose format):\n\nDefine a research_assistant agent. The framing question is \"should we\nacquire competitor X?\" and the decision is needed by 2026-06-15. The agent\nhas access to financials.pdf, 10K.pdf, and press.html, plus search and\ncalculator tools. The behavior is: in parallel, spawn three subagents — one\nnamed \"market\" to assess size and growth using market docs, one named\n\"legal\" to assess antitrust risk using legal docs, and one named \"finance\"\nto build a valuation model using the financials. Then synthesize their\noutputs into a decision memo. Lyndon reviews as a human in the loop. The\nfinal output is a 2-page markdown document.\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "• Agent name: research_assistant\n• Framing question: \"should we acquire competitor X?\"\n• Decision deadline: 2026-06-15\n• Input file: financials.pdf\n• Input file: 10K.pdf\n• Input file: press.html\n• Tool: search\n• Tool: calculator\n• Subagent name: market\n• Subagent task: assess market size and growth\n• Subagent input source: market docs\n• Subagent name: legal\n• Subagent task: assess antitrust risk\n• Subagent input source: legal docs\n• Subagent name: finance\n• Subagent task: build a valuation model\n• Subagent input source: financials\n• Subagent execution mode: parallel (all three spawned simultaneously)\n• Step: synthesize outputs from market, legal, and finance subagents\n• Synthesis output type: decision memo\n• Human-in-the-loop reviewer: Lyndon\n• Final output format: markdown document\n• Final output length: 2 pages",
+  "prompt_tokens": 307,
+  "completion_tokens": 247,
+  "cost": 0.004626,
+  "ran_at": "2026-05-04T12:42:10.698Z"
+}

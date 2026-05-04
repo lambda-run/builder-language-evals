@@ -1,0 +1,70 @@
+id: t03_agent_def
+name: "Acquisition research agent"
+domain: agent_definition
+
+builder: |
+  agent.new("research_assistant")
+    .frame(question: "should we acquire competitor X?", decision_by: "2026-06-15")
+    .holdings(documents: ["financials.pdf", "10K.pdf", "press.html"], tools: ["search", "calculator"])
+    .behavior(
+      parallelize(
+        subagent(name: "market", task: "size + growth", context: market_docs),
+        subagent(name: "legal", task: "antitrust risk", context: legal_docs),
+        subagent(name: "finance", task: "valuation model", context: financials)),
+      synthesize(into: "decision_memo"),
+      human_in_loop(reviewer: "Lyndon"))
+    .output(format: "markdown", length: "2 pages")
+
+markdown: |
+  # Agent: research_assistant
+
+  ## Frame
+  - Question: should we acquire competitor X?
+  - Decision needed by: 2026-06-15
+
+  ## Holdings
+  - Documents: financials.pdf, 10K.pdf, press.html
+  - Tools: search, calculator
+
+  ## Behavior
+  1. Run three subagents in parallel:
+     - "market" subagent — assess size + growth, using market docs
+     - "legal" subagent — assess antitrust risk, using legal docs
+     - "finance" subagent — build valuation model, using financials
+  2. Synthesize all three into a decision memo
+  3. Human in the loop: Lyndon reviews
+
+  ## Output
+  - Format: markdown
+  - Length: 2 pages
+
+prose: |
+  Define a research_assistant agent. The framing question is "should we
+  acquire competitor X?" and the decision is needed by 2026-06-15. The agent
+  has access to financials.pdf, 10K.pdf, and press.html, plus search and
+  calculator tools. The behavior is: in parallel, spawn three subagents — one
+  named "market" to assess size and growth using market docs, one named
+  "legal" to assess antitrust risk using legal docs, and one named "finance"
+  to build a valuation model using the financials. Then synthesize their
+  outputs into a decision memo. Lyndon reviews as a human in the loop. The
+  final output is a 2-page markdown document.
+
+gold_elements:
+  - research_assistant
+  - acquire
+  - 2026-06-15
+  - financials
+  - 10K
+  - press
+  - search
+  - calculator
+  - subagent
+  - market
+  - legal
+  - antitrust
+  - valuation
+  - synthesize
+  - lyndon
+  - human in the loop
+  - markdown
+  - "2 page"

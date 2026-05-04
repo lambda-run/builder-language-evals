@@ -1,0 +1,11 @@
+{
+  "model": "openai/gpt-5.5",
+  "task_id": "t02_email_intent",
+  "format": "markdown",
+  "prompt": "Declaration (in markdown format):\n\n# Inbox Triage Rule\n\nApply to: urgent emails only\n\nFor each email:\n1. Classify with gpt-5.5\n2. Routing:\n   - If spam → archive\n   - If billing → route to finance team\n   - If sender is VIP AND tone is angry → SMS notify Lyndon\n   - Otherwise → leave in inbox\n\nSchedule: every 15 minutes\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- Apply rule to urgent emails only\n- Process each urgent email individually\n- Classify each email with gpt-5.5\n- If email is classified as spam, archive the email\n- If email is classified as billing, route the email to the finance team\n- If sender is VIP and tone is angry, send SMS notification to Lyndon\n- If no routing condition matches, leave the email in the inbox\n- Run the rule every 15 minutes",
+  "prompt_tokens": 219,
+  "completion_tokens": 161,
+  "cost": 0.005925,
+  "ran_at": "2026-05-04T12:41:49.142Z"
+}

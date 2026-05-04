@@ -1,0 +1,11 @@
+{
+  "model": "openai/gpt-5.5",
+  "task_id": "t04_ci_pipeline",
+  "format": "builder",
+  "prompt": "Declaration (in builder format):\n\npipeline.ci(\"backend-api\", trigger: \"on_push to main\")\n  .parallelize(\n    lint(language: \"go\"),\n    type_check(language: \"go\"),\n    test(framework: \"ginkgo\", coverage_min: 0.80),\n    security_scan(tool: \"snyk\"))\n  .if(all passed):\n    .build(target: \"docker\", registry: \"ghcr.io/lambda-run/backend-api\")\n    .deploy(env: \"staging\", strategy: \"rolling\")\n    .smoke_test(timeout: \"60s\")\n    .if(smoke_test passed):\n      .deploy(env: \"prod\", strategy: \"canary\", canary_percent: 10)\n  .else:\n    .notify(channel: \"slack\", to: \"#deploys\")\n    .block_merge()\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- CI pipeline named \"backend-api\"\n- CI pipeline trigger: on push to main\n- Parallel execution block\n- Lint job\n- Lint language: Go\n- Type check job\n- Type check language: Go\n- Test job\n- Test framework: ginkgo\n- Test minimum coverage: 0.80\n- Security scan job\n- Security scan tool: snyk\n- Condition: all parallel jobs passed\n- Build step gated on all parallel jobs passing\n- Build target: docker\n- Build registry: ghcr.io/lambda-run/backend-api\n- Deploy step to staging gated on all parallel jobs passing\n- Staging deploy environment: staging\n- Staging deploy strategy: rolling\n- Smoke test step after staging deploy\n- Smoke test timeout: 60s\n- Condition: smoke test passed\n- Deploy step to prod gated on smoke test passing\n- Prod deploy environment: prod\n- Prod deploy strategy: canary\n- Prod canary percentage: 10\n- Else branch for failed parallel jobs\n- Notification step on failed parallel jobs\n- Notification channel: slack\n- Notification recipient: #deploys\n- Block merge step on failed parallel jobs",
+  "prompt_tokens": 304,
+  "completion_tokens": 335,
+  "cost": 0.01157,
+  "ran_at": "2026-05-04T12:42:48.500Z"
+}

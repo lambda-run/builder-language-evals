@@ -1,0 +1,442 @@
+{
+  "ran_at": "2026-05-04T12:44:19.708Z",
+  "cells": [
+    {
+      "model": "sonnet",
+      "task": "t01_project_spec",
+      "domain": "project_spec",
+      "format": "builder",
+      "matched": 13,
+      "total": 16,
+      "missed": [
+        "rounds",
+        "first_to_10",
+        "msgpack"
+      ],
+      "score": 0.8125,
+      "cost": 0.007626,
+      "prompt_tokens": 277,
+      "completion_tokens": 453
+    },
+    {
+      "model": "sonnet",
+      "task": "t01_project_spec",
+      "domain": "project_spec",
+      "format": "markdown",
+      "matched": 13,
+      "total": 16,
+      "missed": [
+        "players",
+        "rounds",
+        "first_to_10"
+      ],
+      "score": 0.8125,
+      "cost": 0.003132,
+      "prompt_tokens": 274,
+      "completion_tokens": 154
+    },
+    {
+      "model": "sonnet",
+      "task": "t01_project_spec",
+      "domain": "project_spec",
+      "format": "prose",
+      "matched": 14,
+      "total": 16,
+      "missed": [
+        "rounds",
+        "first_to_10"
+      ],
+      "score": 0.875,
+      "cost": 0.003237,
+      "prompt_tokens": 264,
+      "completion_tokens": 163
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t01_project_spec",
+      "domain": "project_spec",
+      "format": "builder",
+      "matched": 14,
+      "total": 16,
+      "missed": [
+        "players",
+        "rounds"
+      ],
+      "score": 0.875,
+      "cost": 0.0083,
+      "prompt_tokens": 256,
+      "completion_tokens": 234
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t01_project_spec",
+      "domain": "project_spec",
+      "format": "markdown",
+      "matched": 14,
+      "total": 16,
+      "missed": [
+        "players",
+        "rounds"
+      ],
+      "score": 0.875,
+      "cost": 0.008115,
+      "prompt_tokens": 249,
+      "completion_tokens": 229
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t01_project_spec",
+      "domain": "project_spec",
+      "format": "prose",
+      "matched": 14,
+      "total": 16,
+      "missed": [
+        "rounds",
+        "first_to_10"
+      ],
+      "score": 0.875,
+      "cost": 0.0081,
+      "prompt_tokens": 240,
+      "completion_tokens": 230
+    },
+    {
+      "model": "sonnet",
+      "task": "t02_email_intent",
+      "domain": "intent_over_collection",
+      "format": "builder",
+      "matched": 14,
+      "total": 14,
+      "missed": [],
+      "score": 1,
+      "cost": 0.004767,
+      "prompt_tokens": 254,
+      "completion_tokens": 267
+    },
+    {
+      "model": "sonnet",
+      "task": "t02_email_intent",
+      "domain": "intent_over_collection",
+      "format": "markdown",
+      "matched": 13,
+      "total": 14,
+      "missed": [
+        "classify"
+      ],
+      "score": 0.9285714285714286,
+      "cost": 0.002595,
+      "prompt_tokens": 235,
+      "completion_tokens": 126
+    },
+    {
+      "model": "sonnet",
+      "task": "t02_email_intent",
+      "domain": "intent_over_collection",
+      "format": "prose",
+      "matched": 12,
+      "total": 14,
+      "missed": [
+        "classify",
+        "lyndon"
+      ],
+      "score": 0.8571428571428571,
+      "cost": 0.005355,
+      "prompt_tokens": 235,
+      "completion_tokens": 310
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t02_email_intent",
+      "domain": "intent_over_collection",
+      "format": "builder",
+      "matched": 13,
+      "total": 14,
+      "missed": [
+        "classify"
+      ],
+      "score": 0.9285714285714286,
+      "cost": 0.006615,
+      "prompt_tokens": 231,
+      "completion_tokens": 182
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t02_email_intent",
+      "domain": "intent_over_collection",
+      "format": "markdown",
+      "matched": 13,
+      "total": 14,
+      "missed": [
+        "schedule"
+      ],
+      "score": 0.9285714285714286,
+      "cost": 0.005925,
+      "prompt_tokens": 219,
+      "completion_tokens": 161
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t02_email_intent",
+      "domain": "intent_over_collection",
+      "format": "prose",
+      "matched": 11,
+      "total": 14,
+      "missed": [
+        "classify",
+        "lyndon",
+        "schedule"
+      ],
+      "score": 0.7857142857142857,
+      "cost": 0.00761,
+      "prompt_tokens": 220,
+      "completion_tokens": 217
+    },
+    {
+      "model": "sonnet",
+      "task": "t03_agent_def",
+      "domain": "agent_definition",
+      "format": "builder",
+      "matched": 17,
+      "total": 18,
+      "missed": [
+        "human in the loop"
+      ],
+      "score": 0.9444444444444444,
+      "cost": 0.00561,
+      "prompt_tokens": 340,
+      "completion_tokens": 306
+    },
+    {
+      "model": "sonnet",
+      "task": "t03_agent_def",
+      "domain": "agent_definition",
+      "format": "markdown",
+      "matched": 17,
+      "total": 18,
+      "missed": [
+        "human in the loop"
+      ],
+      "score": 0.9444444444444444,
+      "cost": 0.005076,
+      "prompt_tokens": 317,
+      "completion_tokens": 275
+    },
+    {
+      "model": "sonnet",
+      "task": "t03_agent_def",
+      "domain": "agent_definition",
+      "format": "prose",
+      "matched": 17,
+      "total": 18,
+      "missed": [
+        "human in the loop"
+      ],
+      "score": 0.9444444444444444,
+      "cost": 0.004626,
+      "prompt_tokens": 307,
+      "completion_tokens": 247
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t03_agent_def",
+      "domain": "agent_definition",
+      "format": "builder",
+      "matched": 17,
+      "total": 18,
+      "missed": [
+        "human in the loop"
+      ],
+      "score": 0.9444444444444444,
+      "cost": 0.010265,
+      "prompt_tokens": 301,
+      "completion_tokens": 292
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t03_agent_def",
+      "domain": "agent_definition",
+      "format": "markdown",
+      "matched": 17,
+      "total": 18,
+      "missed": [
+        "human in the loop"
+      ],
+      "score": 0.9444444444444444,
+      "cost": 0.01032,
+      "prompt_tokens": 294,
+      "completion_tokens": 295
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t03_agent_def",
+      "domain": "agent_definition",
+      "format": "prose",
+      "matched": 17,
+      "total": 18,
+      "missed": [
+        "human in the loop"
+      ],
+      "score": 0.9444444444444444,
+      "cost": 0.011795,
+      "prompt_tokens": 289,
+      "completion_tokens": 345
+    },
+    {
+      "model": "sonnet",
+      "task": "t04_ci_pipeline",
+      "domain": "ops_pipeline",
+      "format": "builder",
+      "matched": 19,
+      "total": 19,
+      "missed": [],
+      "score": 1,
+      "cost": 0.005196,
+      "prompt_tokens": 347,
+      "completion_tokens": 277
+    },
+    {
+      "model": "sonnet",
+      "task": "t04_ci_pipeline",
+      "domain": "ops_pipeline",
+      "format": "markdown",
+      "matched": 19,
+      "total": 19,
+      "missed": [],
+      "score": 1,
+      "cost": 0.005586,
+      "prompt_tokens": 302,
+      "completion_tokens": 312
+    },
+    {
+      "model": "sonnet",
+      "task": "t04_ci_pipeline",
+      "domain": "ops_pipeline",
+      "format": "prose",
+      "matched": 19,
+      "total": 19,
+      "missed": [],
+      "score": 1,
+      "cost": 0.00633,
+      "prompt_tokens": 295,
+      "completion_tokens": 363
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t04_ci_pipeline",
+      "domain": "ops_pipeline",
+      "format": "builder",
+      "matched": 19,
+      "total": 19,
+      "missed": [],
+      "score": 1,
+      "cost": 0.01157,
+      "prompt_tokens": 304,
+      "completion_tokens": 335
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t04_ci_pipeline",
+      "domain": "ops_pipeline",
+      "format": "markdown",
+      "matched": 19,
+      "total": 19,
+      "missed": [],
+      "score": 1,
+      "cost": 0.012575,
+      "prompt_tokens": 271,
+      "completion_tokens": 374
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t04_ci_pipeline",
+      "domain": "ops_pipeline",
+      "format": "prose",
+      "matched": 19,
+      "total": 19,
+      "missed": [],
+      "score": 1,
+      "cost": 0.011215,
+      "prompt_tokens": 275,
+      "completion_tokens": 328
+    },
+    {
+      "model": "sonnet",
+      "task": "t05_audit",
+      "domain": "multi_criteria_audit",
+      "format": "builder",
+      "matched": 19,
+      "total": 19,
+      "missed": [],
+      "score": 1,
+      "cost": 0.007662,
+      "prompt_tokens": 339,
+      "completion_tokens": 443
+    },
+    {
+      "model": "sonnet",
+      "task": "t05_audit",
+      "domain": "multi_criteria_audit",
+      "format": "markdown",
+      "matched": 19,
+      "total": 19,
+      "missed": [],
+      "score": 1,
+      "cost": 0.009372,
+      "prompt_tokens": 319,
+      "completion_tokens": 561
+    },
+    {
+      "model": "sonnet",
+      "task": "t05_audit",
+      "domain": "multi_criteria_audit",
+      "format": "prose",
+      "matched": 19,
+      "total": 19,
+      "missed": [],
+      "score": 1,
+      "cost": 0.005718,
+      "prompt_tokens": 296,
+      "completion_tokens": 322
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t05_audit",
+      "domain": "multi_criteria_audit",
+      "format": "builder",
+      "matched": 18,
+      "total": 19,
+      "missed": [
+        "markdown table"
+      ],
+      "score": 0.9473684210526315,
+      "cost": 0.01069,
+      "prompt_tokens": 302,
+      "completion_tokens": 306
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t05_audit",
+      "domain": "multi_criteria_audit",
+      "format": "markdown",
+      "matched": 19,
+      "total": 19,
+      "missed": [],
+      "score": 1,
+      "cost": 0.0098,
+      "prompt_tokens": 292,
+      "completion_tokens": 278
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t05_audit",
+      "domain": "multi_criteria_audit",
+      "format": "prose",
+      "matched": 19,
+      "total": 19,
+      "missed": [],
+      "score": 1,
+      "cost": 0.010805,
+      "prompt_tokens": 277,
+      "completion_tokens": 314
+    }
+  ]
+}

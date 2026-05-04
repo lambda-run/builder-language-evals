@@ -1,0 +1,11 @@
+{
+  "model": "anthropic/claude-sonnet-4.6",
+  "task_id": "t03_agent_def",
+  "format": "builder",
+  "prompt": "Declaration (in builder format):\n\nagent.new(\"research_assistant\")\n  .frame(question: \"should we acquire competitor X?\", decision_by: \"2026-06-15\")\n  .holdings(documents: [\"financials.pdf\", \"10K.pdf\", \"press.html\"], tools: [\"search\", \"calculator\"])\n  .behavior(\n    parallelize(\n      subagent(name: \"market\", task: \"size + growth\", context: market_docs),\n      subagent(name: \"legal\", task: \"antitrust risk\", context: legal_docs),\n      subagent(name: \"finance\", task: \"valuation model\", context: financials)),\n    synthesize(into: \"decision_memo\"),\n    human_in_loop(reviewer: \"Lyndon\"))\n  .output(format: \"markdown\", length: \"2 pages\")\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- Agent name: `research_assistant`\n- Framing question: \"should we acquire competitor X?\"\n- Decision deadline: 2026-06-15\n- Input document: `financials.pdf`\n- Input document: `10K.pdf`\n- Input document: `press.html`\n- Tool available: `search`\n- Tool available: `calculator`\n- Subagent name: `market`\n- Subagent task: market size and growth analysis\n- Subagent context source: `market_docs`\n- Subagent name: `legal`\n- Subagent task: antitrust risk assessment\n- Subagent context source: `legal_docs`\n- Subagent name: `finance`\n- Subagent task: valuation model construction\n- Subagent context source: `financials`\n- All three subagents run in parallel\n- Subagent outputs are synthesized into a single artifact\n- Synthesis target artifact name: `decision_memo`\n- Human-in-the-loop review step is required before output is finalized\n- Designated reviewer: `Lyndon`\n- Output format: Markdown\n- Output length: 2 pages\n- Output artifact is a decision memo\n- Execution order: parallel subagents → synthesis → human review → final output",
+  "prompt_tokens": 340,
+  "completion_tokens": 306,
+  "cost": 0.00561,
+  "ran_at": "2026-05-04T12:42:02.385Z"
+}

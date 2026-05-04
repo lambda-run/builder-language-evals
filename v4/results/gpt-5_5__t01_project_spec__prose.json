@@ -1,0 +1,11 @@
+{
+  "model": "openai/gpt-5.5",
+  "task_id": "t01_project_spec",
+  "format": "prose",
+  "prompt": "Declaration (in prose format):\n\nProject \"webby\" is a websocket multiplayer game. It supports 2 to 8 players,\nwith three states: lobby, in_game, and spectator. Authentication uses\nephemeral tokens. Rounds last 60 seconds and end when the first player\nreaches 10 points. The protocol uses websockets with msgpack serialization\nand a 5-second heartbeat. Leaderboards are stored in redis; match history\nin postgres. Deploys to both staging and prod environments with automatic\nregion selection.\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- Project name: webby\n- Project type: websocket multiplayer game\n- Minimum supported players: 2\n- Maximum supported players: 8\n- Player state: lobby\n- Player state: in_game\n- Player state: spectator\n- Authentication method: ephemeral tokens\n- Round duration: 60 seconds\n- Round end condition: first player reaches 10 points\n- Winning score threshold: 10 points\n- Network protocol: websockets\n- Serialization format: msgpack\n- Heartbeat interval: 5 seconds\n- Leaderboard storage: redis\n- Match history storage: postgres\n- Deployment environment: staging\n- Deployment environment: prod\n- Deployment behavior: automatic region selection",
+  "prompt_tokens": 240,
+  "completion_tokens": 230,
+  "cost": 0.0081,
+  "ran_at": "2026-05-04T12:41:23.152Z"
+}

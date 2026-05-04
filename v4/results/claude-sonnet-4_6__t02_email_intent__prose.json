@@ -1,0 +1,11 @@
+{
+  "model": "anthropic/claude-sonnet-4.6",
+  "task_id": "t02_email_intent",
+  "format": "prose",
+  "prompt": "Declaration (in prose format):\n\nBuild an email triage rule that runs every 15 minutes against urgent emails\nin my inbox. For each email, classify it using gpt-5.5. If it's spam,\narchive it. If it's a billing email, route to the finance team. If the\nsender is a VIP and the tone is angry, send me an SMS notification.\nOtherwise, leave the email alone in the inbox.\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "• Triage rule scheduled to run every 15 minutes\n• Triage rule targets the inbox folder\n• Triage rule filters for emails marked/tagged as urgent before processing\n• Each qualifying email is passed to GPT-5.5 for classification\n• GPT-5.5 is used as the classification model (not any other model)\n• Classification must produce at least the following categories: spam, billing, VIP-angry, other\n• Spam classification action: archive the email\n• Billing classification action: route email to the finance team\n• VIP + angry tone classification action: send an SMS notification to the rule owner\n• Other/unmatched classification action: leave the email in the inbox untouched\n• VIP sender detection must be evaluated as a condition\n• Tone analysis (angry vs. not angry) must be evaluated as a condition\n• Both VIP status and angry tone must be true simultaneously to trigger SMS\n• SMS notification recipient is the inbox owner (the person who defined the rule)\n• The rule operates on each email individually (per-email iteration)\n• Archiving removes the email from the inbox view without deleting it\n• Routing to finance team implies the email is forwarded or assigned to a finance team inbox/address\n• The classification step precedes all routing/action steps\n• The rule runs continuously on a 15-minute interval (recurring, not one-time)",
+  "prompt_tokens": 235,
+  "completion_tokens": 310,
+  "cost": 0.005355,
+  "ran_at": "2026-05-04T12:41:39.575Z"
+}

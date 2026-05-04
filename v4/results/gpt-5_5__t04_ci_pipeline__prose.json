@@ -1,0 +1,11 @@
+{
+  "model": "openai/gpt-5.5",
+  "task_id": "t04_ci_pipeline",
+  "format": "prose",
+  "prompt": "Declaration (in prose format):\n\nBuild a CI/CD pipeline for the backend-api project, triggered on push to\nmain. In parallel, run: a Go linter, a Go type checker, the ginkgo test\nframework with minimum 80% coverage, and a snyk security scan. If all four\npass, build a docker image and push it to ghcr.io/lambda-run/backend-api,\nthen deploy it to staging using a rolling strategy, then smoke test with\na 60-second timeout. If the smoke test passes, deploy to production using\na canary strategy at 10%. If any of the initial four checks fail, notify\n#deploys in Slack and block the merge.\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- Project: backend-api\n- CI/CD pipeline\n- Trigger: push to main\n- Parallel execution for initial checks\n- Initial check: Go linter\n- Initial check: Go type checker\n- Initial check: ginkgo test framework\n- Test coverage minimum: 80%\n- Initial check: snyk security scan\n- Condition: all four initial checks must pass before build\n- Action: build a docker image\n- Action: push docker image\n- Docker image destination: ghcr.io/lambda-run/backend-api\n- Action: deploy to staging\n- Staging deployment strategy: rolling\n- Action: smoke test after staging deployment\n- Smoke test timeout: 60 seconds\n- Condition: smoke test must pass before production deployment\n- Action: deploy to production\n- Production deployment strategy: canary\n- Production canary percentage: 10%\n- Failure condition: any initial check fails\n- Failure action: notify Slack\n- Slack channel: #deploys\n- Failure action: block the merge",
+  "prompt_tokens": 275,
+  "completion_tokens": 328,
+  "cost": 0.011215,
+  "ran_at": "2026-05-04T12:42:58.721Z"
+}

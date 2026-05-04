@@ -1,0 +1,11 @@
+{
+  "model": "openai/gpt-5.5",
+  "task_id": "t01_project_spec",
+  "format": "markdown",
+  "prompt": "Declaration (in markdown format):\n\n# Project: webby\nA websocket multiplayer game.\n\n## Players\n- Capacity: 2-8\n- States: lobby, in_game, spectator\n- Auth: ephemeral_token\n\n## Rounds\n- Duration: 60s\n- Win condition: first_to_10\n\n## Protocol\n- Transport: websocket\n- Serialization: msgpack\n- Heartbeat: 5s\n\n## Persistence\n- Leaderboards: redis\n- Match history: postgres\n\n## Deploy\n- Environments: staging, prod\n- Region: auto\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- Project name: webby\n- Project type: websocket multiplayer game\n- Player capacity minimum: 2\n- Player capacity maximum: 8\n- Player state: lobby\n- Player state: in_game\n- Player state: spectator\n- Player authentication: ephemeral_token\n- Round duration: 60s\n- Round win condition: first_to_10\n- Protocol transport: websocket\n- Protocol serialization: msgpack\n- Protocol heartbeat interval: 5s\n- Leaderboards persistence: redis\n- Match history persistence: postgres\n- Deployment environment: staging\n- Deployment environment: prod\n- Deployment region: auto",
+  "prompt_tokens": 249,
+  "completion_tokens": 229,
+  "cost": 0.008115,
+  "ran_at": "2026-05-04T12:41:17.593Z"
+}

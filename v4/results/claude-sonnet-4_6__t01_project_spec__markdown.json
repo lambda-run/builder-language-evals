@@ -1,0 +1,11 @@
+{
+  "model": "anthropic/claude-sonnet-4.6",
+  "task_id": "t01_project_spec",
+  "format": "markdown",
+  "prompt": "Declaration (in markdown format):\n\n# Project: webby\nA websocket multiplayer game.\n\n## Players\n- Capacity: 2-8\n- States: lobby, in_game, spectator\n- Auth: ephemeral_token\n\n## Rounds\n- Duration: 60s\n- Win condition: first_to_10\n\n## Protocol\n- Transport: websocket\n- Serialization: msgpack\n- Heartbeat: 5s\n\n## Persistence\n- Leaderboards: redis\n- Match history: postgres\n\n## Deploy\n- Environments: staging, prod\n- Region: auto\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "• Project name: webby\n• Game type: websocket multiplayer\n• Minimum player count: 2\n• Maximum player count: 8\n• Player state: lobby\n• Player state: in_game\n• Player state: spectator\n• Authentication method: ephemeral_token\n• Round duration: 60 seconds\n• Win condition: first player to reach 10 points\n• Transport protocol: WebSocket\n• Serialization format: msgpack\n• Heartbeat interval: 5 seconds\n• Leaderboard storage: Redis\n• Match history storage: PostgreSQL\n• Deployment environment: staging\n• Deployment environment: prod\n• Deployment region selection: auto",
+  "prompt_tokens": 274,
+  "completion_tokens": 154,
+  "cost": 0.003132,
+  "ran_at": "2026-05-04T12:41:04.959Z"
+}

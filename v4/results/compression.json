@@ -1,0 +1,125 @@
+{
+  "ran_at": "2026-05-04T12:40:13.924Z",
+  "rows": [
+    {
+      "task": "t01_project_spec",
+      "domain": "project_spec",
+      "format": "builder",
+      "chars": 383,
+      "lines": 6,
+      "est_tokens": 96
+    },
+    {
+      "task": "t01_project_spec",
+      "domain": "project_spec",
+      "format": "markdown",
+      "chars": 387,
+      "lines": 24,
+      "est_tokens": 97
+    },
+    {
+      "task": "t01_project_spec",
+      "domain": "project_spec",
+      "format": "prose",
+      "chars": 458,
+      "lines": 7,
+      "est_tokens": 115
+    },
+    {
+      "task": "t02_email_intent",
+      "domain": "intent_over_collection",
+      "format": "builder",
+      "chars": 277,
+      "lines": 8,
+      "est_tokens": 69
+    },
+    {
+      "task": "t02_email_intent",
+      "domain": "intent_over_collection",
+      "format": "markdown",
+      "chars": 286,
+      "lines": 13,
+      "est_tokens": 72
+    },
+    {
+      "task": "t02_email_intent",
+      "domain": "intent_over_collection",
+      "format": "prose",
+      "chars": 331,
+      "lines": 5,
+      "est_tokens": 83
+    },
+    {
+      "task": "t03_agent_def",
+      "domain": "agent_definition",
+      "format": "builder",
+      "chars": 603,
+      "lines": 11,
+      "est_tokens": 151
+    },
+    {
+      "task": "t03_agent_def",
+      "domain": "agent_definition",
+      "format": "markdown",
+      "chars": 578,
+      "lines": 21,
+      "est_tokens": 145
+    },
+    {
+      "task": "t03_agent_def",
+      "domain": "agent_definition",
+      "format": "prose",
+      "chars": 624,
+      "lines": 9,
+      "est_tokens": 156
+    },
+    {
+      "task": "t04_ci_pipeline",
+      "domain": "ops_pipeline",
+      "format": "builder",
+      "chars": 554,
+      "lines": 15,
+      "est_tokens": 139
+    },
+    {
+      "task": "t04_ci_pipeline",
+      "domain": "ops_pipeline",
+      "format": "markdown",
+      "chars": 462,
+      "lines": 19,
+      "est_tokens": 116
+    },
+    {
+      "task": "t04_ci_pipeline",
+      "domain": "ops_pipeline",
+      "format": "prose",
+      "chars": 552,
+      "lines": 8,
+      "est_tokens": 138
+    },
+    {
+      "task": "t05_audit",
+      "domain": "multi_criteria_audit",
+      "format": "builder",
+      "chars": 501,
+      "lines": 11,
+      "est_tokens": 125
+    },
+    {
+      "task": "t05_audit",
+      "domain": "multi_criteria_audit",
+      "format": "markdown",
+      "chars": 522,
+      "lines": 23,
+      "est_tokens": 131
+    },
+    {
+      "task": "t05_audit",
+      "domain": "multi_criteria_audit",
+      "format": "prose",
+      "chars": 523,
+      "lines": 8,
+      "est_tokens": 131
+    }
+  ]
+}

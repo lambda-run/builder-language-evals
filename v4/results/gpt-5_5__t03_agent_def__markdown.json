@@ -1,0 +1,11 @@
+{
+  "model": "openai/gpt-5.5",
+  "task_id": "t03_agent_def",
+  "format": "markdown",
+  "prompt": "Declaration (in markdown format):\n\n# Agent: research_assistant\n\n## Frame\n- Question: should we acquire competitor X?\n- Decision needed by: 2026-06-15\n\n## Holdings\n- Documents: financials.pdf, 10K.pdf, press.html\n- Tools: search, calculator\n\n## Behavior\n1. Run three subagents in parallel:\n   - \"market\" subagent — assess size + growth, using market docs\n   - \"legal\" subagent — assess antitrust risk, using legal docs\n   - \"finance\" subagent — build valuation model, using financials\n2. Synthesize all three into a decision memo\n3. Human in the loop: Lyndon reviews\n\n## Output\n- Format: markdown\n- Length: 2 pages\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- Agent name: research_assistant\n- Question: should we acquire competitor X?\n- Decision needed by: 2026-06-15\n- Document holding: financials.pdf\n- Document holding: 10K.pdf\n- Document holding: press.html\n- Tool holding: search\n- Tool holding: calculator\n- Run three subagents in parallel\n- Subagent: market\n- Market subagent task: assess size\n- Market subagent task: assess growth\n- Market subagent input source: market docs\n- Subagent: legal\n- Legal subagent task: assess antitrust risk\n- Legal subagent input source: legal docs\n- Subagent: finance\n- Finance subagent task: build valuation model\n- Finance subagent input source: financials\n- Synthesize market subagent output\n- Synthesize legal subagent output\n- Synthesize finance subagent output\n- Produce a decision memo\n- Human-in-the-loop review required\n- Human reviewer: Lyndon\n- Output format: markdown\n- Output length: 2 pages",
+  "prompt_tokens": 294,
+  "completion_tokens": 295,
+  "cost": 0.01032,
+  "ran_at": "2026-05-04T12:42:19.632Z"
+}

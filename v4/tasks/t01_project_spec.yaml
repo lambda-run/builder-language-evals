@@ -1,0 +1,64 @@
+id: t01_project_spec
+name: "Websocket game project spec"
+domain: project_spec
+
+builder: |
+  project.new("webby", "websocket multiplayer game")
+    .players(capacity: 2-8, states: ["lobby", "in_game", "spectator"], auth: "ephemeral_token")
+    .rounds(duration: "60s", win: "first_to_10")
+    .protocol(transport: "websocket", serialize: "msgpack", heartbeat: "5s")
+    .persistence(leaderboards: "redis", match_history: "postgres")
+    .deploy(env: ["staging", "prod"], region: "auto")
+
+markdown: |
+  # Project: webby
+  A websocket multiplayer game.
+
+  ## Players
+  - Capacity: 2-8
+  - States: lobby, in_game, spectator
+  - Auth: ephemeral_token
+
+  ## Rounds
+  - Duration: 60s
+  - Win condition: first_to_10
+
+  ## Protocol
+  - Transport: websocket
+  - Serialization: msgpack
+  - Heartbeat: 5s
+
+  ## Persistence
+  - Leaderboards: redis
+  - Match history: postgres
+
+  ## Deploy
+  - Environments: staging, prod
+  - Region: auto
+
+prose: |
+  Project "webby" is a websocket multiplayer game. It supports 2 to 8 players,
+  with three states: lobby, in_game, and spectator. Authentication uses
+  ephemeral tokens. Rounds last 60 seconds and end when the first player
+  reaches 10 points. The protocol uses websockets with msgpack serialization
+  and a 5-second heartbeat. Leaderboards are stored in redis; match history
+  in postgres. Deploys to both staging and prod environments with automatic
+  region selection.
+
+gold_elements:
+  - players
+  - lobby
+  - spectator
+  - ephemeral
+  - rounds
+  - "60"
+  - first_to_10
+  - websocket
+  - msgpack
+  - heartbeat
+  - redis
+  - postgres
+  - leaderboard
+  - match history
+  - staging
+  - prod

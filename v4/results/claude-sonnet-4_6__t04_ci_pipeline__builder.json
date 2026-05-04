@@ -1,0 +1,11 @@
+{
+  "model": "anthropic/claude-sonnet-4.6",
+  "task_id": "t04_ci_pipeline",
+  "format": "builder",
+  "prompt": "Declaration (in builder format):\n\npipeline.ci(\"backend-api\", trigger: \"on_push to main\")\n  .parallelize(\n    lint(language: \"go\"),\n    type_check(language: \"go\"),\n    test(framework: \"ginkgo\", coverage_min: 0.80),\n    security_scan(tool: \"snyk\"))\n  .if(all passed):\n    .build(target: \"docker\", registry: \"ghcr.io/lambda-run/backend-api\")\n    .deploy(env: \"staging\", strategy: \"rolling\")\n    .smoke_test(timeout: \"60s\")\n    .if(smoke_test passed):\n      .deploy(env: \"prod\", strategy: \"canary\", canary_percent: 10)\n  .else:\n    .notify(channel: \"slack\", to: \"#deploys\")\n    .block_merge()\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "• Pipeline name: `backend-api`\n• Trigger event: push to `main` branch\n• Parallel stage containing four concurrent jobs\n• Job 1: lint, language Go\n• Job 2: type-check, language Go\n• Job 3: test, framework Ginkgo, minimum coverage threshold 80%\n• Job 4: security scan, tool Snyk\n• Gate condition: all four parallel jobs must pass before proceeding\n• Build step: target Docker\n• Docker image registry: `ghcr.io/lambda-run/backend-api`\n• Deploy step: environment staging\n• Staging deployment strategy: rolling\n• Smoke test step following staging deploy\n• Smoke test timeout: 60 seconds\n• Gate condition: smoke test must pass before proceeding to prod\n• Deploy step: environment prod\n• Prod deployment strategy: canary\n• Canary traffic percentage: 10%\n• Else branch triggers when any of the four parallel jobs fail\n• Failure notification channel: Slack\n• Slack notification recipient: `#deploys`\n• Merge block action on failure: `block_merge()`\n• Else branch also triggers if smoke test fails (implied by nesting of the outer else)",
+  "prompt_tokens": 347,
+  "completion_tokens": 277,
+  "cost": 0.005196,
+  "ran_at": "2026-05-04T12:42:31.255Z"
+}

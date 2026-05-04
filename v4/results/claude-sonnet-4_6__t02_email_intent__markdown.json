@@ -1,0 +1,11 @@
+{
+  "model": "anthropic/claude-sonnet-4.6",
+  "task_id": "t02_email_intent",
+  "format": "markdown",
+  "prompt": "Declaration (in markdown format):\n\n# Inbox Triage Rule\n\nApply to: urgent emails only\n\nFor each email:\n1. Classify with gpt-5.5\n2. Routing:\n   - If spam → archive\n   - If billing → route to finance team\n   - If sender is VIP AND tone is angry → SMS notify Lyndon\n   - Otherwise → leave in inbox\n\nSchedule: every 15 minutes\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "• Target scope: urgent emails only\n• Classification model: gpt-5.5\n• Classification step executes per email\n• Spam classification outcome → archive action\n• Billing classification outcome → route to finance team\n• VIP sender condition evaluated per email\n• Angry tone condition evaluated per email\n• VIP sender AND angry tone → SMS notification sent to Lyndon\n• All other emails (not spam, not billing, not VIP+angry) → left in inbox\n• Schedule interval: every 15 minutes\n• Processing is per-email within each scheduled run",
+  "prompt_tokens": 235,
+  "completion_tokens": 126,
+  "cost": 0.002595,
+  "ran_at": "2026-05-04T12:41:31.436Z"
+}

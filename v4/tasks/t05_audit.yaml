@@ -1,0 +1,72 @@
+id: t05_audit
+name: "Database choice audit"
+domain: multi_criteria_audit
+
+builder: |
+  audit.compare(["postgres", "mongodb", "redis"])
+    .on(criteria: [
+      consistency_model(values: ["strong", "eventual"]),
+      cost_per_gb_per_month(threshold: 0.10),
+      write_throughput(min: 50000, unit: "ops_per_sec"),
+      schema_flexibility(scale: 1-5),
+      operational_complexity(scale: 1-5),
+      cloud_providers(min_count: 3)])
+    .weight_by({consistency: 0.3, cost: 0.2, throughput: 0.25, schema: 0.1, ops: 0.1, cloud: 0.05})
+    .recommend(top: 1, justify: true)
+    .output(format: "markdown_table")
+
+markdown: |
+  # Audit: pick a database
+
+  Compare: postgres, mongodb, redis
+
+  ## Criteria
+  - Consistency model (strong vs eventual)
+  - Cost per GB per month (threshold $0.10)
+  - Write throughput (min 50,000 ops/sec)
+  - Schema flexibility (1-5 scale)
+  - Operational complexity (1-5 scale)
+  - Cloud provider availability (min 3)
+
+  ## Weights
+  - Consistency: 0.3
+  - Cost: 0.2
+  - Throughput: 0.25
+  - Schema flexibility: 0.1
+  - Operational complexity: 0.1
+  - Cloud providers: 0.05
+
+  ## Output
+  - Recommend the top 1 with justification
+  - Format: markdown table
+
+prose: |
+  Compare three databases — postgres, mongodb, and redis — across six
+  criteria: their consistency model (strong or eventual), cost per GB per
+  month (looking for under $0.10), write throughput in ops/sec (minimum
+  50,000), schema flexibility on a 1-5 scale, operational complexity on
+  a 1-5 scale, and number of cloud providers they support (minimum 3).
+  Weight the criteria as: consistency 0.3, cost 0.2, throughput 0.25,
+  schema 0.1, ops 0.1, cloud 0.05. Recommend the top one with justification,
+  and output as a markdown table.
+
+gold_elements:
+  - postgres
+  - mongodb
+  - redis
+  - consistency
+  - strong
+  - eventual
+  - cost
+  - "0.10"
+  - throughput
+  - "50"
+  - schema
+  - flexibility
+  - complexity
+  - cloud
+  - "0.3"
+  - "0.25"
+  - recommend
+  - markdown table
+  - justif

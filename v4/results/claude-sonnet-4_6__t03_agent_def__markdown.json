@@ -1,0 +1,11 @@
+{
+  "model": "anthropic/claude-sonnet-4.6",
+  "task_id": "t03_agent_def",
+  "format": "markdown",
+  "prompt": "Declaration (in markdown format):\n\n# Agent: research_assistant\n\n## Frame\n- Question: should we acquire competitor X?\n- Decision needed by: 2026-06-15\n\n## Holdings\n- Documents: financials.pdf, 10K.pdf, press.html\n- Tools: search, calculator\n\n## Behavior\n1. Run three subagents in parallel:\n   - \"market\" subagent — assess size + growth, using market docs\n   - \"legal\" subagent — assess antitrust risk, using legal docs\n   - \"finance\" subagent — build valuation model, using financials\n2. Synthesize all three into a decision memo\n3. Human in the loop: Lyndon reviews\n\n## Output\n- Format: markdown\n- Length: 2 pages\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- Agent name: research_assistant\n- Driving question: should we acquire competitor X?\n- Decision deadline: 2026-06-15\n- Input document: financials.pdf\n- Input document: 10K.pdf\n- Input document: press.html\n- Available tool: search\n- Available tool: calculator\n- Subagent name: market\n- Subagent task: assess market size\n- Subagent task: assess market growth\n- Subagent input: market docs\n- Subagent name: legal\n- Subagent task: assess antitrust risk\n- Subagent input: legal docs\n- Subagent name: finance\n- Subagent task: build valuation model\n- Subagent input: financials\n- Execution pattern: three subagents run in parallel\n- Step 1: run market, legal, and finance subagents in parallel\n- Step 2: synthesize outputs of all three subagents into a decision memo\n- Step 3: human review by Lyndon\n- Human-in-the-loop reviewer: Lyndon\n- Output type: decision memo\n- Output format: markdown\n- Output length: 2 pages",
+  "prompt_tokens": 317,
+  "completion_tokens": 275,
+  "cost": 0.005076,
+  "ran_at": "2026-05-04T12:42:06.567Z"
+}

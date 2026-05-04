@@ -1,0 +1,11 @@
+{
+  "model": "openai/gpt-5.5",
+  "task_id": "t03_agent_def",
+  "format": "prose",
+  "prompt": "Declaration (in prose format):\n\nDefine a research_assistant agent. The framing question is \"should we\nacquire competitor X?\" and the decision is needed by 2026-06-15. The agent\nhas access to financials.pdf, 10K.pdf, and press.html, plus search and\ncalculator tools. The behavior is: in parallel, spawn three subagents — one\nnamed \"market\" to assess size and growth using market docs, one named\n\"legal\" to assess antitrust risk using legal docs, and one named \"finance\"\nto build a valuation model using the financials. Then synthesize their\noutputs into a decision memo. Lyndon reviews as a human in the loop. The\nfinal output is a 2-page markdown document.\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- Define agent: `research_assistant`\n- Framing question: `should we acquire competitor X?`\n- Decision deadline: `2026-06-15`\n- Agent access to document: `financials.pdf`\n- Agent access to document: `10K.pdf`\n- Agent access to document: `press.html`\n- Agent access to tool: `search`\n- Agent access to tool: `calculator`\n- Execute subagent work in parallel\n- Spawn subagent: `market`\n- `market` subagent task: assess size and growth\n- `market` subagent input category: market docs\n- Spawn subagent: `legal`\n- `legal` subagent task: assess antitrust risk\n- `legal` subagent input category: legal docs\n- Spawn subagent: `finance`\n- `finance` subagent task: build a valuation model\n- `finance` subagent input category: financials\n- Synthesize subagent outputs\n- Produce a decision memo\n- Human-in-the-loop reviewer: Lyndon\n- Final output format: markdown document\n- Final output length: 2 pages",
+  "prompt_tokens": 289,
+  "completion_tokens": 345,
+  "cost": 0.011795,
+  "ran_at": "2026-05-04T12:42:25.284Z"
+}

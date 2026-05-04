@@ -1,0 +1,11 @@
+{
+  "model": "anthropic/claude-sonnet-4.6",
+  "task_id": "t02_email_intent",
+  "format": "builder",
+  "prompt": "Declaration (in builder format):\n\ninbox.urgent\n  .(email ->\n    email.classify(model: \"gpt-5.5\")\n      .if(is_spam): archive()\n      .if(is_billing): route_to(team: \"finance\")\n      .if(is_vip and is_angry): notify(channel: \"sms\", to: \"lyndon\")\n      .else: leave_in_inbox())\n  .schedule(cadence: \"every_15min\")\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- Trigger source: `inbox.urgent`\n- Input type: email\n- Classification action: `email.classify`\n- Classification model: `gpt-5.5`\n- Condition branch 1: `is_spam`\n- Action for `is_spam`: `archive()`\n- Condition branch 2: `is_billing`\n- Action for `is_billing`: `route_to`\n- Routing destination team: `finance`\n- Condition branch 3: composite `is_vip AND is_angry`\n- Action for `is_vip AND is_angry`: `notify`\n- Notification channel: `sms`\n- Notification recipient: `lyndon`\n- Default/else action: `leave_in_inbox()`\n- Execution schedule: recurring\n- Schedule cadence: every 15 minutes\n- Branch evaluation order: `is_spam` → `is_billing` → `is_vip and is_angry` → else\n- Each email processed individually (per-item pipeline)\n- Classification must resolve at minimum the labels: `is_spam`, `is_billing`, `is_vip`, `is_angry`",
+  "prompt_tokens": 254,
+  "completion_tokens": 267,
+  "cost": 0.004767,
+  "ran_at": "2026-05-04T12:41:28.183Z"
+}

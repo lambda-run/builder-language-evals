@@ -1,0 +1,11 @@
+{
+  "model": "openai/gpt-5.5",
+  "task_id": "t04_ci_pipeline",
+  "format": "markdown",
+  "prompt": "Declaration (in markdown format):\n\n# CI/CD Pipeline: backend-api\n\nTrigger: on push to main\n\n## Step 1 (parallel)\n- Lint (Go)\n- Type check (Go)\n- Test (ginkgo, coverage min 80%)\n- Security scan (snyk)\n\n## Step 2 (if all four pass)\n- Build docker image, push to ghcr.io/lambda-run/backend-api\n- Deploy to staging with rolling strategy\n- Smoke test (60s timeout)\n- If smoke test passes: deploy to prod with canary strategy (10%)\n\n## Step 3 (if any failed)\n- Notify #deploys in Slack\n- Block the merge\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- CI/CD pipeline named `backend-api`\n- Trigger on push\n- Trigger branch `main`\n- Step 1 executes in parallel\n- Step 1 includes Go lint\n- Step 1 includes Go type check\n- Step 1 includes tests using `ginkgo`\n- Step 1 enforces test coverage minimum of 80%\n- Step 1 includes security scan using `snyk`\n- Step 2 runs only if Go lint passes\n- Step 2 runs only if Go type check passes\n- Step 2 runs only if `ginkgo` tests pass\n- Step 2 runs only if `snyk` security scan passes\n- Step 2 builds a Docker image\n- Step 2 pushes the Docker image to `ghcr.io/lambda-run/backend-api`\n- Step 2 deploys to staging\n- Staging deployment uses a rolling strategy\n- Step 2 runs a smoke test\n- Smoke test timeout is 60 seconds\n- Production deployment runs only if smoke test passes\n- Production deployment uses a canary strategy\n- Production canary percentage is 10%\n- Step 3 runs if Go lint fails\n- Step 3 runs if Go type check fails\n- Step 3 runs if `ginkgo` tests fail\n- Step 3 runs if test coverage is below 80%\n- Step 3 runs if `snyk` security scan fails\n- Step 3 notifies Slack channel `#deploys`\n- Step 3 blocks the merge",
+  "prompt_tokens": 271,
+  "completion_tokens": 374,
+  "cost": 0.012575,
+  "ran_at": "2026-05-04T12:42:53.863Z"
+}

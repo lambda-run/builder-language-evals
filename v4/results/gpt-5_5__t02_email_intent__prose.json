@@ -1,0 +1,11 @@
+{
+  "model": "openai/gpt-5.5",
+  "task_id": "t02_email_intent",
+  "format": "prose",
+  "prompt": "Declaration (in prose format):\n\nBuild an email triage rule that runs every 15 minutes against urgent emails\nin my inbox. For each email, classify it using gpt-5.5. If it's spam,\narchive it. If it's a billing email, route to the finance team. If the\nsender is a VIP and the tone is angry, send me an SMS notification.\nOtherwise, leave the email alone in the inbox.\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- Email triage rule\n- Runs every 15 minutes\n- Targets urgent emails\n- Targets emails in the inbox\n- Processes each matching email\n- Classifies each email\n- Uses gpt-5.5 for classification\n- Detects spam emails\n- Archives emails classified as spam\n- Detects billing emails\n- Routes billing emails to the finance team\n- Detects whether the sender is a VIP\n- Detects whether the email tone is angry\n- Sends an SMS notification to the user when the sender is a VIP and the tone is angry\n- Leaves all other emails alone in the inbox",
+  "prompt_tokens": 220,
+  "completion_tokens": 217,
+  "cost": 0.00761,
+  "ran_at": "2026-05-04T12:41:56.673Z"
+}

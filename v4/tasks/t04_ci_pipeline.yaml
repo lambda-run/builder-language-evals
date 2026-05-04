@@ -1,0 +1,72 @@
+id: t04_ci_pipeline
+name: "CI/CD pipeline for backend-api"
+domain: ops_pipeline
+
+builder: |
+  pipeline.ci("backend-api", trigger: "on_push to main")
+    .parallelize(
+      lint(language: "go"),
+      type_check(language: "go"),
+      test(framework: "ginkgo", coverage_min: 0.80),
+      security_scan(tool: "snyk"))
+    .if(all passed):
+      .build(target: "docker", registry: "ghcr.io/lambda-run/backend-api")
+      .deploy(env: "staging", strategy: "rolling")
+      .smoke_test(timeout: "60s")
+      .if(smoke_test passed):
+        .deploy(env: "prod", strategy: "canary", canary_percent: 10)
+    .else:
+      .notify(channel: "slack", to: "#deploys")
+      .block_merge()
+
+markdown: |
+  # CI/CD Pipeline: backend-api
+
+  Trigger: on push to main
+
+  ## Step 1 (parallel)
+  - Lint (Go)
+  - Type check (Go)
+  - Test (ginkgo, coverage min 80%)
+  - Security scan (snyk)
+
+  ## Step 2 (if all four pass)
+  - Build docker image, push to ghcr.io/lambda-run/backend-api
+  - Deploy to staging with rolling strategy
+  - Smoke test (60s timeout)
+  - If smoke test passes: deploy to prod with canary strategy (10%)
+
+  ## Step 3 (if any failed)
+  - Notify #deploys in Slack
+  - Block the merge
+
+prose: |
+  Build a CI/CD pipeline for the backend-api project, triggered on push to
+  main. In parallel, run: a Go linter, a Go type checker, the ginkgo test
+  framework with minimum 80% coverage, and a snyk security scan. If all four
+  pass, build a docker image and push it to ghcr.io/lambda-run/backend-api,
+  then deploy it to staging using a rolling strategy, then smoke test with
+  a 60-second timeout. If the smoke test passes, deploy to production using
+  a canary strategy at 10%. If any of the initial four checks fail, notify
+  #deploys in Slack and block the merge.
+
+gold_elements:
+  - lint
+  - type
+  - test
+  - ginkgo
+  - "80"
+  - snyk
+  - security
+  - docker
+  - ghcr.io
+  - staging
+  - rolling
+  - smoke
+  - "60"
+  - prod
+  - canary
+  - "10"
+  - slack
+  - "#deploys"
+  - block

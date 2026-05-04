@@ -1,0 +1,11 @@
+{
+  "model": "openai/gpt-5.5",
+  "task_id": "t02_email_intent",
+  "format": "builder",
+  "prompt": "Declaration (in builder format):\n\ninbox.urgent\n  .(email ->\n    email.classify(model: \"gpt-5.5\")\n      .if(is_spam): archive()\n      .if(is_billing): route_to(team: \"finance\")\n      .if(is_vip and is_angry): notify(channel: \"sms\", to: \"lyndon\")\n      .else: leave_in_inbox())\n  .schedule(cadence: \"every_15min\")\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "- `inbox.urgent` workflow\n- Email input\n- Email classification step\n- Classification model: `gpt-5.5`\n- Spam condition: `is_spam`\n- Spam action: `archive()`\n- Billing condition: `is_billing`\n- Billing action: route to team `finance`\n- VIP-and-angry condition: `is_vip and is_angry`\n- VIP-and-angry action: notify via channel `sms`\n- VIP-and-angry notification recipient: `lyndon`\n- Else action: leave in inbox\n- Schedule cadence: `every_15min`",
+  "prompt_tokens": 231,
+  "completion_tokens": 182,
+  "cost": 0.006615,
+  "ran_at": "2026-05-04T12:41:44.494Z"
+}

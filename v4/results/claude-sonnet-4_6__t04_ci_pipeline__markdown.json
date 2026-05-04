@@ -1,0 +1,11 @@
+{
+  "model": "anthropic/claude-sonnet-4.6",
+  "task_id": "t04_ci_pipeline",
+  "format": "markdown",
+  "prompt": "Declaration (in markdown format):\n\n# CI/CD Pipeline: backend-api\n\nTrigger: on push to main\n\n## Step 1 (parallel)\n- Lint (Go)\n- Type check (Go)\n- Test (ginkgo, coverage min 80%)\n- Security scan (snyk)\n\n## Step 2 (if all four pass)\n- Build docker image, push to ghcr.io/lambda-run/backend-api\n- Deploy to staging with rolling strategy\n- Smoke test (60s timeout)\n- If smoke test passes: deploy to prod with canary strategy (10%)\n\n## Step 3 (if any failed)\n- Notify #deploys in Slack\n- Block the merge\n\nOutput a flat bullet list manifest of every concrete element this declaration implies.",
+  "manifest": "• Trigger: git push event on main branch\n• Step 1 runs all four jobs in parallel\n• Step 1 job: Lint using Go linter\n• Step 1 job: Type check using Go toolchain\n• Step 1 job: Test using Ginkgo test framework\n• Step 1 job: minimum code coverage threshold of 80%\n• Step 1 job: Security scan using Snyk\n• Step 2 executes only if all four Step 1 jobs pass\n• Step 2 action: build Docker image\n• Step 2 action: push Docker image to ghcr.io/lambda-run/backend-api\n• Step 2 action: deploy to staging environment\n• Step 2 staging deployment strategy: rolling\n• Step 2 action: run smoke test against staging\n• Step 2 smoke test timeout: 60 seconds\n• Step 2 condition: smoke test must pass before proceeding to production deploy\n• Step 2 action: deploy to production environment\n• Step 2 production deployment strategy: canary\n• Step 2 canary initial traffic percentage: 10%\n• Step 3 executes if any Step 1 job fails\n• Step 3 action: send notification to Slack channel #deploys\n• Step 3 action: block the merge (branch protection / merge gate enforcement)",
+  "prompt_tokens": 302,
+  "completion_tokens": 312,
+  "cost": 0.005586,
+  "ran_at": "2026-05-04T12:42:36.667Z"
+}
