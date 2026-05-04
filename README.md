@@ -22,7 +22,6 @@ ResearchTask
   .parallelize(market_agent, legal_agent)
   .transform(into: "synthesis_doc", format: "markdown")
   .approve(lyndon)
-  .run()
 ```
 
 `market_agent`, `legal_agent`, and `lyndon` are named bindings defined elsewhere. The chain composes named values rather than restating each one's arguments inline, and invents a domain verb (`.approve()`) instead of a generic `human_in_loop(reviewer:)` wrapper.
