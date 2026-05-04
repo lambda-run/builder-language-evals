@@ -12,7 +12,7 @@ The [`builder-language`](skill/SKILL.md) skill is a personal notation preference
 
 It teaches Claude to write plans as a strict noun + named-verb chain instead of markdown or prose:
 
-```
+```ts
 ResearchTask
   .frame(question: "...", decision_by: "...")
   .parallelize(
