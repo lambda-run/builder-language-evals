@@ -1,0 +1,80 @@
+{
+  "task_id": "t04_deploy",
+  "condition": "json",
+  "executor_model": "anthropic/claude-sonnet-4.6",
+  "plan": "```json\n{\n  \"steps\": [\n    {\n      \"parallel\": false,\n      \"calls\": [\n        { \"tool\": \"build\", \"args\": { \"version\": \"v2.3.1\" } }\n      ]\n    },\n    {\n      \"parallel\": true,\n      \"calls\": [\n        { \"tool\": \"run_tests\", \"args\": { \"version\": \"v2.3.1\" } },\n        { \"tool\": \"security_scan\", \"args\": { \"version\": \"v2.3.1\" } }\n      ]\n    }\n  ],\n  \"conditionals\": [\n    {\n      \"if\": \"all of build, run_tests, and security_scan succeeded\",\n      \"then\": [\n        {\n          \"parallel\": false,\n          \"calls\": [\n            { \"tool\": \"deploy\", \"args\": { \"version\": \"v2.3.1\", \"env\": \"staging\" } }\n          ]\n        },\n        {\n          \"parallel\": false,\n          \"calls\": [\n            { \"tool\": \"notify_team\", \"args\": { \"channel\": \"#deploys\", \"message\": \"✅ v2.3.1 has been successfully deployed to staging. Build, tests, and security scan all passed.\" } }\n          ]\n        }\n      ]\n    },\n    {\n      \"if\": \"any of build, run_tests, or security_scan failed\",\n      \"then\": [\n        {\n          \"parallel\": false,\n          \"calls\": [\n            { \"tool\": \"notify_team\", \"args\": { \"channel\": \"#deploys\", \"message\": \"❌ Deployment of v2.3.1 to staging was aborted. The following checks failed: {failed_check_names}. Please investigate before retrying.\" } }\n          ]\n        }\n      ]\n    }\n  ]\n}\n```",
+  "trace": [
+    {
+      "turn": 0,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01HWDJHF7TivRV8ryDMUUyuK",
+          "name": "build",
+          "args": {
+            "version": "v2.3.1"
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 1,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_019iv3TaRo6M9y5faStY4DRi",
+          "name": "run_tests",
+          "args": {
+            "version": "v2.3.1"
+          }
+        },
+        {
+          "id": "toolu_bdrk_01XY9tBDnk1x7z93zfSez9XG",
+          "name": "security_scan",
+          "args": {
+            "version": "v2.3.1"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 2,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01E1LM74n1Dhaqv3d9jFCDS8",
+          "name": "deploy",
+          "args": {
+            "version": "v2.3.1",
+            "env": "staging"
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 3,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_014U33bTSNw7VL4Yys7Xyx4h",
+          "name": "notify_team",
+          "args": {
+            "channel": "#deploys",
+            "message": "✅ v2.3.1 has been successfully deployed to staging. Build, tests, and security scan all passed."
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 4,
+      "tool_calls": [],
+      "parallel": false,
+      "final_text": "---\n\n**Plan execution complete!** Here's a summary of all steps:\n\n| Step | Tool | Result |\n|------|------|--------|\n| 1 | `build` v2.3.1 | ✅ Success — `build-v2.3.1.tar` |\n| 2a | `run_tests` v2.3.1 | ✅ Success — 0 failures |\n| 2b | `security_scan` v2.3.1 | ✅ Success — 0 vulnerabilities |\n| 3 | `deploy` → staging | ✅ Success — deployed at `2026-05-04T12:00:00Z` |\n| 4 | `notify_team` → #deploys | ✅ Notified |\n\nAll checks passed and **v2.3.1 is live in staging**. 🚀"
+    }
+  ],
+  "prompt_tokens": 8619,
+  "completion_tokens": 670,
+  "cost": 0.035906999999999994,
+  "turns": 5,
+  "ran_at": "2026-05-04T09:44:12.858Z"
+}

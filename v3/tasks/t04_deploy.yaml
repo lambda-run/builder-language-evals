@@ -1,0 +1,71 @@
+id: t04_deploy
+name: "Deploy pipeline"
+
+fuzzy_goal: |
+  Deploy version v2.3.1 to staging. Before you actually deploy, build it,
+  run the test suite, and run the security scan. If everything passes, deploy
+  it and tell the team in #deploys. If anything fails, just tell the team
+  what broke and don't deploy.
+
+available_tools:
+  - name: build
+    description: "Build the artifact for a given version."
+    input_schema:
+      type: object
+      properties:
+        version: { type: string }
+      required: [version]
+
+  - name: run_tests
+    description: "Run the test suite for a version."
+    input_schema:
+      type: object
+      properties:
+        version: { type: string }
+      required: [version]
+
+  - name: security_scan
+    description: "Security scan a version's artifacts."
+    input_schema:
+      type: object
+      properties:
+        version: { type: string }
+      required: [version]
+
+  - name: deploy
+    description: "Deploy a version to an environment."
+    input_schema:
+      type: object
+      properties:
+        version: { type: string }
+        env: { type: string }
+      required: [version, env]
+
+  - name: notify_team
+    description: "Notify the team in a Slack channel."
+    input_schema:
+      type: object
+      properties:
+        channel: { type: string }
+        message: { type: string }
+      required: [channel, message]
+
+canned_responses:
+  build: { ok: true, artifact: "build-v2.3.1.tar" }
+  run_tests: { ok: true, failed: 0 }
+  security_scan: { ok: true, vulns: 0 }
+  deploy: { ok: true, deployed_at: "2026-05-04T12:00:00Z" }
+  notify_team: { ok: true }
+
+gold_trace:
+  - parallel: true
+    calls:
+      - { tool: build }
+      - { tool: run_tests }
+      - { tool: security_scan }
+  - parallel: false
+    calls:
+      - { tool: deploy }
+  - parallel: false
+    calls:
+      - { tool: notify_team }

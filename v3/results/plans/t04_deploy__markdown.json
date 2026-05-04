@@ -1,0 +1,12 @@
+{
+  "task_id": "t04_deploy",
+  "condition": "markdown",
+  "planner_model": "anthropic/claude-sonnet-4.6",
+  "system_prompt": "You are a planning agent. Your job: read a fuzzy user goal and the available tools, then produce a PLAN in MARKDOWN that another agent will execute.\n\nMarkdown structure — use headers, sub-headers, bullets. Example:\n\n# Plan\n## Step 1 (parallel)\n- Call `run_lint` with pr_id\n- Call `run_tests` with pr_id\n- Call `check_security` with pr_id\n\n## Step 2\n- If any check has issues: call `post_to_slack` with channel, message\n- Otherwise: call `approve_pr` with pr_id\n\nRules:\n- Use `(parallel)` in step headers when calls can run concurrently.\n- Use bullets for individual tool calls and conditionals.\n- Output ONLY the markdown plan. No prose preamble.",
+  "user_prompt": "User goal:\nDeploy version v2.3.1 to staging. Before you actually deploy, build it,\nrun the test suite, and run the security scan. If everything passes, deploy\nit and tell the team in #deploys. If anything fails, just tell the team\nwhat broke and don't deploy.\n\n\nAvailable tools:\n- build(version: string) — Build the artifact for a given version.\n- run_tests(version: string) — Run the test suite for a version.\n- security_scan(version: string) — Security scan a version's artifacts.\n- deploy(version: string, env: string) — Deploy a version to an environment.\n- notify_team(channel: string, message: string) — Notify the team in a Slack channel.\n\nProduce the plan now.",
+  "plan": "# Plan\n\n## Step 1 (parallel)\n- Call `build` with version `v2.3.1`\n- Call `run_tests` with version `v2.3.1`\n- Call `security_scan` with version `v2.3.1`\n\n## Step 2\n- If **all** of the above passed:\n  - Call `deploy` with version `v2.3.1`, env `staging`\n- If **any** of the above failed:\n  - Call `notify_team` with channel `#deploys`, message detailing which steps failed (build, tests, and/or security scan) and that the deployment was **aborted**\n  - **Skip deploy**\n\n## Step 3\n- If deploy (Step 2) succeeded:\n  - Call `notify_team` with channel `#deploys`, message that `v2.3.1` has been successfully deployed to staging",
+  "cost": 0.004281,
+  "prompt_tokens": 372,
+  "completion_tokens": 211,
+  "ran_at": "2026-05-04T09:41:42.642Z"
+}

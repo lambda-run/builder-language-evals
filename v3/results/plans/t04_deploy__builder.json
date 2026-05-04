@@ -1,0 +1,12 @@
+{
+  "task_id": "t04_deploy",
+  "condition": "builder",
+  "planner_model": "anthropic/claude-sonnet-4.6",
+  "system_prompt": "You are a planning agent. Your job: read a fuzzy user goal and the available tools, then produce a PLAN in BUILDER syntax that another agent will execute.\n\nBuilder syntax — use `Noun.verb(...).verb(...)` chains. Example:\n  PRReview\n    .parallelize(\n        run_lint(pr_id),\n        run_tests(pr_id),\n        check_security(pr_id))\n    .if(any check has issues): post_to_slack(channel, message)\n    .else: approve_pr(pr_id)\n\nRules:\n- Use `.parallelize(a, b, c)` for tools that can run concurrently (independent inputs).\n- Use `.sequence(a, b)` or chained verbs for ordered steps.\n- Use `.if(condition): action` for conditional dispatch.\n- Inline `// comments` for non-obvious choices.\n- Output ONLY the builder spec inside a fenced ```builder block. No prose before or after.",
+  "user_prompt": "User goal:\nDeploy version v2.3.1 to staging. Before you actually deploy, build it,\nrun the test suite, and run the security scan. If everything passes, deploy\nit and tell the team in #deploys. If anything fails, just tell the team\nwhat broke and don't deploy.\n\n\nAvailable tools:\n- build(version: string) — Build the artifact for a given version.\n- run_tests(version: string) — Run the test suite for a version.\n- security_scan(version: string) — Security scan a version's artifacts.\n- deploy(version: string, env: string) — Deploy a version to an environment.\n- notify_team(channel: string, message: string) — Notify the team in a Slack channel.\n\nProduce the plan now.",
+  "plan": "```builder\nDeploy_v2_3_1_Staging\n  .sequence(\n    build(\"v2.3.1\"),                          // must build before tests/scan can run\n    .parallelize(\n      run_tests(\"v2.3.1\"),\n      security_scan(\"v2.3.1\")                 // tests and scan are independent, run concurrently\n    )\n  )\n  .if(all of build, run_tests, security_scan passed):\n    .sequence(\n      deploy(\"v2.3.1\", \"staging\"),\n      notify_team(\"#deploys\", \"✅ v2.3.1 successfully deployed to staging.\")\n    )\n  .else:\n    notify_team(\"#deploys\", \"❌ v2.3.1 deployment to staging aborted. Failed steps: {list any of build/tests/security_scan that failed}.\")\n    // no deploy call is made on failure\n```",
+  "cost": 0.004557,
+  "prompt_tokens": 414,
+  "completion_tokens": 221,
+  "ran_at": "2026-05-04T09:41:32.204Z"
+}

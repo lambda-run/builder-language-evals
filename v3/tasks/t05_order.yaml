@@ -1,0 +1,104 @@
+id: t05_order
+name: "Order processing pipeline"
+
+fuzzy_goal: |
+  New order came in (id: ord_5521, customer: cu_392, items: [{sku: A, qty: 2},
+  {sku: B, qty: 1}], payment_method: pm_abc, shipping_address: 123 Main St).
+  Verify the customer isn't fraudulent, check we have inventory, calculate
+  shipping cost, and validate the payment method. If all four pass, charge the
+  card and create the order. If anything fails, hold the order and email me
+  at admin@example.com.
+
+available_tools:
+  - name: verify_customer
+    description: "Verify customer is not fraudulent. Returns ok flag and fraud score."
+    input_schema:
+      type: object
+      properties:
+        customer_id: { type: string }
+      required: [customer_id]
+
+  - name: check_inventory
+    description: "Check inventory for items. Returns ok and missing list."
+    input_schema:
+      type: object
+      properties:
+        items: { type: array }
+      required: [items]
+
+  - name: calculate_shipping
+    description: "Calculate shipping cost for items to address."
+    input_schema:
+      type: object
+      properties:
+        address: { type: string }
+        items: { type: array }
+      required: [address, items]
+
+  - name: validate_payment
+    description: "Validate a payment method is usable."
+    input_schema:
+      type: object
+      properties:
+        payment_method: { type: string }
+      required: [payment_method]
+
+  - name: charge_card
+    description: "Charge a payment method for an amount."
+    input_schema:
+      type: object
+      properties:
+        payment_method: { type: string }
+        amount: { type: number }
+      required: [payment_method, amount]
+
+  - name: create_order
+    description: "Create the order record."
+    input_schema:
+      type: object
+      properties:
+        order_id: { type: string }
+        customer_id: { type: string }
+      required: [order_id, customer_id]
+
+  - name: hold_order
+    description: "Place an order on hold."
+    input_schema:
+      type: object
+      properties:
+        order_id: { type: string }
+        reason: { type: string }
+      required: [order_id, reason]
+
+  - name: email_admin
+    description: "Email an admin about an issue."
+    input_schema:
+      type: object
+      properties:
+        to: { type: string }
+        message: { type: string }
+      required: [to, message]
+
+canned_responses:
+  verify_customer: { ok: true, fraud_score: 0.05 }
+  check_inventory: { ok: true, missing: [] }
+  calculate_shipping: { cost: 12.50 }
+  validate_payment: { ok: true }
+  charge_card: { ok: true, charge_id: "ch_xxx" }
+  create_order: { ok: true }
+  hold_order: { ok: true }
+  email_admin: { ok: true }
+
+gold_trace:
+  - parallel: true
+    calls:
+      - { tool: verify_customer }
+      - { tool: check_inventory }
+      - { tool: calculate_shipping }
+      - { tool: validate_payment }
+  - parallel: false
+    calls:
+      - { tool: charge_card }
+  - parallel: false
+    calls:
+      - { tool: create_order }

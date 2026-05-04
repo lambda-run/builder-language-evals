@@ -1,0 +1,557 @@
+{
+  "ran_at": "2026-05-04T09:45:17.689Z",
+  "cells": [
+    {
+      "task_id": "t01_pr_review",
+      "condition": "builder",
+      "coverage": 1,
+      "covered_tools": [
+        "run_lint",
+        "run_tests",
+        "check_security",
+        "count_loc_change",
+        "approve_pr"
+      ],
+      "missing_tools": [],
+      "extra_calls": 0,
+      "extra_tools": [],
+      "parallel_matched": 1,
+      "parallel_total": 1,
+      "parallel_score": 1,
+      "parallel_detail": [
+        {
+          "group": [
+            "run_lint",
+            "run_tests",
+            "check_security",
+            "count_loc_change"
+          ],
+          "matched": true,
+          "turn": 0
+        }
+      ],
+      "total_calls": 5,
+      "turns": 3,
+      "planner_tokens": 755,
+      "executor_tokens": 5469,
+      "total_tokens": 6224,
+      "cost": 0.028584000000000002
+    },
+    {
+      "task_id": "t01_pr_review",
+      "condition": "json",
+      "coverage": 1,
+      "covered_tools": [
+        "run_lint",
+        "run_tests",
+        "check_security",
+        "count_loc_change",
+        "approve_pr"
+      ],
+      "missing_tools": [],
+      "extra_calls": 0,
+      "extra_tools": [],
+      "parallel_matched": 1,
+      "parallel_total": 1,
+      "parallel_score": 1,
+      "parallel_detail": [
+        {
+          "group": [
+            "run_lint",
+            "run_tests",
+            "check_security",
+            "count_loc_change"
+          ],
+          "matched": true,
+          "turn": 0
+        }
+      ],
+      "total_calls": 5,
+      "turns": 3,
+      "planner_tokens": 934,
+      "executor_tokens": 5984,
+      "total_tokens": 6918,
+      "cost": 0.032586
+    },
+    {
+      "task_id": "t01_pr_review",
+      "condition": "markdown",
+      "coverage": 1,
+      "covered_tools": [
+        "run_lint",
+        "run_tests",
+        "check_security",
+        "count_loc_change",
+        "approve_pr"
+      ],
+      "missing_tools": [],
+      "extra_calls": 0,
+      "extra_tools": [],
+      "parallel_matched": 1,
+      "parallel_total": 1,
+      "parallel_score": 1,
+      "parallel_detail": [
+        {
+          "group": [
+            "run_lint",
+            "run_tests",
+            "check_security",
+            "count_loc_change"
+          ],
+          "matched": true,
+          "turn": 0
+        }
+      ],
+      "total_calls": 5,
+      "turns": 3,
+      "planner_tokens": 694,
+      "executor_tokens": 5395,
+      "total_tokens": 6089,
+      "cost": 0.027807
+    },
+    {
+      "task_id": "t02_customer_triage",
+      "condition": "builder",
+      "coverage": 1,
+      "covered_tools": [
+        "classify_intent",
+        "check_sentiment",
+        "lookup_customer",
+        "page_csm"
+      ],
+      "missing_tools": [],
+      "extra_calls": 0,
+      "extra_tools": [],
+      "parallel_matched": 1,
+      "parallel_total": 1,
+      "parallel_score": 1,
+      "parallel_detail": [
+        {
+          "group": [
+            "classify_intent",
+            "check_sentiment",
+            "lookup_customer"
+          ],
+          "matched": true,
+          "turn": 0
+        }
+      ],
+      "total_calls": 4,
+      "turns": 3,
+      "planner_tokens": 910,
+      "executor_tokens": 5689,
+      "total_tokens": 6599,
+      "cost": 0.030861
+    },
+    {
+      "task_id": "t02_customer_triage",
+      "condition": "json",
+      "coverage": 1,
+      "covered_tools": [
+        "classify_intent",
+        "check_sentiment",
+        "lookup_customer",
+        "page_csm"
+      ],
+      "missing_tools": [],
+      "extra_calls": 0,
+      "extra_tools": [],
+      "parallel_matched": 1,
+      "parallel_total": 1,
+      "parallel_score": 1,
+      "parallel_detail": [
+        {
+          "group": [
+            "classify_intent",
+            "check_sentiment",
+            "lookup_customer"
+          ],
+          "matched": true,
+          "turn": 0
+        }
+      ],
+      "total_calls": 4,
+      "turns": 3,
+      "planner_tokens": 955,
+      "executor_tokens": 5922,
+      "total_tokens": 6877,
+      "cost": 0.033063
+    },
+    {
+      "task_id": "t02_customer_triage",
+      "condition": "markdown",
+      "coverage": 1,
+      "covered_tools": [
+        "classify_intent",
+        "check_sentiment",
+        "lookup_customer",
+        "page_csm"
+      ],
+      "missing_tools": [],
+      "extra_calls": 0,
+      "extra_tools": [],
+      "parallel_matched": 1,
+      "parallel_total": 1,
+      "parallel_score": 1,
+      "parallel_detail": [
+        {
+          "group": [
+            "classify_intent",
+            "check_sentiment",
+            "lookup_customer"
+          ],
+          "matched": true,
+          "turn": 0
+        }
+      ],
+      "total_calls": 4,
+      "turns": 3,
+      "planner_tokens": 833,
+      "executor_tokens": 5639,
+      "total_tokens": 6472,
+      "cost": 0.030492000000000002
+    },
+    {
+      "task_id": "t03_image_pipeline",
+      "condition": "builder",
+      "coverage": 1,
+      "covered_tools": [
+        "resize_image",
+        "make_thumbnail",
+        "extract_exif",
+        "upload_to_cdn"
+      ],
+      "missing_tools": [],
+      "extra_calls": 0,
+      "extra_tools": [],
+      "parallel_matched": 2,
+      "parallel_total": 2,
+      "parallel_score": 1,
+      "parallel_detail": [
+        {
+          "group": [
+            "resize_image",
+            "make_thumbnail",
+            "extract_exif"
+          ],
+          "matched": true,
+          "turn": 0
+        },
+        {
+          "group": [
+            "upload_to_cdn",
+            "upload_to_cdn"
+          ],
+          "matched": true,
+          "turn": 1
+        }
+      ],
+      "total_calls": 5,
+      "turns": 3,
+      "planner_tokens": 679,
+      "executor_tokens": 5313,
+      "total_tokens": 5992,
+      "cost": 0.029615999999999996
+    },
+    {
+      "task_id": "t03_image_pipeline",
+      "condition": "json",
+      "coverage": 1,
+      "covered_tools": [
+        "resize_image",
+        "make_thumbnail",
+        "extract_exif",
+        "upload_to_cdn"
+      ],
+      "missing_tools": [],
+      "extra_calls": 0,
+      "extra_tools": [],
+      "parallel_matched": 2,
+      "parallel_total": 2,
+      "parallel_score": 1,
+      "parallel_detail": [
+        {
+          "group": [
+            "resize_image",
+            "make_thumbnail",
+            "extract_exif"
+          ],
+          "matched": true,
+          "turn": 0
+        },
+        {
+          "group": [
+            "upload_to_cdn",
+            "upload_to_cdn"
+          ],
+          "matched": true,
+          "turn": 1
+        }
+      ],
+      "total_calls": 5,
+      "turns": 3,
+      "planner_tokens": 815,
+      "executor_tokens": 5602,
+      "total_tokens": 6417,
+      "cost": 0.031239
+    },
+    {
+      "task_id": "t03_image_pipeline",
+      "condition": "markdown",
+      "coverage": 1,
+      "covered_tools": [
+        "resize_image",
+        "make_thumbnail",
+        "extract_exif",
+        "upload_to_cdn"
+      ],
+      "missing_tools": [],
+      "extra_calls": 0,
+      "extra_tools": [],
+      "parallel_matched": 2,
+      "parallel_total": 2,
+      "parallel_score": 1,
+      "parallel_detail": [
+        {
+          "group": [
+            "resize_image",
+            "make_thumbnail",
+            "extract_exif"
+          ],
+          "matched": true,
+          "turn": 0
+        },
+        {
+          "group": [
+            "upload_to_cdn",
+            "upload_to_cdn"
+          ],
+          "matched": true,
+          "turn": 1
+        }
+      ],
+      "total_calls": 5,
+      "turns": 3,
+      "planner_tokens": 604,
+      "executor_tokens": 4939,
+      "total_tokens": 5543,
+      "cost": 0.025436999999999998
+    },
+    {
+      "task_id": "t04_deploy",
+      "condition": "builder",
+      "coverage": 1,
+      "covered_tools": [
+        "build",
+        "run_tests",
+        "security_scan",
+        "deploy",
+        "notify_team"
+      ],
+      "missing_tools": [],
+      "extra_calls": 0,
+      "extra_tools": [],
+      "parallel_matched": 0,
+      "parallel_total": 1,
+      "parallel_score": 0,
+      "parallel_detail": [
+        {
+          "group": [
+            "build",
+            "run_tests",
+            "security_scan"
+          ],
+          "matched": false,
+          "turn": -1
+        }
+      ],
+      "total_calls": 5,
+      "turns": 5,
+      "planner_tokens": 635,
+      "executor_tokens": 8233,
+      "total_tokens": 8868,
+      "cost": 0.037044
+    },
+    {
+      "task_id": "t04_deploy",
+      "condition": "json",
+      "coverage": 1,
+      "covered_tools": [
+        "build",
+        "run_tests",
+        "security_scan",
+        "deploy",
+        "notify_team"
+      ],
+      "missing_tools": [],
+      "extra_calls": 0,
+      "extra_tools": [],
+      "parallel_matched": 0,
+      "parallel_total": 1,
+      "parallel_score": 0,
+      "parallel_detail": [
+        {
+          "group": [
+            "build",
+            "run_tests",
+            "security_scan"
+          ],
+          "matched": false,
+          "turn": -1
+        }
+      ],
+      "total_calls": 5,
+      "turns": 5,
+      "planner_tokens": 865,
+      "executor_tokens": 9289,
+      "total_tokens": 10154,
+      "cost": 0.04384199999999999
+    },
+    {
+      "task_id": "t04_deploy",
+      "condition": "markdown",
+      "coverage": 1,
+      "covered_tools": [
+        "build",
+        "run_tests",
+        "security_scan",
+        "deploy",
+        "notify_team"
+      ],
+      "missing_tools": [],
+      "extra_calls": 0,
+      "extra_tools": [],
+      "parallel_matched": 1,
+      "parallel_total": 1,
+      "parallel_score": 1,
+      "parallel_detail": [
+        {
+          "group": [
+            "build",
+            "run_tests",
+            "security_scan"
+          ],
+          "matched": true,
+          "turn": 0
+        }
+      ],
+      "total_calls": 5,
+      "turns": 4,
+      "planner_tokens": 583,
+      "executor_tokens": 6567,
+      "total_tokens": 7150,
+      "cost": 0.030798
+    },
+    {
+      "task_id": "t05_order",
+      "condition": "builder",
+      "coverage": 1,
+      "covered_tools": [
+        "verify_customer",
+        "check_inventory",
+        "calculate_shipping",
+        "validate_payment",
+        "charge_card",
+        "create_order"
+      ],
+      "missing_tools": [],
+      "extra_calls": 0,
+      "extra_tools": [],
+      "parallel_matched": 1,
+      "parallel_total": 1,
+      "parallel_score": 1,
+      "parallel_detail": [
+        {
+          "group": [
+            "verify_customer",
+            "check_inventory",
+            "calculate_shipping",
+            "validate_payment"
+          ],
+          "matched": true,
+          "turn": 0
+        }
+      ],
+      "total_calls": 6,
+      "turns": 4,
+      "planner_tokens": 997,
+      "executor_tokens": 8940,
+      "total_tokens": 9937,
+      "cost": 0.043191
+    },
+    {
+      "task_id": "t05_order",
+      "condition": "json",
+      "coverage": 1,
+      "covered_tools": [
+        "verify_customer",
+        "check_inventory",
+        "calculate_shipping",
+        "validate_payment",
+        "charge_card",
+        "create_order"
+      ],
+      "missing_tools": [],
+      "extra_calls": 0,
+      "extra_tools": [],
+      "parallel_matched": 1,
+      "parallel_total": 1,
+      "parallel_score": 1,
+      "parallel_detail": [
+        {
+          "group": [
+            "verify_customer",
+            "check_inventory",
+            "calculate_shipping",
+            "validate_payment"
+          ],
+          "matched": true,
+          "turn": 0
+        }
+      ],
+      "total_calls": 6,
+      "turns": 4,
+      "planner_tokens": 1363,
+      "executor_tokens": 10453,
+      "total_tokens": 11816,
+      "cost": 0.05381999999999999
+    },
+    {
+      "task_id": "t05_order",
+      "condition": "markdown",
+      "coverage": 1,
+      "covered_tools": [
+        "verify_customer",
+        "check_inventory",
+        "calculate_shipping",
+        "validate_payment",
+        "charge_card",
+        "create_order"
+      ],
+      "missing_tools": [],
+      "extra_calls": 0,
+      "extra_tools": [],
+      "parallel_matched": 1,
+      "parallel_total": 1,
+      "parallel_score": 1,
+      "parallel_detail": [
+        {
+          "group": [
+            "verify_customer",
+            "check_inventory",
+            "calculate_shipping",
+            "validate_payment"
+          ],
+          "matched": true,
+          "turn": 0
+        }
+      ],
+      "total_calls": 6,
+      "turns": 4,
+      "planner_tokens": 928,
+      "executor_tokens": 9105,
+      "total_tokens": 10033,
+      "cost": 0.044943000000000004
+    }
+  ]
+}

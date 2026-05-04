@@ -1,0 +1,100 @@
+{
+  "task_id": "t05_order",
+  "condition": "builder",
+  "executor_model": "anthropic/claude-sonnet-4.6",
+  "plan": "```builder\nOrder\n  .parallelize(\n    verify_customer(\"cu_392\"),                                          // fraud check\n    check_inventory([{sku: \"A\", qty: 2}, {sku: \"B\", qty: 1}]),        // stock check\n    calculate_shipping(\"123 Main St\", [{sku: \"A\", qty: 2}, {sku: \"B\", qty: 1}]),  // shipping cost (needed for charge amount)\n    validate_payment(\"pm_abc\")                                          // payment method check\n  )\n  .if(all four results pass — verify_customer.ok, check_inventory.ok, validate_payment.ok, calculate_shipping succeeds):\n    sequence(\n      charge_card(\"pm_abc\", calculate_shipping.cost),                  // charge using shipping-inclusive amount\n      create_order(\"ord_5521\", \"cu_392\")                               // create record only after successful charge\n    )\n  .else:\n    sequence(\n      hold_order(\n        \"ord_5521\",\n        // Collect all failure reasons for a descriptive hold message\n        reason: [\n          !verify_customer.ok     ? `Fraud check failed (score: ${verify_customer.fraud_score})` : null,\n          !check_inventory.ok     ? `Inventory missing: ${check_inventory.missing}` : null,\n          !validate_payment.ok    ? \"Payment method invalid\" : null,\n          calculate_shipping.error ? \"Shipping calculation failed\" : null\n        ].filter(Boolean).join(\"; \")\n      ),\n      email_admin(\n        \"admin@example.com\",\n        message: `Order ord_5521 for customer cu_392 has been placed on HOLD.\\nReasons: ${hold_order.reason}\\nPlease review and take action.`\n      )\n    )\n```",
+  "trace": [
+    {
+      "turn": 0,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_0169i8CjoNn9NvKeMcfkek9V",
+          "name": "verify_customer",
+          "args": {
+            "customer_id": "cu_392"
+          }
+        },
+        {
+          "id": "toolu_bdrk_01QnjJWjmxwDpzRji5LyZ79g",
+          "name": "check_inventory",
+          "args": {
+            "items": [
+              {
+                "sku": "A",
+                "qty": 2
+              },
+              {
+                "sku": "B",
+                "qty": 1
+              }
+            ]
+          }
+        },
+        {
+          "id": "toolu_bdrk_01E1DzbSKcwXrcFQDVdA56YW",
+          "name": "calculate_shipping",
+          "args": {
+            "address": "123 Main St",
+            "items": [
+              {
+                "sku": "A",
+                "qty": 2
+              },
+              {
+                "sku": "B",
+                "qty": 1
+              }
+            ]
+          }
+        },
+        {
+          "id": "toolu_bdrk_01Qiyxa5asfVogswuWwVnStj",
+          "name": "validate_payment",
+          "args": {
+            "payment_method": "pm_abc"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 1,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01SfkgfXFC1hvgb6BUKg9DPc",
+          "name": "charge_card",
+          "args": {
+            "payment_method": "pm_abc",
+            "amount": 12.5
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 2,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01F5dXiXTKvgmv6tHtQHu3Ys",
+          "name": "create_order",
+          "args": {
+            "order_id": "ord_5521",
+            "customer_id": "cu_392"
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 3,
+      "tool_calls": [],
+      "parallel": false,
+      "final_text": "---\n\n### ✅ Plan Execution Complete\n\n| Step | Result |\n|---|---|\n| Fraud check (`cu_392`) | ✅ Passed (score: 0.05) |\n| Inventory check | ✅ All items available |\n| Shipping calculation | ✅ $12.50 |\n| Payment validation (`pm_abc`) | ✅ Valid |\n| Charge card | ✅ Charged $12.50 (charge: `ch_xxx`) |\n| Create order (`ord_5521`) | ✅ Order created |\n\nOrder `ord_5521` for customer `cu_392` has been successfully placed and charged! 🎉"
+    }
+  ],
+  "prompt_tokens": 8261,
+  "completion_tokens": 679,
+  "cost": 0.034968,
+  "turns": 4,
+  "ran_at": "2026-05-04T09:44:38.481Z"
+}

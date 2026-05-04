@@ -1,0 +1,60 @@
+{
+  "task_id": "t02_customer_triage",
+  "condition": "json",
+  "executor_model": "anthropic/claude-sonnet-4.6",
+  "plan": "```json\n{\n  \"steps\": [\n    {\n      \"parallel\": true,\n      \"calls\": [\n        {\n          \"tool\": \"classify_intent\",\n          \"args\": { \"text\": \"Your product is broken and I want a refund NOW.\" }\n        },\n        {\n          \"tool\": \"check_sentiment\",\n          \"args\": { \"text\": \"Your product is broken and I want a refund NOW.\" }\n        },\n        {\n          \"tool\": \"lookup_customer\",\n          \"args\": { \"email\": \"alice@bigco.com\" }\n        }\n      ]\n    }\n  ],\n  \"conditionals\": [\n    {\n      \"if\": \"classify_intent result is 'spam'\",\n      \"then\": [\n        {\n          \"tool\": \"archive_ticket\",\n          \"args\": { \"ticket_id\": \"tk_8842\" }\n        }\n      ]\n    },\n    {\n      \"if\": \"classify_intent result is 'billing' AND lookup_customer tier is NOT 'vip'\",\n      \"then\": [\n        {\n          \"tool\": \"route_to_finance\",\n          \"args\": { \"ticket_id\": \"tk_8842\" }\n        }\n      ]\n    },\n    {\n      \"if\": \"lookup_customer tier is 'vip' AND check_sentiment result is 'angry' OR 'negative'\",\n      \"then\": [\n        {\n          \"tool\": \"page_csm\",\n          \"args\": {\n            \"customer_id\": \"lookup_customer.result.customer_id\",\n            \"reason\": \"VIP customer alice@bigco.com submitted an angry ticket (tk_8842): 'Your product is broken and I want a refund NOW.' Intent classified as '{{classify_intent.result}}'. Immediate attention required.\"\n          }\n        }\n      ]\n    }\n  ]\n}\n```",
+  "trace": [
+    {
+      "turn": 0,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_017HDXf9gqhppxx9muNLmDRv",
+          "name": "classify_intent",
+          "args": {
+            "text": "Your product is broken and I want a refund NOW."
+          }
+        },
+        {
+          "id": "toolu_bdrk_01VVZpPkZLxaKRZURzpb2rec",
+          "name": "check_sentiment",
+          "args": {
+            "text": "Your product is broken and I want a refund NOW."
+          }
+        },
+        {
+          "id": "toolu_bdrk_01UgaFhWetNZuVeGkdaE3keG",
+          "name": "lookup_customer",
+          "args": {
+            "email": "alice@bigco.com"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 1,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01Q4LM3AMsXoMnTpYBwNBJNT",
+          "name": "page_csm",
+          "args": {
+            "customer_id": "cu_alice",
+            "reason": "VIP customer alice@bigco.com submitted an angry ticket (tk_8842): 'Your product is broken and I want a refund NOW.' Intent classified as 'support'. Immediate attention required."
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 2,
+      "tool_calls": [],
+      "parallel": false,
+      "final_text": "Plan execution complete. Here's a summary of what happened:\n\n| Step | Tool | Result |\n|------|------|--------|\n| 1 | `classify_intent` | `\"support\"` |\n| 2 | `check_sentiment` | `\"angry\"` |\n| 3 | `lookup_customer` | tier: `\"vip\"`, customer_id: `\"cu_alice\"` |\n| 4 | `page_csm` | ✅ Paged successfully |\n\n**Key outcome:** The on-call CSM was paged because Alice (`alice@bigco.com`) is a **VIP customer** who submitted an **angry** support ticket. The other two conditional branches (spam archival and finance routing) were correctly skipped."
+    }
+  ],
+  "prompt_tokens": 5341,
+  "completion_tokens": 581,
+  "cost": 0.024738,
+  "turns": 3,
+  "ran_at": "2026-05-04T09:43:07.122Z"
+}

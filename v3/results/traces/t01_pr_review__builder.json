@@ -1,0 +1,66 @@
+{
+  "task_id": "t01_pr_review",
+  "condition": "builder",
+  "executor_model": "anthropic/claude-sonnet-4.6",
+  "plan": "```builder\nPRReview\n  .parallelize(\n    run_lint(\"482\"),\n    run_tests(\"482\"),\n    check_security(\"482\"),\n    count_loc_change(\"482\")  // independent of other checks, can run concurrently\n  )\n  .if(\n    run_lint has issue_count > 0\n    OR run_tests has any failures\n    OR check_security returns any vulnerabilities\n    OR count_loc_change indicates a large/risky change  // e.g. unusually high LOC delta\n  ):\n    post_to_slack(\n      \"#code-reviews\",\n      // Summarize all findings: lint errors, test failures, security vulns, LOC stats\n      message = \"PR #482 Review Summary:\\n\"\n              + \"Lint issues: {lint.issue_count} — {lint.errors}\\n\"\n              + \"Tests: {tests.pass_count} passed, {tests.fail_count} failed\\n\"\n              + \"Security vulnerabilities: {security.vulnerabilities}\\n\"\n              + \"Lines changed: +{loc.added} / -{loc.removed}\\n\"\n              + \"Action required: one or more checks failed or flagged a risk.\"\n    )\n  .else:\n    approve_pr(\"482\")  // all checks clean, safe to approve\n```",
+  "trace": [
+    {
+      "turn": 0,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_0118jpkJvmheh5mbDMWpyxx1",
+          "name": "run_lint",
+          "args": {
+            "pr_id": "482"
+          }
+        },
+        {
+          "id": "toolu_bdrk_01GLSRADE2XfQBXGcmCLswj8",
+          "name": "run_tests",
+          "args": {
+            "pr_id": "482"
+          }
+        },
+        {
+          "id": "toolu_bdrk_017toCdoLpBLoPmhQhWkPtt1",
+          "name": "check_security",
+          "args": {
+            "pr_id": "482"
+          }
+        },
+        {
+          "id": "toolu_bdrk_01BdmhDgg4xqBK7WNBSfptiA",
+          "name": "count_loc_change",
+          "args": {
+            "pr_id": "482"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 1,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_014gSVVg5SXzApcLt4ieyqqQ",
+          "name": "approve_pr",
+          "args": {
+            "pr_id": "482"
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 2,
+      "tool_calls": [],
+      "parallel": false,
+      "final_text": "**PR #482 has been approved! 🎉** Here's a summary of all checks that passed:\n\n| Check | Result |\n|---|---|\n| 🔍 Lint | 0 issues, 0 errors |\n| 🧪 Tests | 42 passed, 0 failed |\n| 🔒 Security | No vulnerabilities found |\n| 📏 Lines Changed | +30 added / -12 removed (low risk) |\n\nEvery check came back clean and the LOC delta was small and non-risky, so the PR was automatically approved — no Slack notification needed."
+    }
+  ],
+  "prompt_tokens": 4955,
+  "completion_tokens": 514,
+  "cost": 0.022575,
+  "turns": 3,
+  "ran_at": "2026-05-04T09:42:26.183Z"
+}

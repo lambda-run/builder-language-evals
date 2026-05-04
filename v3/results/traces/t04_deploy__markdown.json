@@ -1,0 +1,74 @@
+{
+  "task_id": "t04_deploy",
+  "condition": "markdown",
+  "executor_model": "anthropic/claude-sonnet-4.6",
+  "plan": "# Plan\n\n## Step 1 (parallel)\n- Call `build` with version `v2.3.1`\n- Call `run_tests` with version `v2.3.1`\n- Call `security_scan` with version `v2.3.1`\n\n## Step 2\n- If **all** of the above passed:\n  - Call `deploy` with version `v2.3.1`, env `staging`\n- If **any** of the above failed:\n  - Call `notify_team` with channel `#deploys`, message detailing which steps failed (build, tests, and/or security scan) and that the deployment was **aborted**\n  - **Skip deploy**\n\n## Step 3\n- If deploy (Step 2) succeeded:\n  - Call `notify_team` with channel `#deploys`, message that `v2.3.1` has been successfully deployed to staging",
+  "trace": [
+    {
+      "turn": 0,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_012Dzneoz3s3XKGdU2FCi3aM",
+          "name": "build",
+          "args": {
+            "version": "v2.3.1"
+          }
+        },
+        {
+          "id": "toolu_bdrk_01LphQtJXEBv5xmJzwZXPnpH",
+          "name": "run_tests",
+          "args": {
+            "version": "v2.3.1"
+          }
+        },
+        {
+          "id": "toolu_bdrk_01NFWiKStr2R7jqNzFu3vhNt",
+          "name": "security_scan",
+          "args": {
+            "version": "v2.3.1"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 1,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_017SSSUCHarvKX9ip7sGMUhv",
+          "name": "deploy",
+          "args": {
+            "version": "v2.3.1",
+            "env": "staging"
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 2,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01JXp24KBTVrGDLzHj5S7cX7",
+          "name": "notify_team",
+          "args": {
+            "channel": "#deploys",
+            "message": "✅ v2.3.1 has been successfully deployed to staging at 2026-05-04T12:00:00Z. Build, tests, and security scan all passed."
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 3,
+      "tool_calls": [],
+      "parallel": false,
+      "final_text": "All steps completed successfully! Here's a summary:\n\n| Step | Task | Result |\n|------|------|--------|\n| 1 | Build `v2.3.1` | ✅ Passed |\n| 1 | Run Tests `v2.3.1` | ✅ Passed (0 failures) |\n| 1 | Security Scan `v2.3.1` | ✅ Passed (0 vulnerabilities) |\n| 2 | Deploy to `staging` | ✅ Deployed at `2026-05-04T12:00:00Z` |\n| 3 | Notify `#deploys` | ✅ Team notified |"
+    }
+  ],
+  "prompt_tokens": 5999,
+  "completion_tokens": 568,
+  "cost": 0.026517,
+  "turns": 4,
+  "ran_at": "2026-05-04T09:44:25.179Z"
+}

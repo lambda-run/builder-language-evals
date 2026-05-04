@@ -1,0 +1,60 @@
+id: t03_image_pipeline
+name: "Image upload processing"
+
+fuzzy_goal: |
+  Got an image upload at /uploads/raw/photo_8821.jpg. Resize it for web
+  (max 1200px wide), make a thumbnail (200px square), pull out the EXIF data,
+  then upload both the resized version and the thumbnail to our CDN. Give me
+  back the URLs.
+
+available_tools:
+  - name: resize_image
+    description: "Resize image to max width. Returns path to resized file."
+    input_schema:
+      type: object
+      properties:
+        src: { type: string }
+        max_width: { type: integer }
+      required: [src, max_width]
+
+  - name: make_thumbnail
+    description: "Create a square thumbnail. Returns path to thumbnail file."
+    input_schema:
+      type: object
+      properties:
+        src: { type: string }
+        size: { type: integer }
+      required: [src, size]
+
+  - name: extract_exif
+    description: "Pull EXIF metadata from an image."
+    input_schema:
+      type: object
+      properties:
+        src: { type: string }
+      required: [src]
+
+  - name: upload_to_cdn
+    description: "Upload a file to the CDN. Returns the public URL."
+    input_schema:
+      type: object
+      properties:
+        path: { type: string }
+      required: [path]
+
+canned_responses:
+  resize_image: { dst: "/processed/resized_photo_8821.jpg" }
+  make_thumbnail: { dst: "/processed/thumb_photo_8821.jpg" }
+  extract_exif: { camera: "Canon EOS R5", iso: 400, shutter: "1/200" }
+  upload_to_cdn: { url: "https://cdn.example.com/x.jpg" }
+
+gold_trace:
+  - parallel: true
+    calls:
+      - { tool: resize_image }
+      - { tool: make_thumbnail }
+      - { tool: extract_exif }
+  - parallel: true
+    calls:
+      - { tool: upload_to_cdn }
+      - { tool: upload_to_cdn }

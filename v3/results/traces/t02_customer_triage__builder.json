@@ -1,0 +1,60 @@
+{
+  "task_id": "t02_customer_triage",
+  "condition": "builder",
+  "executor_model": "anthropic/claude-sonnet-4.6",
+  "plan": "```builder\nSupportTicket(id: \"tk_8842\", from: \"alice@bigco.com\", body: \"Your product is broken and I want a refund NOW.\")\n\n  // Gather all intel concurrently — none of these depend on each other\n  .parallelize(\n    classify_intent(\"Your product is broken and I want a refund NOW.\"),\n    check_sentiment(\"Your product is broken and I want a refund NOW.\"),\n    lookup_customer(\"alice@bigco.com\")\n  )\n\n  // Decision tree once all three results are in\n  .if(classify_intent == \"spam\"):\n    archive_ticket(\"tk_8842\")                          // drop it, no further action\n\n  .else if(classify_intent == \"billing\"\n           AND lookup_customer.tier == \"vip\"\n           AND check_sentiment == \"angry\"):\n    page_csm(\n      customer_id: lookup_customer.customer_id,\n      reason: \"VIP customer alice@bigco.com submitted angry billing/refund ticket tk_8842 — immediate attention required.\"\n    )\n\n  .else if(classify_intent == \"billing\"):              // billing but not VIP+angry combo\n    route_to_finance(\"tk_8842\")\n\n  .else if(lookup_customer.tier == \"vip\"\n           AND check_sentiment == \"angry\"):            // non-billing but VIP + angry (e.g. support)\n    page_csm(\n      customer_id: lookup_customer.customer_id,\n      reason: \"VIP customer alice@bigco.com is angry on ticket tk_8842 (intent: support) — escalate immediately.\"\n    )\n\n  // All other cases (neutral support, feature requests, etc.) — no action defined; fall through\n```",
+  "trace": [
+    {
+      "turn": 0,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_013nxx4SmnmkBNWQDEYxy6P8",
+          "name": "classify_intent",
+          "args": {
+            "text": "Your product is broken and I want a refund NOW."
+          }
+        },
+        {
+          "id": "toolu_bdrk_01Qkrq74N5hauahYqWnPtD5f",
+          "name": "check_sentiment",
+          "args": {
+            "text": "Your product is broken and I want a refund NOW."
+          }
+        },
+        {
+          "id": "toolu_bdrk_015Qw13ND7GsmdFdBJPc6TBU",
+          "name": "lookup_customer",
+          "args": {
+            "email": "alice@bigco.com"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 1,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_0135ES39mCWyEquyhWMtn9Lw",
+          "name": "page_csm",
+          "args": {
+            "customer_id": "cu_alice",
+            "reason": "VIP customer alice@bigco.com is angry on ticket tk_8842 (intent: support) — escalate immediately."
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 2,
+      "tool_calls": [],
+      "parallel": false,
+      "final_text": "**Execution complete.** Here's a summary of what happened:\n\n| Step | Result |\n|---|---|\n| `classify_intent` | `\"support\"` |\n| `check_sentiment` | `\"angry\"` |\n| `lookup_customer` | tier: `vip`, customer_id: `cu_alice` |\n| **Action taken** | `page_csm` — CSM paged ✅ |\n\nAlice is a **VIP customer** who is **angry** on a **support ticket**, so the on-call Customer Success Manager was paged immediately with a full escalation reason. No other actions were needed."
+    }
+  ],
+  "prompt_tokens": 5183,
+  "completion_tokens": 506,
+  "cost": 0.023139,
+  "turns": 3,
+  "ran_at": "2026-05-04T09:42:57.001Z"
+}

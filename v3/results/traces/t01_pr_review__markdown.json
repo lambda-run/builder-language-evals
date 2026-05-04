@@ -1,0 +1,66 @@
+{
+  "task_id": "t01_pr_review",
+  "condition": "markdown",
+  "executor_model": "anthropic/claude-sonnet-4.6",
+  "plan": "# Plan\n\n## Step 1 (parallel)\n- Call `run_lint` with pr_id `\"482\"`\n- Call `run_tests` with pr_id `\"482\"`\n- Call `check_security` with pr_id `\"482\"`\n- Call `count_loc_change` with pr_id `\"482\"`\n\n## Step 2\n- Evaluate results from Step 1:\n  - **Fails or risky** if any of the following are true:\n    - `run_lint` returns issue count > 0\n    - `run_tests` returns any failing tests\n    - `check_security` returns any vulnerabilities\n    - `count_loc_change` returns a line change count considered high-risk (e.g. > 500 lines changed)\n- If **any** condition above is met:\n  - Call `post_to_slack` with channel `\"#code-reviews\"` and a message summarizing:\n    - Lint issue count and errors (if any)\n    - Test pass/fail counts (if any failures)\n    - Security vulnerabilities found (if any)\n    - Lines added/removed\n- Otherwise (all checks pass and no risk flags):\n  - Call `approve_pr` with pr_id `\"482\"`",
+  "trace": [
+    {
+      "turn": 0,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_013zbMJiMHhgEo1pwD6jn5J1",
+          "name": "run_lint",
+          "args": {
+            "pr_id": "482"
+          }
+        },
+        {
+          "id": "toolu_bdrk_014YBDyWMEY9k1XZNps6PLmu",
+          "name": "run_tests",
+          "args": {
+            "pr_id": "482"
+          }
+        },
+        {
+          "id": "toolu_bdrk_01URHaDGm44rfnWJ6eVmX2BU",
+          "name": "check_security",
+          "args": {
+            "pr_id": "482"
+          }
+        },
+        {
+          "id": "toolu_bdrk_01TVcGKt5nMKtpfNuh7XEUfn",
+          "name": "count_loc_change",
+          "args": {
+            "pr_id": "482"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 1,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01SvRSicxRYtLpKGRdbPRK5c",
+          "name": "approve_pr",
+          "args": {
+            "pr_id": "482"
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 2,
+      "tool_calls": [],
+      "parallel": false,
+      "final_text": "PR `#482` has been successfully approved! Here's a summary of the results:\n\n| Check | Result |\n|---|---|\n| 🔍 Lint | 0 issues, 0 errors |\n| 🧪 Tests | 42 passed, 0 failed |\n| 🔒 Security | No vulnerabilities |\n| 📏 LOC Change | +30 / -12 (42 total) |\n\nAll checks were clean and the line change count was well within safe limits, so the PR was automatically approved for merge. ✅"
+    }
+  ],
+  "prompt_tokens": 4893,
+  "completion_tokens": 502,
+  "cost": 0.022209,
+  "turns": 3,
+  "ran_at": "2026-05-04T09:42:46.176Z"
+}

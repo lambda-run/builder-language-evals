@@ -1,0 +1,100 @@
+{
+  "task_id": "t05_order",
+  "condition": "json",
+  "executor_model": "anthropic/claude-sonnet-4.6",
+  "plan": "```json\n{\n  \"steps\": [\n    {\n      \"parallel\": true,\n      \"calls\": [\n        {\n          \"tool\": \"verify_customer\",\n          \"args\": { \"customer_id\": \"cu_392\" }\n        },\n        {\n          \"tool\": \"check_inventory\",\n          \"args\": { \"items\": [{ \"sku\": \"A\", \"qty\": 2 }, { \"sku\": \"B\", \"qty\": 1 }] }\n        },\n        {\n          \"tool\": \"calculate_shipping\",\n          \"args\": {\n            \"address\": \"123 Main St\",\n            \"items\": [{ \"sku\": \"A\", \"qty\": 2 }, { \"sku\": \"B\", \"qty\": 1 }]\n          }\n        },\n        {\n          \"tool\": \"validate_payment\",\n          \"args\": { \"payment_method\": \"pm_abc\" }\n        }\n      ]\n    },\n    {\n      \"parallel\": false,\n      \"calls\": [\n        {\n          \"tool\": \"charge_card\",\n          \"args\": {\n            \"payment_method\": \"pm_abc\",\n            \"amount\": \"$calculated_shipping.cost\"\n          }\n        }\n      ]\n    },\n    {\n      \"parallel\": false,\n      \"calls\": [\n        {\n          \"tool\": \"create_order\",\n          \"args\": {\n            \"order_id\": \"ord_5521\",\n            \"customer_id\": \"cu_392\"\n          }\n        }\n      ]\n    }\n  ],\n  \"conditionals\": [\n    {\n      \"if\": \"verify_customer.ok == false OR check_inventory.ok == false OR validate_payment.ok == false OR calculate_shipping failed\",\n      \"then\": [\n        {\n          \"tool\": \"hold_order\",\n          \"args\": {\n            \"order_id\": \"ord_5521\",\n            \"reason\": \"One or more pre-checks failed: customer verification, inventory, shipping calculation, or payment validation.\"\n          }\n        },\n        {\n          \"tool\": \"email_admin\",\n          \"args\": {\n            \"to\": \"admin@example.com\",\n            \"message\": \"Order ord_5521 for customer cu_392 has been placed on hold. One or more checks failed. Details — fraud check: $verify_customer.ok (score: $verify_customer.fraud_score), inventory check: $check_inventory.ok (missing: $check_inventory.missing), shipping calculation: $calculate_shipping.status, payment validation: $validate_payment.ok.\"\n          }\n        }\n      ]\n    },\n    {\n      \"if\": \"charge_card failed\",\n      \"then\": [\n        {\n          \"tool\": \"hold_order\",\n          \"args\": {\n            \"order_id\": \"ord_5521\",\n            \"reason\": \"Card charge failed after all pre-checks passed.\"\n          }\n        },\n        {\n          \"tool\": \"email_admin\",\n          \"args\": {\n            \"to\": \"admin@example.com\",\n            \"message\": \"Order ord_5521 for customer cu_392 has been placed on hold. All pre-checks passed but the card charge on payment method pm_abc failed. Please investigate.\"\n          }\n        }\n      ]\n    }\n  ]\n}\n```",
+  "trace": [
+    {
+      "turn": 0,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01ANRNohoByseR9qUjamaT5d",
+          "name": "verify_customer",
+          "args": {
+            "customer_id": "cu_392"
+          }
+        },
+        {
+          "id": "toolu_bdrk_01JxfngcW26NKYQ8E1oau6gi",
+          "name": "check_inventory",
+          "args": {
+            "items": [
+              {
+                "sku": "A",
+                "qty": 2
+              },
+              {
+                "sku": "B",
+                "qty": 1
+              }
+            ]
+          }
+        },
+        {
+          "id": "toolu_bdrk_012Kki1erfaghkv7Lqd994xz",
+          "name": "calculate_shipping",
+          "args": {
+            "address": "123 Main St",
+            "items": [
+              {
+                "sku": "A",
+                "qty": 2
+              },
+              {
+                "sku": "B",
+                "qty": 1
+              }
+            ]
+          }
+        },
+        {
+          "id": "toolu_bdrk_01AtPXZnsizJ7Xc27o2rtgWm",
+          "name": "validate_payment",
+          "args": {
+            "payment_method": "pm_abc"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 1,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01SFHLYJQkGPAp2nMwGXFfuX",
+          "name": "charge_card",
+          "args": {
+            "payment_method": "pm_abc",
+            "amount": 12.5
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 2,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01D3GTB13xUkPx1mLF8pa1aS",
+          "name": "create_order",
+          "args": {
+            "order_id": "ord_5521",
+            "customer_id": "cu_392"
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 3,
+      "tool_calls": [],
+      "parallel": false,
+      "final_text": "---\n\n✅ **Plan complete — all steps succeeded!** Here's a summary:\n\n| Step | Tool | Result |\n|------|------|--------|\n| Pre-check | `verify_customer` | ✅ OK (fraud score: 0.05) |\n| Pre-check | `check_inventory` | ✅ OK (no missing items) |\n| Pre-check | `calculate_shipping` | ✅ OK (cost: $12.50) |\n| Pre-check | `validate_payment` | ✅ OK |\n| Charge | `charge_card` | ✅ Charged $12.50 (charge: `ch_xxx`) |\n| Order | `create_order` | ✅ Order `ord_5521` created for customer `cu_392` |\n\nNo holds or admin emails were triggered — the order was processed cleanly end-to-end."
+    }
+  ],
+  "prompt_tokens": 9718,
+  "completion_tokens": 735,
+  "cost": 0.04017899999999999,
+  "turns": 4,
+  "ran_at": "2026-05-04T09:44:52.788Z"
+}

@@ -1,0 +1,77 @@
+id: t01_pr_review
+name: "PR review pipeline"
+
+fuzzy_goal: |
+  Review PR #482. Run all the checks for me — lint, tests, security scan, and
+  count how many lines changed. If anything fails or looks risky, post a
+  summary to #code-reviews. Otherwise just approve it.
+
+available_tools:
+  - name: run_lint
+    description: "Run linter on PR. Returns issue count and errors."
+    input_schema:
+      type: object
+      properties:
+        pr_id: { type: string }
+      required: [pr_id]
+
+  - name: run_tests
+    description: "Run test suite for PR. Returns pass/fail counts."
+    input_schema:
+      type: object
+      properties:
+        pr_id: { type: string }
+      required: [pr_id]
+
+  - name: check_security
+    description: "Run security scanner on PR. Returns vulnerability list."
+    input_schema:
+      type: object
+      properties:
+        pr_id: { type: string }
+      required: [pr_id]
+
+  - name: count_loc_change
+    description: "Count lines added and removed in PR."
+    input_schema:
+      type: object
+      properties:
+        pr_id: { type: string }
+      required: [pr_id]
+
+  - name: post_to_slack
+    description: "Post a message to a Slack channel."
+    input_schema:
+      type: object
+      properties:
+        channel: { type: string }
+        message: { type: string }
+      required: [channel, message]
+
+  - name: approve_pr
+    description: "Approve a PR for merge."
+    input_schema:
+      type: object
+      properties:
+        pr_id: { type: string }
+      required: [pr_id]
+
+# Canned responses tools return when called. Drives the conditional path.
+canned_responses:
+  run_lint: { issues: 0, errors: [] }
+  run_tests: { passed: 42, failed: 0 }
+  check_security: { vulns: [] }
+  count_loc_change: { added: 30, removed: 12 }
+  post_to_slack: { ok: true }
+  approve_pr: { ok: true }
+
+gold_trace:
+  - parallel: true
+    calls:
+      - { tool: run_lint }
+      - { tool: run_tests }
+      - { tool: check_security }
+      - { tool: count_loc_change }
+  - parallel: false
+    calls:
+      - { tool: approve_pr }  # all checks pass → approve path

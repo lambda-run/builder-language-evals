@@ -1,0 +1,68 @@
+{
+  "task_id": "t03_image_pipeline",
+  "condition": "json",
+  "executor_model": "anthropic/claude-sonnet-4.6",
+  "plan": "```json\n{\n  \"steps\": [\n    {\n      \"parallel\": true,\n      \"calls\": [\n        {\n          \"tool\": \"resize_image\",\n          \"args\": {\n            \"src\": \"/uploads/raw/photo_8821.jpg\",\n            \"max_width\": 1200\n          }\n        },\n        {\n          \"tool\": \"make_thumbnail\",\n          \"args\": {\n            \"src\": \"/uploads/raw/photo_8821.jpg\",\n            \"size\": 200\n          }\n        },\n        {\n          \"tool\": \"extract_exif\",\n          \"args\": {\n            \"src\": \"/uploads/raw/photo_8821.jpg\"\n          }\n        }\n      ]\n    },\n    {\n      \"parallel\": true,\n      \"calls\": [\n        {\n          \"tool\": \"upload_to_cdn\",\n          \"args\": {\n            \"path\": \"$steps[0].calls[0].result\"\n          }\n        },\n        {\n          \"tool\": \"upload_to_cdn\",\n          \"args\": {\n            \"path\": \"$steps[0].calls[1].result\"\n          }\n        }\n      ]\n    }\n  ],\n  \"conditionals\": [\n    {\n      \"if\": \"any step fails\",\n      \"then\": [\n        {\n          \"tool\": \"post_to_slack\",\n          \"args\": {\n            \"message\": \"Image processing pipeline failed for /uploads/raw/photo_8821.jpg. Check logs for details.\"\n          }\n        }\n      ]\n    }\n  ]\n}\n```",
+  "trace": [
+    {
+      "turn": 0,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01RBydZN45Pk9KUrRBMXkxw7",
+          "name": "resize_image",
+          "args": {
+            "src": "/uploads/raw/photo_8821.jpg",
+            "max_width": 1200
+          }
+        },
+        {
+          "id": "toolu_bdrk_01LzdpEeN3wmAtbBXqKEwjet",
+          "name": "make_thumbnail",
+          "args": {
+            "src": "/uploads/raw/photo_8821.jpg",
+            "size": 200
+          }
+        },
+        {
+          "id": "toolu_bdrk_01CyYqAR7v5AN2wG6Q3ydRWa",
+          "name": "extract_exif",
+          "args": {
+            "src": "/uploads/raw/photo_8821.jpg"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 1,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01W4eejptnbsc8qBrMmpyCbP",
+          "name": "upload_to_cdn",
+          "args": {
+            "path": "/processed/resized_photo_8821.jpg"
+          }
+        },
+        {
+          "id": "toolu_bdrk_01QUEwuUYcHYirSDxRWKTXjk",
+          "name": "upload_to_cdn",
+          "args": {
+            "path": "/processed/thumb_photo_8821.jpg"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 2,
+      "tool_calls": [],
+      "parallel": false,
+      "final_text": "All steps completed successfully — no failure condition triggered. Here's a full summary:\n\n---\n\n### ✅ Pipeline Complete for `photo_8821.jpg`\n\n| Step | Task | Result |\n|------|------|--------|\n| 1a | Resize (max 1200px) | `/processed/resized_photo_8821.jpg` |\n| 1b | Thumbnail (200×200) | `/processed/thumb_photo_8821.jpg` |\n| 1c | EXIF Extraction | Camera: Canon EOS R5, ISO: 400, Shutter: 1/200 |\n| 2a | CDN Upload (resized) | `https://cdn.example.com/x.jpg` |\n| 2b | CDN Upload (thumbnail) | `https://cdn.example.com/x.jpg` |\n\nBoth processed images are now live on the CDN and ready to use! 🎉"
+    }
+  ],
+  "prompt_tokens": 4987,
+  "completion_tokens": 615,
+  "cost": 0.024186,
+  "turns": 3,
+  "ran_at": "2026-05-04T09:43:38.558Z"
+}

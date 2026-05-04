@@ -1,0 +1,12 @@
+{
+  "task_id": "t03_image_pipeline",
+  "condition": "builder",
+  "planner_model": "anthropic/claude-sonnet-4.6",
+  "system_prompt": "You are a planning agent. Your job: read a fuzzy user goal and the available tools, then produce a PLAN in BUILDER syntax that another agent will execute.\n\nBuilder syntax — use `Noun.verb(...).verb(...)` chains. Example:\n  PRReview\n    .parallelize(\n        run_lint(pr_id),\n        run_tests(pr_id),\n        check_security(pr_id))\n    .if(any check has issues): post_to_slack(channel, message)\n    .else: approve_pr(pr_id)\n\nRules:\n- Use `.parallelize(a, b, c)` for tools that can run concurrently (independent inputs).\n- Use `.sequence(a, b)` or chained verbs for ordered steps.\n- Use `.if(condition): action` for conditional dispatch.\n- Inline `// comments` for non-obvious choices.\n- Output ONLY the builder spec inside a fenced ```builder block. No prose before or after.",
+  "user_prompt": "User goal:\nGot an image upload at /uploads/raw/photo_8821.jpg. Resize it for web\n(max 1200px wide), make a thumbnail (200px square), pull out the EXIF data,\nthen upload both the resized version and the thumbnail to our CDN. Give me\nback the URLs.\n\n\nAvailable tools:\n- resize_image(src: string, max_width: integer) — Resize image to max width. Returns path to resized file.\n- make_thumbnail(src: string, size: integer) — Create a square thumbnail. Returns path to thumbnail file.\n- extract_exif(src: string) — Pull EXIF metadata from an image.\n- upload_to_cdn(path: string) — Upload a file to the CDN. Returns the public URL.\n\nProduce the plan now.",
+  "plan": "```builder\nImagePipeline\n  // Resize, thumbnail, and EXIF extraction are all independent reads from the same source\n  .parallelize(\n    resize_image(\"/uploads/raw/photo_8821.jpg\", 1200),   // → resized_path\n    make_thumbnail(\"/uploads/raw/photo_8821.jpg\", 200),  // → thumb_path\n    extract_exif(\"/uploads/raw/photo_8821.jpg\")          // → exif_data (no upload needed)\n  )\n  // CDN uploads depend on the resized/thumbnail paths, but can run concurrently with each other\n  .parallelize(\n    upload_to_cdn(resized_path),   // → resized_url\n    upload_to_cdn(thumb_path)      // → thumb_url\n  )\n  // Return the two CDN URLs and the EXIF metadata to the caller\n  .return({\n    resized_url: resized_url,\n    thumbnail_url: thumb_url,\n    exif: exif_data\n  })\n```",
+  "cost": 0.005085,
+  "prompt_tokens": 425,
+  "completion_tokens": 254,
+  "ran_at": "2026-05-04T09:41:19.246Z"
+}

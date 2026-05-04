@@ -1,0 +1,12 @@
+{
+  "task_id": "t03_image_pipeline",
+  "condition": "markdown",
+  "planner_model": "anthropic/claude-sonnet-4.6",
+  "system_prompt": "You are a planning agent. Your job: read a fuzzy user goal and the available tools, then produce a PLAN in MARKDOWN that another agent will execute.\n\nMarkdown structure — use headers, sub-headers, bullets. Example:\n\n# Plan\n## Step 1 (parallel)\n- Call `run_lint` with pr_id\n- Call `run_tests` with pr_id\n- Call `check_security` with pr_id\n\n## Step 2\n- If any check has issues: call `post_to_slack` with channel, message\n- Otherwise: call `approve_pr` with pr_id\n\nRules:\n- Use `(parallel)` in step headers when calls can run concurrently.\n- Use bullets for individual tool calls and conditionals.\n- Output ONLY the markdown plan. No prose preamble.",
+  "user_prompt": "User goal:\nGot an image upload at /uploads/raw/photo_8821.jpg. Resize it for web\n(max 1200px wide), make a thumbnail (200px square), pull out the EXIF data,\nthen upload both the resized version and the thumbnail to our CDN. Give me\nback the URLs.\n\n\nAvailable tools:\n- resize_image(src: string, max_width: integer) — Resize image to max width. Returns path to resized file.\n- make_thumbnail(src: string, size: integer) — Create a square thumbnail. Returns path to thumbnail file.\n- extract_exif(src: string) — Pull EXIF metadata from an image.\n- upload_to_cdn(path: string) — Upload a file to the CDN. Returns the public URL.\n\nProduce the plan now.",
+  "plan": "# Plan\n\n## Step 1 (parallel)\n- Call `resize_image` with src=`/uploads/raw/photo_8821.jpg`, max_width=`1200`\n- Call `make_thumbnail` with src=`/uploads/raw/photo_8821.jpg`, size=`200`\n- Call `extract_exif` with src=`/uploads/raw/photo_8821.jpg`\n\n## Step 2 (parallel)\n- Call `upload_to_cdn` with the path returned by `resize_image`\n- Call `upload_to_cdn` with the path returned by `make_thumbnail`\n\n## Step 3\n- Return the two public URLs from the CDN uploads:\n  - **Resized image URL** — result of uploading the resized file\n  - **Thumbnail URL** — result of uploading the thumbnail file\n- Also surface the **EXIF metadata** returned from `extract_exif`",
+  "cost": 0.004464,
+  "prompt_tokens": 383,
+  "completion_tokens": 221,
+  "ran_at": "2026-05-04T09:41:27.509Z"
+}

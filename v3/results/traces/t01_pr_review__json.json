@@ -1,0 +1,66 @@
+{
+  "task_id": "t01_pr_review",
+  "condition": "json",
+  "executor_model": "anthropic/claude-sonnet-4.6",
+  "plan": "```json\n{\n  \"steps\": [\n    {\n      \"parallel\": true,\n      \"calls\": [\n        { \"tool\": \"run_lint\", \"args\": { \"pr_id\": \"482\" } },\n        { \"tool\": \"run_tests\", \"args\": { \"pr_id\": \"482\" } },\n        { \"tool\": \"check_security\", \"args\": { \"pr_id\": \"482\" } },\n        { \"tool\": \"count_loc_change\", \"args\": { \"pr_id\": \"482\" } }\n      ]\n    }\n  ],\n  \"conditionals\": [\n    {\n      \"if\": \"run_lint returns issue_count > 0 OR run_tests returns any failures OR check_security returns any vulnerabilities OR count_loc_change returns a line change count considered risky (e.g. > 500 lines changed)\",\n      \"then\": [\n        {\n          \"tool\": \"post_to_slack\",\n          \"args\": {\n            \"channel\": \"#code-reviews\",\n            \"message\": \"⚠️ PR #482 review summary — issues detected:\\n- Lint: {{run_lint.issue_count}} issue(s): {{run_lint.errors}}\\n- Tests: {{run_tests.fail_count}} failure(s) out of {{run_tests.total_count}} tests\\n- Security: {{check_security.vulnerabilities}}\\n- Lines changed: +{{count_loc_change.lines_added}} / -{{count_loc_change.lines_removed}}\\n\\nPlease review before merging.\"\n          }\n        }\n      ]\n    },\n    {\n      \"if\": \"run_lint returns issue_count == 0 AND run_tests returns zero failures AND check_security returns no vulnerabilities AND count_loc_change is not considered risky\",\n      \"then\": [\n        {\n          \"tool\": \"approve_pr\",\n          \"args\": { \"pr_id\": \"482\" }\n        }\n      ]\n    }\n  ]\n}\n```",
+  "trace": [
+    {
+      "turn": 0,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_017LmXwp4UV4iCXpcrxYHb8H",
+          "name": "run_lint",
+          "args": {
+            "pr_id": "482"
+          }
+        },
+        {
+          "id": "toolu_bdrk_01K826ijgQXEtPcLHE1ifARh",
+          "name": "run_tests",
+          "args": {
+            "pr_id": "482"
+          }
+        },
+        {
+          "id": "toolu_bdrk_01GfwFaupxduBJh63RnU4YgU",
+          "name": "check_security",
+          "args": {
+            "pr_id": "482"
+          }
+        },
+        {
+          "id": "toolu_bdrk_01NVEMBxAenSgeRxpb4rMzFP",
+          "name": "count_loc_change",
+          "args": {
+            "pr_id": "482"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 1,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01PKoyrgy3mwNfrkmiPPERYk",
+          "name": "approve_pr",
+          "args": {
+            "pr_id": "482"
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 2,
+      "tool_calls": [],
+      "parallel": false,
+      "final_text": "✅ **PR #482 has been approved and is ready to merge!**\n\nHere's the full summary:\n- 🟢 **Lint:** 0 issues\n- 🟢 **Tests:** 42/42 passed\n- 🟢 **Security:** No vulnerabilities found\n- 🟢 **Lines Changed:** +30 / -12 (well within the safe threshold)\n\nAll checks passed cleanly, so the PR was automatically approved — no Slack alert was needed."
+    }
+  ],
+  "prompt_tokens": 5483,
+  "completion_tokens": 501,
+  "cost": 0.023964,
+  "turns": 3,
+  "ran_at": "2026-05-04T09:42:35.781Z"
+}

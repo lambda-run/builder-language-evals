@@ -1,0 +1,76 @@
+id: t02_customer_triage
+name: "Customer ticket triage"
+
+fuzzy_goal: |
+  New support ticket came in (id: tk_8842, from: alice@bigco.com, body: "Your
+  product is broken and I want a refund NOW."). Figure out who they are, what
+  they want, and how mad they are. If they're a VIP and angry, page our CSM.
+  If it's a regular billing question, route to finance. If it's spam, drop it.
+
+available_tools:
+  - name: classify_intent
+    description: "Classify ticket intent: billing | support | feature_request | spam."
+    input_schema:
+      type: object
+      properties:
+        text: { type: string }
+      required: [text]
+
+  - name: check_sentiment
+    description: "Sentiment: positive | neutral | negative | angry."
+    input_schema:
+      type: object
+      properties:
+        text: { type: string }
+      required: [text]
+
+  - name: lookup_customer
+    description: "Get customer record by email. Returns tier (free|pro|vip) and history count."
+    input_schema:
+      type: object
+      properties:
+        email: { type: string }
+      required: [email]
+
+  - name: page_csm
+    description: "Page the on-call customer success manager."
+    input_schema:
+      type: object
+      properties:
+        customer_id: { type: string }
+        reason: { type: string }
+      required: [customer_id, reason]
+
+  - name: route_to_finance
+    description: "Route a billing ticket to the finance team."
+    input_schema:
+      type: object
+      properties:
+        ticket_id: { type: string }
+      required: [ticket_id]
+
+  - name: archive_ticket
+    description: "Archive (drop) a ticket as spam."
+    input_schema:
+      type: object
+      properties:
+        ticket_id: { type: string }
+      required: [ticket_id]
+
+canned_responses:
+  classify_intent: "support"
+  check_sentiment: "angry"
+  lookup_customer: { tier: "vip", history: 17, customer_id: "cu_alice" }
+  page_csm: { paged: true }
+  route_to_finance: { ok: true }
+  archive_ticket: { ok: true }
+
+gold_trace:
+  - parallel: true
+    calls:
+      - { tool: classify_intent }
+      - { tool: check_sentiment }
+      - { tool: lookup_customer }
+  - parallel: false
+    calls:
+      - { tool: page_csm }  # vip + angry → page path
