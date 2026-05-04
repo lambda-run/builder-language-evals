@@ -23,7 +23,7 @@ available_tools:
     input_schema:
       type: object
       properties:
-        items: { type: array }
+        items: { type: array, items: { type: object } }
       required: [items]
 
   - name: calculate_shipping
@@ -32,7 +32,7 @@ available_tools:
       type: object
       properties:
         address: { type: string }
-        items: { type: array }
+        items: { type: array, items: { type: object } }
       required: [address, items]
 
   - name: validate_payment

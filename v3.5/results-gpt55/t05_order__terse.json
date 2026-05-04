@@ -1,0 +1,79 @@
+{
+  "task_id": "t05_order",
+  "format": "terse",
+  "executor_model": "openai/gpt-5.5",
+  "plan": "parallel { verify_customer(...); check_inventory(...); calculate_shipping(...); validate_payment(...) };\ncharge_card(...);\ncreate_order(...);",
+  "trace": [
+    {
+      "turn": 0,
+      "tool_calls": [
+        {
+          "id": "call_4utgkojurwiVs9D8pbRZky3S",
+          "name": "verify_customer",
+          "args": {
+            "customer_id": "cu_392"
+          }
+        },
+        {
+          "id": "call_X07dgEmSLwRt4jxkSWIjJh55",
+          "name": "check_inventory",
+          "args": {}
+        },
+        {
+          "id": "call_UPQrs2rEmF7WtqrItD4e0ajV",
+          "name": "calculate_shipping",
+          "args": {
+            "address": "123 Main St"
+          }
+        },
+        {
+          "id": "call_5vcx4kVVNX0IGIvqiYl26ga5",
+          "name": "validate_payment",
+          "args": {
+            "payment_method": "pm_abc"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 1,
+      "tool_calls": [
+        {
+          "id": "call_RubWyfU53pAGTvc3X0qNvROm",
+          "name": "charge_card",
+          "args": {
+            "payment_method": "pm_abc",
+            "amount": 12.5
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 2,
+      "tool_calls": [
+        {
+          "id": "call_EabqTiPrLw5eYNYFN9mAy1ES",
+          "name": "create_order",
+          "args": {
+            "order_id": "ord_5521",
+            "customer_id": "cu_392"
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 3,
+      "tool_calls": [],
+      "parallel": false,
+      "final_text": "Plan executed successfully."
+    }
+  ],
+  "prompt_tokens": 2477,
+  "completion_tokens": 146,
+  "cost": 0.016765,
+  "turns": 4,
+  "ran_at": "2026-05-04T12:13:07.799Z"
+}

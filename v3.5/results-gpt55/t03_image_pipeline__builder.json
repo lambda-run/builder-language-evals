@@ -1,0 +1,68 @@
+{
+  "task_id": "t03_image_pipeline",
+  "format": "builder",
+  "executor_model": "openai/gpt-5.5",
+  "plan": "```builder\nImagePipeline\n  .parallelize(\n    resize_image(...),\n    make_thumbnail(...),\n    extract_exif(...)\n  )\n  .parallelize(\n    upload_to_cdn(...),\n    upload_to_cdn(...)\n  )\n```",
+  "trace": [
+    {
+      "turn": 0,
+      "tool_calls": [
+        {
+          "id": "call_1ZOnSCPzQHMKXpzonk3ND7Gh",
+          "name": "resize_image",
+          "args": {
+            "src": "/uploads/raw/photo_8821.jpg",
+            "max_width": 1200
+          }
+        },
+        {
+          "id": "call_FofRkgjFbSXoTKd1qUqUmvnK",
+          "name": "make_thumbnail",
+          "args": {
+            "src": "/uploads/raw/photo_8821.jpg",
+            "size": 200
+          }
+        },
+        {
+          "id": "call_dDPydBjkDELlkW8Hx2ZT3vx9",
+          "name": "extract_exif",
+          "args": {
+            "src": "/uploads/raw/photo_8821.jpg"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 1,
+      "tool_calls": [
+        {
+          "id": "call_GUDjwjbjqv90Xi38FKUAwMY1",
+          "name": "upload_to_cdn",
+          "args": {
+            "path": "/processed/resized_photo_8821.jpg"
+          }
+        },
+        {
+          "id": "call_EXzB47eJkf9qLVYMUKLd14IB",
+          "name": "upload_to_cdn",
+          "args": {
+            "path": "/processed/thumb_photo_8821.jpg"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 2,
+      "tool_calls": [],
+      "parallel": false,
+      "final_text": "Resized image URL: https://cdn.example.com/x.jpg  \nThumbnail URL: https://cdn.example.com/x.jpg"
+    }
+  ],
+  "prompt_tokens": 1541,
+  "completion_tokens": 188,
+  "cost": 0.013345,
+  "turns": 3,
+  "ran_at": "2026-05-04T12:11:02.237Z"
+}
