@@ -1,0 +1,94 @@
+{
+  "ran_at": "2026-05-04T15:02:46.376Z",
+  "cells": [
+    {
+      "model": "sonnet",
+      "task": "t01_distributed_ralph_fair",
+      "domain": "agent_orchestration_deep",
+      "format": "builder",
+      "matched": 34,
+      "total": 36,
+      "missed": [
+        "10m",
+        "escalate"
+      ],
+      "score": 0.9444444444444444,
+      "cost": 0.008286,
+      "prompt_tokens": 422,
+      "completion_tokens": 468
+    },
+    {
+      "model": "sonnet",
+      "task": "t01_distributed_ralph_fair",
+      "domain": "agent_orchestration_deep",
+      "format": "markdown",
+      "matched": 35,
+      "total": 36,
+      "missed": [
+        "10m"
+      ],
+      "score": 0.9722222222222222,
+      "cost": 0.008601,
+      "prompt_tokens": 417,
+      "completion_tokens": 490
+    },
+    {
+      "model": "sonnet",
+      "task": "t01_distributed_ralph_fair",
+      "domain": "agent_orchestration_deep",
+      "format": "prose",
+      "matched": 35,
+      "total": 36,
+      "missed": [
+        "10m"
+      ],
+      "score": 0.9722222222222222,
+      "cost": 0.009,
+      "prompt_tokens": 390,
+      "completion_tokens": 522
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t01_distributed_ralph_fair",
+      "domain": "agent_orchestration_deep",
+      "format": "builder",
+      "matched": 35,
+      "total": 36,
+      "missed": [
+        "10m"
+      ],
+      "score": 0.9722222222222222,
+      "cost": 0.02585,
+      "prompt_tokens": 376,
+      "completion_tokens": 799
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t01_distributed_ralph_fair",
+      "domain": "agent_orchestration_deep",
+      "format": "markdown",
+      "matched": 36,
+      "total": 36,
+      "missed": [],
+      "score": 1,
+      "cost": 0.019675,
+      "prompt_tokens": 377,
+      "completion_tokens": 593
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t01_distributed_ralph_fair",
+      "domain": "agent_orchestration_deep",
+      "format": "prose",
+      "matched": 35,
+      "total": 36,
+      "missed": [
+        "10m"
+      ],
+      "score": 0.9722222222222222,
+      "cost": 0.028015,
+      "prompt_tokens": 359,
+      "completion_tokens": 874
+    }
+  ]
+}

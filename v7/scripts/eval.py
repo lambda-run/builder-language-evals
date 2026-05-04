@@ -25,6 +25,7 @@ def load_task(task_id: str):
 
 TASK_DATA = load_task("t01_rate_limiter")  # default for rate_limiter()
 SCHEDULER_DATA = load_task("t02_job_scheduler")
+SCHEDULER_FAIR_DATA = load_task("t02_job_scheduler_fair")
 
 SYSTEM = """You are a Python developer. Implement the class described in the spec, then run tests until they all pass.
 
@@ -103,3 +104,10 @@ def rate_limiter(format: str = "builder"):
 @task
 def job_scheduler(format: str = "builder"):
     return _build_task(SCHEDULER_DATA, format, "JobScheduler", "job_scheduler.py", max_messages=40)
+
+
+@task
+def job_scheduler_fair(format: str = "builder"):
+    """Fair-comparison variant: every format is hand-tightened to its minimum
+    expressive form, with all formats conveying the same information content."""
+    return _build_task(SCHEDULER_FAIR_DATA, format, "JobScheduler", "job_scheduler.py", max_messages=40)

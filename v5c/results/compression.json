@@ -1,0 +1,29 @@
+{
+  "ran_at": "2026-05-04T15:01:43.656Z",
+  "rows": [
+    {
+      "task": "t01_distributed_ralph_fair",
+      "domain": "agent_orchestration_deep",
+      "format": "builder",
+      "chars": 812,
+      "lines": 16,
+      "est_tokens": 203
+    },
+    {
+      "task": "t01_distributed_ralph_fair",
+      "domain": "agent_orchestration_deep",
+      "format": "markdown",
+      "chars": 812,
+      "lines": 30,
+      "est_tokens": 203
+    },
+    {
+      "task": "t01_distributed_ralph_fair",
+      "domain": "agent_orchestration_deep",
+      "format": "prose",
+      "chars": 874,
+      "lines": 1,
+      "est_tokens": 219
+    }
+  ]
+}

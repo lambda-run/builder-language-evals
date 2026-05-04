@@ -1,0 +1,127 @@
+{
+  "cells": [
+    {
+      "model": "openrouter/anthropic/claude-sonnet-4.6",
+      "format": "builder",
+      "slug": "claude-sonnet-4_6__builder",
+      "code_chars": 4156,
+      "code_lines": 125,
+      "src_log": "2026-05-04T15-05-10-00-00_job-scheduler-fair_9GavjwFZP6HdtnG9d3Zfkm.eval",
+      "scores": {
+        "spec_faithfulness": 9,
+        "code_clarity": 9,
+        "idiomatic_python": 7,
+        "error_handling": 8,
+        "structure": 9,
+        "hallucinated_methods": [],
+        "missing_features": [],
+        "notable_issues": [
+          "Cycle detection occurs after executing non-cyclic jobs (lines 88-91). If a cycle is submitted, valid jobs will run before the `CycleError` is raised, which may cause unintended side effects.",
+          "Cycles that are downstream of a failed job are marked as 'blocked' and will be excluded from the cycle check (line 89), potentially violating the spec's requirement to raise `CycleError` on submitted cycles.",
+          "In `run()`, `set(executed_order)` is evaluated on every iteration of the list comprehension (line 88), leading to O(N^2) performance. It should be assigned to a variable before the comprehension.",
+          "The `ready` queue uses `list.pop(0)` and `list.sort()` (lines 65, 81), which are O(N) and O(N log N) operations respectively. Using `heapq` would be more idiomatic and efficient for a priority queue."
+        ]
+      }
+    },
+    {
+      "model": "openrouter/anthropic/claude-sonnet-4.6",
+      "format": "markdown",
+      "slug": "claude-sonnet-4_6__markdown",
+      "code_chars": 4491,
+      "code_lines": 142,
+      "src_log": "2026-05-04T15-07-13-00-00_job-scheduler-fair_dsNHs3BxATCESvzJtjDxMK.eval",
+      "scores": {
+        "spec_faithfulness": 10,
+        "code_clarity": 9,
+        "idiomatic_python": 9,
+        "error_handling": 10,
+        "structure": 10,
+        "hallucinated_methods": [],
+        "missing_features": [],
+        "notable_issues": [
+          "Line 53: `import heapq` is placed inside the `run` method instead of at the top of the file.",
+          "Calling `run()` multiple times will re-execute already succeeded jobs. While technically adhering to 'execute all submitted jobs', a typical scheduler would only execute 'pending' jobs on subsequent runs."
+        ]
+      }
+    },
+    {
+      "model": "openrouter/anthropic/claude-sonnet-4.6",
+      "format": "prose",
+      "slug": "claude-sonnet-4_6__prose",
+      "code_chars": 4266,
+      "code_lines": 131,
+      "src_log": "2026-05-04T15-08-50-00-00_job-scheduler-fair_7hTVSsvFVioUpTg9MkmUKb.eval",
+      "scores": {
+        "spec_faithfulness": 8,
+        "code_clarity": 9,
+        "idiomatic_python": 9,
+        "error_handling": 9,
+        "structure": 8,
+        "hallucinated_methods": [],
+        "missing_features": [],
+        "notable_issues": [
+          "Cycle detection is interleaved with execution (lines 71-124). If a cycle exists, jobs outside the cycle will be executed before the `CycleError` is raised, which violates the typical expectation of validating the DAG before execution.",
+          "Unknown dependencies are silently ignored (line 52). If a job depends on an unsubmitted job, it will run immediately instead of waiting for the dependency to succeed.",
+          "Inconsistent timing for `blocked` status propagation: immediate children of a failed job wait for all their other dependencies to finish before being marked blocked, whereas transitive dependents (grandchildren) are marked blocked immediately via the recursive `_mark_blocked` method (lines 128-133)."
+        ]
+      }
+    },
+    {
+      "model": "openrouter/openai/gpt-5.5",
+      "format": "builder",
+      "slug": "gpt-5_5__builder",
+      "code_chars": 4957,
+      "code_lines": 145,
+      "src_log": "2026-05-04T15-11-33-00-00_job-scheduler-fair_T8QJxEbSRHH83ePkUYq3sa.eval",
+      "scores": {
+        "spec_faithfulness": 10,
+        "code_clarity": 10,
+        "idiomatic_python": 10,
+        "error_handling": 10,
+        "structure": 10,
+        "hallucinated_methods": [],
+        "missing_features": [],
+        "notable_issues": []
+      }
+    },
+    {
+      "model": "openrouter/openai/gpt-5.5",
+      "format": "markdown",
+      "slug": "gpt-5_5__markdown",
+      "code_chars": 4853,
+      "code_lines": 141,
+      "src_log": "2026-05-04T15-12-32-00-00_job-scheduler-fair_fqzW8bvGVBCyi2f7eJkzKn.eval",
+      "scores": {
+        "spec_faithfulness": 8,
+        "code_clarity": 9,
+        "idiomatic_python": 9,
+        "error_handling": 9,
+        "structure": 9,
+        "hallucinated_methods": [],
+        "missing_features": [],
+        "notable_issues": [
+          "If `run()` is called multiple times, jobs that depend on previously `succeeded` jobs will never execute. This is because `remaining[jid]` (line 51) increments for all dependencies present in `self._jobs` regardless of their current status, and since already succeeded jobs are never pushed to `ready`, the `remaining` count for their dependents will never reach 0.",
+          "In `_block_transitive` (lines 114-124), the method recurses on children even if the current job is already marked as `blocked`. This leads to redundant O(V+E) traversals of the downstream dependency graph."
+        ]
+      }
+    },
+    {
+      "model": "openrouter/openai/gpt-5.5",
+      "format": "prose",
+      "slug": "gpt-5_5__prose",
+      "code_chars": 3878,
+      "code_lines": 125,
+      "src_log": "2026-05-04T15-13-38-00-00_job-scheduler-fair_TsQV82AGxaBWEV9DNuXXRF.eval",
+      "scores": {
+        "spec_faithfulness": 10,
+        "code_clarity": 10,
+        "idiomatic_python": 10,
+        "error_handling": 10,
+        "structure": 10,
+        "hallucinated_methods": [],
+        "missing_features": [],
+        "notable_issues": []
+      }
+    }
+  ]
+}
