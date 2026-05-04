@@ -19,13 +19,13 @@ It teaches Claude to take a plan that would normally come out like this:
 ```ts
 ResearchTask
   .frame(question: "...", decision_by: "...")
-  .parallelize(
-      subagent(name: "market", task: t1, context: c1),
-      subagent(name: "legal",  task: t2, context: c2))
+  .parallelize(market_agent, legal_agent)
   .transform(into: "synthesis_doc", format: "markdown")
-  .human_in_loop(reviewer: "Lyndon")
+  .human_in_loop("Lyndon")
   .run()
 ```
+
+`market_agent` and `legal_agent` are named bindings defined elsewhere — the chain composes named values rather than restating each subagent's arguments inline.
 
 Same plan. The hypothesis was that the second form is easier for downstream tools and for the next agent in the loop to consume. It isn't — see below.
 
