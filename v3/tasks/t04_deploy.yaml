@@ -58,9 +58,14 @@ canned_responses:
   notify_team: { ok: true }
 
 gold_trace:
-  - parallel: true
+  # build is a real dependency: tests/scan operate on the build artifact.
+  # Originally we had all 3 in one parallel group, which penalised correct
+  # dependency-aware planning. Fixed 2026-05-04 after Gemini review.
+  - parallel: false
     calls:
       - { tool: build }
+  - parallel: true
+    calls:
       - { tool: run_tests }
       - { tool: security_scan }
   - parallel: false

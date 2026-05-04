@@ -1,0 +1,8 @@
+RUN IN PARALLEL:
+  - resize_image
+  - make_thumbnail
+  - extract_exif
+
+THEN: RUN IN PARALLEL:
+  - upload_to_cdn
+  - upload_to_cdn

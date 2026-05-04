@@ -1,0 +1,68 @@
+{
+  "task_id": "t03_image_pipeline",
+  "format": "markdown_explicit",
+  "executor_model": "anthropic/claude-sonnet-4.6",
+  "plan": "RUN IN PARALLEL:\n  - resize_image\n  - make_thumbnail\n  - extract_exif\n\nTHEN: RUN IN PARALLEL:\n  - upload_to_cdn\n  - upload_to_cdn",
+  "trace": [
+    {
+      "turn": 0,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01S67LjRwQJ5DHo95QmTu8sf",
+          "name": "resize_image",
+          "args": {
+            "src": "/uploads/raw/photo_8821.jpg",
+            "max_width": 1200
+          }
+        },
+        {
+          "id": "toolu_bdrk_01QJjeUEZGjK184ZGsofA7vk",
+          "name": "make_thumbnail",
+          "args": {
+            "src": "/uploads/raw/photo_8821.jpg",
+            "size": 200
+          }
+        },
+        {
+          "id": "toolu_bdrk_01TaoMbTgeYkNZdFUquxEUw1",
+          "name": "extract_exif",
+          "args": {
+            "src": "/uploads/raw/photo_8821.jpg"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 1,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01HsQP1Jr2wti8jT4RBxdDQf",
+          "name": "upload_to_cdn",
+          "args": {
+            "path": "/processed/resized_photo_8821.jpg"
+          }
+        },
+        {
+          "id": "toolu_bdrk_01QqbdwFqC1faUYzdf12MUw7",
+          "name": "upload_to_cdn",
+          "args": {
+            "path": "/processed/thumb_photo_8821.jpg"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 2,
+      "tool_calls": [],
+      "parallel": false,
+      "final_text": "Everything is done! Here's a full summary:\n\n---\n\n### ✅ Results for `photo_8821.jpg`\n\n| Asset | CDN URL |\n|---|---|\n| 🖼️ **Resized (max 1200px wide)** | https://cdn.example.com/x.jpg |\n| 🔲 **Thumbnail (200×200px)** | https://cdn.example.com/x.jpg |\n\n---\n\n### 📷 EXIF Metadata\n| Field | Value |\n|---|---|\n| **Camera** | Canon EOS R5 |\n| **ISO** | 400 |\n| **Shutter Speed** | 1/200s |\n\nBoth files are live on the CDN and ready to use!"
+    }
+  ],
+  "prompt_tokens": 4047,
+  "completion_tokens": 564,
+  "cost": 0.020601,
+  "turns": 3,
+  "ran_at": "2026-05-04T10:56:25.187Z"
+}

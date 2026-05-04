@@ -1,5 +1,5 @@
 {
-  "ran_at": "2026-05-04T09:45:17.689Z",
+  "ran_at": "2026-05-04T10:51:16.934Z",
   "cells": [
     {
       "task_id": "t01_pr_review",
@@ -351,18 +351,17 @@
       "missing_tools": [],
       "extra_calls": 0,
       "extra_tools": [],
-      "parallel_matched": 0,
+      "parallel_matched": 1,
       "parallel_total": 1,
-      "parallel_score": 0,
+      "parallel_score": 1,
       "parallel_detail": [
         {
           "group": [
-            "build",
             "run_tests",
             "security_scan"
           ],
-          "matched": false,
-          "turn": -1
+          "matched": true,
+          "turn": 1
         }
       ],
       "total_calls": 5,
@@ -386,18 +385,17 @@
       "missing_tools": [],
       "extra_calls": 0,
       "extra_tools": [],
-      "parallel_matched": 0,
+      "parallel_matched": 1,
       "parallel_total": 1,
-      "parallel_score": 0,
+      "parallel_score": 1,
       "parallel_detail": [
         {
           "group": [
-            "build",
             "run_tests",
             "security_scan"
           ],
-          "matched": false,
-          "turn": -1
+          "matched": true,
+          "turn": 1
         }
       ],
       "total_calls": 5,
@@ -427,7 +425,6 @@
       "parallel_detail": [
         {
           "group": [
-            "build",
             "run_tests",
             "security_scan"
           ],

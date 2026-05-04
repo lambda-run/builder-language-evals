@@ -1,0 +1,9 @@
+# Plan
+
+## Step 1 (parallel)
+- Call `classify_intent` with appropriate args
+- Call `check_sentiment` with appropriate args
+- Call `lookup_customer` with appropriate args
+
+## Step 2
+- Call `page_csm` with appropriate args

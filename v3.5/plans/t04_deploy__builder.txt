@@ -1,0 +1,10 @@
+```builder
+Deploy
+  .build(...)
+  .parallelize(
+    run_tests(...),
+    security_scan(...)
+  )
+  .deploy(...)
+  .notify_team(...)
+```

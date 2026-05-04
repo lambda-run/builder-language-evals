@@ -1,0 +1,9 @@
+RUN IN PARALLEL:
+  - verify_customer
+  - check_inventory
+  - calculate_shipping
+  - validate_payment
+
+THEN: charge_card
+
+THEN: create_order

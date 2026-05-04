@@ -1,0 +1,94 @@
+{
+  "task_id": "t05_order",
+  "format": "builder",
+  "executor_model": "anthropic/claude-sonnet-4.6",
+  "plan": "```builder\nOrder\n  .parallelize(\n    verify_customer(...),\n    check_inventory(...),\n    calculate_shipping(...),\n    validate_payment(...)\n  )\n  .charge_card(...)\n  .create_order(...)\n```",
+  "trace": [
+    {
+      "turn": 0,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01THGt1eJ39obzGG4fXAkysK",
+          "name": "verify_customer",
+          "args": {
+            "customer_id": "cu_392"
+          }
+        },
+        {
+          "id": "toolu_bdrk_015cCobZBU1Aa1MrkmzEpC5a",
+          "name": "check_inventory",
+          "args": {
+            "items": [
+              {
+                "sku": "A",
+                "qty": 2
+              },
+              {
+                "sku": "B",
+                "qty": 1
+              }
+            ]
+          }
+        },
+        {
+          "id": "toolu_bdrk_01Sfx73ckADAEiBHCwYQnbxT",
+          "name": "calculate_shipping",
+          "args": {
+            "address": "123 Main St",
+            "items": [
+              {
+                "sku": "A",
+                "qty": 2
+              },
+              {
+                "sku": "B",
+                "qty": 1
+              }
+            ]
+          }
+        },
+        {
+          "id": "toolu_bdrk_01PQYwy3p2fgMYRdGYwnfFoJ",
+          "name": "validate_payment",
+          "args": {
+            "payment_method": "pm_abc"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 1,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_015ehk7rkA3GfCE6ajyv44hM",
+          "name": "charge_card",
+          "args": {
+            "payment_method": "pm_abc",
+            "amount": 12.5
+          }
+        },
+        {
+          "id": "toolu_bdrk_018DhgDzfKFZb9NXoWZ9MPxA",
+          "name": "create_order",
+          "args": {
+            "order_id": "ord_5521",
+            "customer_id": "cu_392"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 2,
+      "tool_calls": [],
+      "parallel": false,
+      "final_text": "🎉 **Order `ord_5521` has been successfully processed!** Here's the full summary:\n\n| Step | Result |\n|---|---|\n| Customer Fraud Check | ✅ Passed (score: 0.05) |\n| Inventory Check | ✅ All items in stock |\n| Shipping Calculation | ✅ $12.50 |\n| Payment Validation | ✅ Valid |\n| Card Charged | ✅ Charge ID: `ch_xxx` for $12.50 |\n| Order Created | ✅ Order `ord_5521` created for customer `cu_392` |\n\nEverything went through without a hitch — no holds or admin alerts needed!"
+    }
+  ],
+  "prompt_tokens": 5195,
+  "completion_tokens": 696,
+  "cost": 0.026025,
+  "turns": 3,
+  "ran_at": "2026-05-04T10:58:06.207Z"
+}

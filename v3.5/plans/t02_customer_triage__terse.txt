@@ -1,0 +1,2 @@
+parallel { classify_intent(...); check_sentiment(...); lookup_customer(...) };
+page_csm(...);

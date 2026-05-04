@@ -1,0 +1,2 @@
+parallel { resize_image(...); make_thumbnail(...); extract_exif(...) };
+parallel { upload_to_cdn(...); upload_to_cdn(...) };

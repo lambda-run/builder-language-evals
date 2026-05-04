@@ -1,0 +1,9 @@
+build
+
+THEN: RUN IN PARALLEL:
+  - run_tests
+  - security_scan
+
+THEN: deploy
+
+THEN: notify_team

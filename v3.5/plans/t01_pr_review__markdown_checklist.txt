@@ -1,0 +1,10 @@
+# Plan
+
+## Step 1 (parallel)
+- Call `run_lint` with appropriate args
+- Call `run_tests` with appropriate args
+- Call `check_security` with appropriate args
+- Call `count_loc_change` with appropriate args
+
+## Step 2
+- Call `approve_pr` with appropriate args

@@ -1,0 +1,36 @@
+```json
+{
+  "steps": [
+    {
+      "parallel": true,
+      "calls": [
+        {
+          "tool": "run_lint",
+          "args": "<infer from goal>"
+        },
+        {
+          "tool": "run_tests",
+          "args": "<infer from goal>"
+        },
+        {
+          "tool": "check_security",
+          "args": "<infer from goal>"
+        },
+        {
+          "tool": "count_loc_change",
+          "args": "<infer from goal>"
+        }
+      ]
+    },
+    {
+      "parallel": false,
+      "calls": [
+        {
+          "tool": "approve_pr",
+          "args": "<infer from goal>"
+        }
+      ]
+    }
+  ]
+}
+```

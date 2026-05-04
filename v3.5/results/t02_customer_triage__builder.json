@@ -1,0 +1,60 @@
+{
+  "task_id": "t02_customer_triage",
+  "format": "builder",
+  "executor_model": "anthropic/claude-sonnet-4.6",
+  "plan": "```builder\nCustomerTriage\n  .parallelize(\n    classify_intent(...),\n    check_sentiment(...),\n    lookup_customer(...)\n  )\n  .page_csm(...)\n```",
+  "trace": [
+    {
+      "turn": 0,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01Xymc6yjckPcMZBaKVGnQAL",
+          "name": "classify_intent",
+          "args": {
+            "text": "Your product is broken and I want a refund NOW."
+          }
+        },
+        {
+          "id": "toolu_bdrk_01ENVuSMxzWU74Dsw71qPh6C",
+          "name": "check_sentiment",
+          "args": {
+            "text": "Your product is broken and I want a refund NOW."
+          }
+        },
+        {
+          "id": "toolu_bdrk_01LJ66DdiyMoUGQJBbofj2a6",
+          "name": "lookup_customer",
+          "args": {
+            "email": "alice@bigco.com"
+          }
+        }
+      ],
+      "parallel": true
+    },
+    {
+      "turn": 1,
+      "tool_calls": [
+        {
+          "id": "toolu_bdrk_01VG2oDLJVts4BVD1KnxVNpT",
+          "name": "page_csm",
+          "args": {
+            "customer_id": "cu_alice",
+            "reason": "VIP customer alice@bigco.com submitted ticket tk_8842 expressing anger — reports product is broken and is demanding a refund. Immediate attention required."
+          }
+        }
+      ],
+      "parallel": false
+    },
+    {
+      "turn": 2,
+      "tool_calls": [],
+      "parallel": false,
+      "final_text": "✅ **Plan complete. Here's the full summary:**\n\n| Check | Result |\n|---|---|\n| 🎯 Intent | `support` (refund demand) |\n| 😡 Sentiment | `angry` |\n| 👑 Customer Tier | `VIP` (17 interactions) |\n| 📟 CSM Paged | ✅ Yes |\n\n**Action taken:** The on-call Customer Success Manager has been paged for `cu_alice` (alice@bigco.com). Given she's a VIP with an angry tone and a broken-product complaint, this escalation takes priority over a standard finance routing. No spam archival needed."
+    }
+  ],
+  "prompt_tokens": 4290,
+  "completion_tokens": 564,
+  "cost": 0.02133,
+  "turns": 3,
+  "ran_at": "2026-05-04T10:55:05.650Z"
+}

@@ -1,0 +1,14 @@
+# Plan
+
+## Step 1
+- Call `build` with appropriate args
+
+## Step 2 (parallel)
+- Call `run_tests` with appropriate args
+- Call `security_scan` with appropriate args
+
+## Step 3
+- Call `deploy` with appropriate args
+
+## Step 4
+- Call `notify_team` with appropriate args

@@ -1,0 +1,12 @@
+```builder
+ImagePipeline
+  .parallelize(
+    resize_image(...),
+    make_thumbnail(...),
+    extract_exif(...)
+  )
+  .parallelize(
+    upload_to_cdn(...),
+    upload_to_cdn(...)
+  )
+```

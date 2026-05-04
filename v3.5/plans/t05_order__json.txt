@@ -1,0 +1,45 @@
+```json
+{
+  "steps": [
+    {
+      "parallel": true,
+      "calls": [
+        {
+          "tool": "verify_customer",
+          "args": "<infer from goal>"
+        },
+        {
+          "tool": "check_inventory",
+          "args": "<infer from goal>"
+        },
+        {
+          "tool": "calculate_shipping",
+          "args": "<infer from goal>"
+        },
+        {
+          "tool": "validate_payment",
+          "args": "<infer from goal>"
+        }
+      ]
+    },
+    {
+      "parallel": false,
+      "calls": [
+        {
+          "tool": "charge_card",
+          "args": "<infer from goal>"
+        }
+      ]
+    },
+    {
+      "parallel": false,
+      "calls": [
+        {
+          "tool": "create_order",
+          "args": "<infer from goal>"
+        }
+      ]
+    }
+  ]
+}
+```

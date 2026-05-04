@@ -1,0 +1,10 @@
+```builder
+PrReview
+  .parallelize(
+    run_lint(...),
+    run_tests(...),
+    check_security(...),
+    count_loc_change(...)
+  )
+  .approve_pr(...)
+```

@@ -1,0 +1,36 @@
+```json
+{
+  "steps": [
+    {
+      "parallel": true,
+      "calls": [
+        {
+          "tool": "resize_image",
+          "args": "<infer from goal>"
+        },
+        {
+          "tool": "make_thumbnail",
+          "args": "<infer from goal>"
+        },
+        {
+          "tool": "extract_exif",
+          "args": "<infer from goal>"
+        }
+      ]
+    },
+    {
+      "parallel": true,
+      "calls": [
+        {
+          "tool": "upload_to_cdn",
+          "args": "<infer from goal>"
+        },
+        {
+          "tool": "upload_to_cdn",
+          "args": "<infer from goal>"
+        }
+      ]
+    }
+  ]
+}
+```

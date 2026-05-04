@@ -1,0 +1,32 @@
+```json
+{
+  "steps": [
+    {
+      "parallel": true,
+      "calls": [
+        {
+          "tool": "classify_intent",
+          "args": "<infer from goal>"
+        },
+        {
+          "tool": "check_sentiment",
+          "args": "<infer from goal>"
+        },
+        {
+          "tool": "lookup_customer",
+          "args": "<infer from goal>"
+        }
+      ]
+    },
+    {
+      "parallel": false,
+      "calls": [
+        {
+          "tool": "page_csm",
+          "args": "<infer from goal>"
+        }
+      ]
+    }
+  ]
+}
+```

@@ -1,0 +1,4 @@
+build(...);
+parallel { run_tests(...); security_scan(...) };
+deploy(...);
+notify_team(...);

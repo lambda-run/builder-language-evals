@@ -1,0 +1,7 @@
+RUN IN PARALLEL:
+  - run_lint
+  - run_tests
+  - check_security
+  - count_loc_change
+
+THEN: approve_pr

@@ -1,0 +1,46 @@
+```json
+{
+  "steps": [
+    {
+      "parallel": false,
+      "calls": [
+        {
+          "tool": "build",
+          "args": "<infer from goal>"
+        }
+      ]
+    },
+    {
+      "parallel": true,
+      "calls": [
+        {
+          "tool": "run_tests",
+          "args": "<infer from goal>"
+        },
+        {
+          "tool": "security_scan",
+          "args": "<infer from goal>"
+        }
+      ]
+    },
+    {
+      "parallel": false,
+      "calls": [
+        {
+          "tool": "deploy",
+          "args": "<infer from goal>"
+        }
+      ]
+    },
+    {
+      "parallel": false,
+      "calls": [
+        {
+          "tool": "notify_team",
+          "args": "<infer from goal>"
+        }
+      ]
+    }
+  ]
+}
+```

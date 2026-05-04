@@ -1,0 +1,6 @@
+RUN IN PARALLEL:
+  - classify_intent
+  - check_sentiment
+  - lookup_customer
+
+THEN: page_csm

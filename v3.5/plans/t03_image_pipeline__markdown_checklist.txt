@@ -1,0 +1,10 @@
+# Plan
+
+## Step 1 (parallel)
+- Call `resize_image` with appropriate args
+- Call `make_thumbnail` with appropriate args
+- Call `extract_exif` with appropriate args
+
+## Step 2 (parallel)
+- Call `upload_to_cdn` with appropriate args
+- Call `upload_to_cdn` with appropriate args

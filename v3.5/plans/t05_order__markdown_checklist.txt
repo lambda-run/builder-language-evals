@@ -1,0 +1,13 @@
+# Plan
+
+## Step 1 (parallel)
+- Call `verify_customer` with appropriate args
+- Call `check_inventory` with appropriate args
+- Call `calculate_shipping` with appropriate args
+- Call `validate_payment` with appropriate args
+
+## Step 2
+- Call `charge_card` with appropriate args
+
+## Step 3
+- Call `create_order` with appropriate args
