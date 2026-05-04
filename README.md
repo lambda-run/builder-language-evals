@@ -21,11 +21,11 @@ ResearchTask
   .frame(question: "...", decision_by: "...")
   .parallelize(market_agent, legal_agent)
   .transform(into: "synthesis_doc", format: "markdown")
-  .human_in_loop("Lyndon")
+  .approve(lyndon)
   .run()
 ```
 
-`market_agent` and `legal_agent` are named bindings defined elsewhere — the chain composes named values rather than restating each subagent's arguments inline.
+`market_agent`, `legal_agent`, and `lyndon` are named bindings defined elsewhere. The chain composes named values rather than restating each one's arguments inline, and invents a domain verb (`.approve()`) instead of a generic `human_in_loop(reviewer:)` wrapper.
 
 Same plan. The hypothesis was that the second form is easier for downstream tools and for the next agent in the loop to consume. It isn't — see below.
 
