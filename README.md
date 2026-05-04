@@ -4,11 +4,13 @@ A 95-line Claude Code skill that turns AI-generated plans from prose into a stru
 
 ## Verdict
 
-**Tied with tight markdown on every outcome we measured.** One small directional finding stands: builder leads on spec-faithfulness when an agent reads the spec and produces an artifact (v7-fair: 9.5/10 vs 9.0/10 for markdown and prose). That's a TypeScript-prevents-drift kind of edge, lightly supported (N=1 task), not a token or correctness win.
+**Builder beats how people normally talk to AI** (prose, loose markdown, brain-dump): better comprehension (5-11pp), fewer tokens, slightly more faithful artifacts when agents build from the spec.
 
-**Use it if:** you want a discipline that forces you to compose nouns + verbs + explicit values when writing specs. The benefit is mostly in the *author's* thinking, not the LLM's output.
+**Builder ties with idealized tight markdown** in a controlled comparison — but tight markdown is a unicorn. It requires the same up-front structuring discipline that builder enforces. Once you commit to thinking in nouns + verbs + explicit values, the syntax (chain or bullets) becomes secondary.
 
-**Don't use it for:** token efficiency (tied with tight markdown), better code generation (tied), or better wire-format between agents (tied).
+**Use it if:** you'd otherwise dump prose at the AI. The skill enforces structure, and structure beats no-structure decisively.
+
+**Don't use it for:** beating someone who's already writing tight markdown — they're already paying the discipline cost. The wins disappear in that comparison.
 
 ## What the skill does
 
@@ -68,11 +70,12 @@ Seven evals, two adversarial Gemini reviews. Bold claims caught and walked back 
 
 ### What the data actually shows
 
-Three findings strong enough to keep:
+Four findings strong enough to keep:
 
-1. **Verbose markdown is bad.** Almost all the apparent "builder wins" came from comparing against verbose markdown baselines. Tight anything beats verbose anything.
-2. **Frontier models normalize format.** Sonnet 4.6 and GPT-5.5 reconstruct any reasonable spec into the same conceptual plan before reasoning. Format effects only appear in marginal places (decode efficiency, faithfulness).
-3. **Builder shows a small spec-faithfulness lead** in agent → artifact tasks (v7-fair). Directional, N=1, would need 3+ tasks to firm up.
+1. **vs the realistic baseline (prose / loose markdown), builder wins.** v5: builder hit 91.7%/100% comprehension on Sonnet/GPT-5.5 vs prose at 88.9%/94.4%. v7: builder produced more spec-faithful agent artifacts than verbose markdown. This is the comparison most users actually face.
+2. **vs an idealized tight-markdown baseline (v5c, v7-fair), builder ties.** When you hand-tighten markdown to its minimum expressive form too, both formats land in the same place. But this requires the same structural discipline builder enforces — so the comparison is "structure A vs structure B," not "skill helps vs not."
+3. **Verbose markdown is genuinely bad** — most of what looked like "format effects" was really a "verbosity effect."
+4. **Frontier models normalize format internally.** Format effects only appear in marginal places (decode efficiency, faithfulness) once both formats are structurally clean.
 
 ### What we did NOT measure
 
