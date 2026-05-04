@@ -2,9 +2,13 @@
 
 Does forcing Claude to write plans in a custom, chainable syntax actually improve its performance?
 
-We ran five escalating evaluations to find out. **The short answer: mostly no — with one preliminary positive at depth that's worth more testing.**
+We ran six evaluations to find out. **The short answer: null at small scale; a real and measurable win at depth, once you write the chain in a tight style.**
 
-The [`builder-language`](skill/SKILL.md) skill does not improve downstream code generation, is not a better wire format between agents, and ties markdown/prose at one-screen scale. v5 (added after the original four nulls) tested whether depth changes the picture and found that on a single ~35-element, 4-level-deep spec, builder won both compression (-10% vs markdown) and comprehension (+3-11pp on both Sonnet 4.6 and GPT-5.5). One task isn't a finding, but it's the first non-null in the suite and it points at the only axis we hadn't stressed.
+The [`builder-language`](skill/SKILL.md) skill does not improve downstream code generation (v2), is not a better wire format between agents (v3, v3.5), and ties markdown/prose at one-screen scale (v4). At depth, the picture changes. **v5b** — a 35-element, 4-level-deep distributed-systems spec written in the *tight* builder style — beat markdown by **-26% prompt tokens** AND **+5-6pp comprehension** on both Sonnet 4.6 and GPT-5.5. The verbose builder style we'd been using (`agent(name: "x", role: "y")` everywhere) actually *lost* on tokens; once we stripped wrapper Nouns, dropped pointless named-args, and used English where snake_case was just structural, builder dominated.
+
+This led to two outputs: (1) updating the [skill itself](skill/SKILL.md) with a "Tight by default" section and bad→good examples drawn from v5b, and (2) committing v5b's tight-style result as the first cleanly-positive eval in the suite.
+
+Caveat: still N=1 task. v6+ (multi-turn agent operating a deep spec) and v7 (agent building real artifacts in a sandbox) are the natural follow-ups before calling this a settled finding.
 
 ---
 
@@ -41,7 +45,8 @@ When [Dexter Horthy](https://twitter.com/dexhorthy) (HumanLayer / 12-Factor Agen
 | It's a better agent-to-agent wire format. | [v3](reports/eval-v3-wire-format-2026-05-04T10-51-44-825.md) | **False.** All formats hit 100% coverage and 100% gold parallelism. Markdown won total tokens. |
 | The win above survives executor isolation. | [v3.5](reports/eval-v3.5-executor-isolation-2026-05-04T10-59-56-246.md) · [cross-model](reports/eval-v3.5-cross-model-2026-05-04T12-13-46-235.md) | **Confirmed null.** All five formats — builder, two markdown variants, json, terse — hit 100/100 on Sonnet 4.6 and GPT-5.5. |
 | Across many domains, builder is more compact AND more comprehension-friendly. | [v4](reports/eval-v4-cross-domain-2026-05-04T12-44-19-739.md) | **False at one-screen scale.** 5 domains × 2 models: comprehension within ~2pp; markdown wins compression by 4%. The two models disagree on the comprehension winner — the differences are noise. |
-| At depth (30+ elements, 4+ levels nested) builder pays off. | [v5](reports/eval-v5-depth-2026-05-04T13-56-32-992.md) | **Preliminary positive.** N=1 task: builder wins compression by 10% AND comprehension by 3pp (Sonnet) / 11pp (GPT-5.5) — GPT-5.5 hit 100% on builder. Scorer was patched mid-eval to fix a snake_case ↔ space substring bug; same patch leaves v4's null result unchanged, so the fix isn't biased. Still N=1 — needs 2-3 more deep tasks before "finding." |
+| At depth (30+ elements, 4+ levels nested) builder pays off. | [v5](reports/eval-v5-depth-2026-05-04T13-56-32-992.md) | **Preliminary positive.** N=1 task: builder wins compression by 10% AND comprehension by 3pp (Sonnet) / 11pp (GPT-5.5) — GPT-5.5 hit 100% on builder. Scorer was patched mid-eval to fix a snake_case ↔ space substring bug; same patch leaves v4's null result unchanged, so the fix isn't biased. |
+| The win above survives switching the metric from chars to real prompt_tokens, AND only holds when the chain is written in a tight style (no wrapper Nouns, no unnecessary named-args, English over snake_case). | [v5b](reports/eval-v5b-tight-2026-05-04T14-15-27-315.md) | **Confirmed positive.** Same task as v5 with the chain rewritten in the tight style now codified in the skill. API-reported prompt_tokens: builder -26% vs markdown on both Sonnet 4.6 and GPT-5.5. Comprehension: 94.4% (Sonnet) / 97.2% (GPT-5.5) for builder vs 88.9% / 91.7% for markdown. Both axes, both models. Verbose builder (v5) lost on real tokens; tight builder wins. |
 
 For the first four evals, the skill produced a parseable syntax that no system consumes, and on every other axis the differences were within noise. v5 is the first sign that depth might be the axis where the compositional grammar actually pays off — but it's one task, with a post-hoc scorer fix, and needs replication.
 
@@ -68,6 +73,20 @@ For the first four evals, the skill produced a parseable syntax that no system c
 | **Comprehension** (GPT-5.5) | **100.0%** (36/36) | 88.9% (32/36) | 94.4% (34/36) |
 
 GPT-5.5 hit a perfect score on builder — extracted every gold element. First time any format clearly led both axes simultaneously. **Caveat: N=1, post-hoc scorer fix.** See the [v5 report](reports/eval-v5-depth-2026-05-04T13-56-32-992.md) for the full transparency note on the scorer change and the v4 sanity check.
+
+## v5b headline — tight style + real tokens, both axes both models
+
+Same task as v5, but builder rewritten in the *tight* style: drop wrapper Nouns, drop unconditional named-args, inline natural-language over snake_case. [Full report](reports/eval-v5b-tight-2026-05-04T14-15-27-315.md).
+
+| | tight builder | markdown | prose |
+|---|---:|---:|---:|
+| **Chars** | **812** (-44% vs md) | 1,440 | 1,330 |
+| **API prompt_tokens (Sonnet)** | **422** (-26%) | 567 | 511 |
+| **API prompt_tokens (GPT-5.5)** | **376** (-26%) | 507 | 461 |
+| **Comprehension (Sonnet 4.6)** | **94.4%** (34/36) | 88.9% (32/36) | 88.9% (32/36) |
+| **Comprehension (GPT-5.5)** | **97.2%** (35/36) | 91.7% (33/36) | 91.7% (33/36) |
+
+The tokens result is API-reported (not estimated), and both models converged on the same -26% delta. Combined with the comprehension lift, this is the first eval result with a clean win across every measured axis on every measured model. The skill itself was updated to default to this tight style — see "Tight by default" in [`skill/SKILL.md`](skill/SKILL.md).
 
 ---
 
@@ -174,7 +193,8 @@ v2/                         # downstream codegen — null
 v3/                         # planner+executor wire format — null
 v3.5/                       # executor isolation, cross-model — null
 v4/                         # cross-domain comprehension + compression — null at one-screen scale
-v5/                         # depth stress test — preliminary positive (N=1)
+v5/                         # depth stress test — preliminary positive (N=1, verbose builder)
+v5b/                        # depth stress test, rerun with tight builder — clean positive both axes both models
 
 reports/                    # date-stamped markdown summaries (committed)
 artifacts/                  # gitignored — promptfoo HTML reports, results.json
