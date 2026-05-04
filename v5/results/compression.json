@@ -1,0 +1,29 @@
+{
+  "ran_at": "2026-05-04T13:51:50.963Z",
+  "rows": [
+    {
+      "task": "t01_distributed_ralph",
+      "domain": "agent_orchestration_deep",
+      "format": "builder",
+      "chars": 1291,
+      "lines": 28,
+      "est_tokens": 323
+    },
+    {
+      "task": "t01_distributed_ralph",
+      "domain": "agent_orchestration_deep",
+      "format": "markdown",
+      "chars": 1440,
+      "lines": 37,
+      "est_tokens": 360
+    },
+    {
+      "task": "t01_distributed_ralph",
+      "domain": "agent_orchestration_deep",
+      "format": "prose",
+      "chars": 1330,
+      "lines": 26,
+      "est_tokens": 333
+    }
+  ]
+}

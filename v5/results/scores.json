@@ -1,0 +1,105 @@
+{
+  "ran_at": "2026-05-04T13:56:32.978Z",
+  "cells": [
+    {
+      "model": "sonnet",
+      "task": "t01_distributed_ralph",
+      "domain": "agent_orchestration_deep",
+      "format": "builder",
+      "matched": 33,
+      "total": 36,
+      "missed": [
+        "10m",
+        "escalate",
+        "terminate"
+      ],
+      "score": 0.9166666666666666,
+      "cost": 0.009243,
+      "prompt_tokens": 611,
+      "completion_tokens": 494
+    },
+    {
+      "model": "sonnet",
+      "task": "t01_distributed_ralph",
+      "domain": "agent_orchestration_deep",
+      "format": "markdown",
+      "matched": 32,
+      "total": 36,
+      "missed": [
+        "10m",
+        "reviewer pool",
+        "requeue",
+        "terminate"
+      ],
+      "score": 0.8888888888888888,
+      "cost": 0.008766,
+      "prompt_tokens": 567,
+      "completion_tokens": 471
+    },
+    {
+      "model": "sonnet",
+      "task": "t01_distributed_ralph",
+      "domain": "agent_orchestration_deep",
+      "format": "prose",
+      "matched": 32,
+      "total": 36,
+      "missed": [
+        "10m",
+        "escalate",
+        "requeue",
+        "terminate"
+      ],
+      "score": 0.8888888888888888,
+      "cost": 0.008898,
+      "prompt_tokens": 511,
+      "completion_tokens": 491
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t01_distributed_ralph",
+      "domain": "agent_orchestration_deep",
+      "format": "builder",
+      "matched": 36,
+      "total": 36,
+      "missed": [],
+      "score": 1,
+      "cost": 0.02552,
+      "prompt_tokens": 532,
+      "completion_tokens": 762
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t01_distributed_ralph",
+      "domain": "agent_orchestration_deep",
+      "format": "markdown",
+      "matched": 32,
+      "total": 36,
+      "missed": [
+        "10m",
+        "escalate",
+        "requeue",
+        "terminate"
+      ],
+      "score": 0.8888888888888888,
+      "cost": 0.025395,
+      "prompt_tokens": 507,
+      "completion_tokens": 762
+    },
+    {
+      "model": "gpt-5.5",
+      "task": "t01_distributed_ralph",
+      "domain": "agent_orchestration_deep",
+      "format": "prose",
+      "matched": 34,
+      "total": 36,
+      "missed": [
+        "10m",
+        "requeue"
+      ],
+      "score": 0.9444444444444444,
+      "cost": 0.022585,
+      "prompt_tokens": 461,
+      "completion_tokens": 676
+    }
+  ]
+}
