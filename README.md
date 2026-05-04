@@ -10,7 +10,11 @@ The [`builder-language`](skill/SKILL.md) skill is a personal notation preference
 
 ## What the skill does
 
-It teaches Claude to write plans as a strict noun + named-verb chain instead of markdown or prose:
+It teaches Claude to take a plan that would normally come out like this:
+
+> *"I need to answer a research question by a given deadline. Run two subagents in parallel — one to dig into the market angle, one to dig into the legal angle — each with its own task description and context. Combine the outputs into a single markdown synthesis doc, have Lyndon review it, then kick it off."*
+
+…and instead express it as a strict noun + named-verb chain:
 
 ```ts
 ResearchTask
@@ -22,6 +26,8 @@ ResearchTask
   .human_in_loop(reviewer: "Lyndon")
   .run()
 ```
+
+Same plan. The hypothesis was that the second form is easier for downstream tools and for the next agent in the loop to consume. It isn't — see below.
 
 When [Dexter Horthy](https://twitter.com/dexhorthy) (HumanLayer / 12-Factor Agents) replied to a description of the skill with **"show me the evals"** and sharpened it to *"is this better than naive prompting?"* — this repo is the answer.
 
