@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "turns": 4,
+  "cost": 0.041838,
+  "prompt_tokens": 6696,
+  "completion_tokens": 1450,
+  "lastTestOutput": "PASS_COUNT=10/10\n  PASS: initial available is 10\n  PASS: try_consume(5) returns True\n  PASS: after consuming 5, available is 5\n  PASS: try_consume(10) returns False when only 5 available\n  PASS: after failed try_consume, available unchanged at 5\n  PASS: after ~1s, available is 7 (5 + 2 refill)\n  PASS: after long wait, available capped at 10\n  PASS: try_consume(0) returns True\n  PASS: try_consume(-1) raises ValueError\n  PASS: after reset, available is 10\n",
+  "bestPass": {
+    "passed": 10,
+    "total": 10
+  }
+}

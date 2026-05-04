@@ -1,0 +1,176 @@
+{
+  "ran_at": "2026-05-04T14:55:46.953239Z",
+  "cells": [
+    {
+      "model": "openrouter/anthropic/claude-sonnet-4.6",
+      "format": "builder",
+      "slug": "claude-sonnet-4_6__builder",
+      "code_path": "/home/ubuntu/builder-language-evals/v7/results/code/claude-sonnet-4_6__builder.py",
+      "code_chars": 5404,
+      "code_lines": 157,
+      "src_log": "2026-05-04T14-33-06-00-00_job-scheduler_jjKXX5vqdzCSS89oTpGRhX.eval",
+      "scores": {
+        "spec_faithfulness": 7,
+        "code_clarity": 8,
+        "idiomatic_python": 8,
+        "error_handling": 7,
+        "structure": 8,
+        "hallucinated_methods": [
+          "_release_dependents",
+          "_detect_cycle"
+        ],
+        "missing_features": [],
+        "notable_strengths": [
+          "Correctly implements exponential backoff and retry logic.",
+          "Uses a priority queue (heapq) to efficiently order ready jobs by priority.",
+          "Correctly detects cycles using a dedicated DFS implementation."
+        ],
+        "notable_issues": [
+          "Calling `status()` before `run()` raises an `AttributeError` because `self._statuses` is not initialized in `__init__` (line 29).",
+          "Dead code: `processed_count` is initialized and incremented but never actually used for cycle detection as originally intended (lines 71, 86, 120).",
+          "The `counter` variable used for stable heap ordering is passed by value to `_release_dependents`, relying on a fragile manual increment in the caller to avoid collisions (lines 89, 134-140). Using `itertools.count()` would be much more idiomatic.",
+          "Blocked status propagation is deferred until all other dependencies of the blocked job are resolved, rather than propagating immediately."
+        ]
+      }
+    },
+    {
+      "model": "openrouter/anthropic/claude-sonnet-4.6",
+      "format": "markdown",
+      "slug": "claude-sonnet-4_6__markdown",
+      "code_path": "/home/ubuntu/builder-language-evals/v7/results/code/claude-sonnet-4_6__markdown.py",
+      "code_chars": 4542,
+      "code_lines": 140,
+      "src_log": "2026-05-04T14-34-47-00-00_job-scheduler_8MKDsC9aHJmR3FuqjZpvtn.eval",
+      "scores": {
+        "spec_faithfulness": 5,
+        "code_clarity": 7,
+        "idiomatic_python": 8,
+        "error_handling": 4,
+        "structure": 6,
+        "hallucinated_methods": [
+          "_propagate_blocked"
+        ],
+        "missing_features": [],
+        "notable_strengths": [
+          "Correct implementation of the retry policy with exponential backoff.",
+          "Good use of Kahn's algorithm for topological sorting.",
+          "Clean use of `heapq` for priority-based scheduling."
+        ],
+        "notable_issues": [
+          "Lines 130-134: `_propagate_blocked` skips decrementing `in_degree` if a job is already marked 'blocked'. In a diamond dependency graph or when a job has multiple failed dependencies, this prevents `in_degree` from reaching 0, causing a deadlock and a false `CycleError`.",
+          "Lines 133-136: Eagerly decrementing `in_degree` for transitive dependencies in `_propagate_blocked` violates topological order and can push jobs to the ready queue before their immediate dependencies are processed.",
+          "Line 41: `dependents[dep].append(jid)` will raise a `KeyError` if a job depends on an `id` that was not submitted, crashing the scheduler instead of handling it gracefully."
+        ]
+      }
+    },
+    {
+      "model": "openrouter/anthropic/claude-sonnet-4.6",
+      "format": "prose",
+      "slug": "claude-sonnet-4_6__prose",
+      "code_path": "/home/ubuntu/builder-language-evals/v7/results/code/claude-sonnet-4_6__prose.py",
+      "code_chars": 3826,
+      "code_lines": 128,
+      "src_log": "2026-05-04T14-36-08-00-00_job-scheduler_QdF74AiA6KFYNYiuARWmdT.eval",
+      "scores": {
+        "spec_faithfulness": 10,
+        "code_clarity": 9,
+        "idiomatic_python": 9,
+        "error_handling": 6,
+        "structure": 9,
+        "hallucinated_methods": [],
+        "missing_features": [],
+        "notable_strengths": [
+          "Elegant use of Kahn's algorithm for both topological sorting and cycle detection.",
+          "Correctly uses a priority queue with a tie-breaker counter to handle priority and insertion order.",
+          "Clean implementation of blocked propagation by unlocking dependents and checking dependency status upon popping."
+        ],
+        "notable_issues": [
+          "Lines 47-49: The check `if dep in dependents:` prevents `in_degree` from incrementing for missing dependencies, causing jobs to be scheduled prematurely.",
+          "Line 77: `self._status[dep]` will raise a `KeyError` if a dependency was not submitted, crashing the scheduler instead of failing or blocking the job."
+        ]
+      }
+    },
+    {
+      "model": "openrouter/openai/gpt-5.5",
+      "format": "builder",
+      "slug": "gpt-5_5__builder",
+      "code_path": "/home/ubuntu/builder-language-evals/v7/results/code/gpt-5_5__builder.py",
+      "code_chars": 5359,
+      "code_lines": 153,
+      "src_log": "2026-05-04T14-38-08-00-00_job-scheduler_38iW7Wa3KxtwJGSjgkpb8j.eval",
+      "scores": {
+        "spec_faithfulness": 10,
+        "code_clarity": 10,
+        "idiomatic_python": 10,
+        "error_handling": 10,
+        "structure": 10,
+        "hallucinated_methods": [],
+        "missing_features": [],
+        "notable_strengths": [
+          "Perfectly handles priority and stable submission order using heapq.",
+          "Clean separation of concerns with well-named private helper methods.",
+          "Robust cycle detection using Kahn's algorithm.",
+          "Gracefully handles missing dependencies by marking them as blocked.",
+          "Accurate and precise state transitions during the retry backoff process."
+        ],
+        "notable_issues": []
+      }
+    },
+    {
+      "model": "openrouter/openai/gpt-5.5",
+      "format": "markdown",
+      "slug": "gpt-5_5__markdown",
+      "code_path": "/home/ubuntu/builder-language-evals/v7/results/code/gpt-5_5__markdown.py",
+      "code_chars": 4580,
+      "code_lines": 137,
+      "src_log": "2026-05-04T14-39-08-00-00_job-scheduler_6kDGLTUeGS9Z6MNEnorg9F.eval",
+      "scores": {
+        "spec_faithfulness": 10,
+        "code_clarity": 9,
+        "idiomatic_python": 10,
+        "error_handling": 10,
+        "structure": 9,
+        "hallucinated_methods": [],
+        "missing_features": [],
+        "notable_strengths": [
+          "Elegant and idiomatic implementation of the retry policy using `try...except...else`.",
+          "Correct and clean cycle detection using DFS.",
+          "Excellent handling of edge cases, such as missing dependencies, by marking them blocked when no jobs are ready."
+        ],
+        "notable_issues": [
+          "`_propagate_blocks` is redundant because `_mark_descendants_blocked` already handles transitive blocking when a job fails (lines 129-139).",
+          "`_dependents_of` iterates over all jobs, making `_mark_descendants_blocked` O(N^2). Building a reverse dependency graph would be more efficient (lines 111-115).",
+          "Redundant checks inside the `for jid in ready:` loop (lines 64-68), as jobs in `ready` are guaranteed to be pending and have succeeded dependencies."
+        ]
+      }
+    },
+    {
+      "model": "openrouter/openai/gpt-5.5",
+      "format": "prose",
+      "slug": "gpt-5_5__prose",
+      "code_path": "/home/ubuntu/builder-language-evals/v7/results/code/gpt-5_5__prose.py",
+      "code_chars": 5417,
+      "code_lines": 152,
+      "src_log": "2026-05-04T14-40-24-00-00_job-scheduler_3SkHct7cLUVZ9vBQbEMqzb.eval",
+      "scores": {
+        "spec_faithfulness": 10,
+        "code_clarity": 9,
+        "idiomatic_python": 10,
+        "error_handling": 10,
+        "structure": 10,
+        "hallucinated_methods": [],
+        "missing_features": [],
+        "notable_strengths": [
+          "Clean, readable code with excellent separation of concerns into private helper methods.",
+          "Correctly implements the retry logic with exact delays and state transitions.",
+          "Handles cycle detection properly using a standard DFS approach.",
+          "Correctly implements priority sorting, including tie-breaking by job ID."
+        ],
+        "notable_issues": [
+          "Line 125: `_propagate_blocks` takes a `dependents` argument but never uses it.",
+          "Lines 118-123: Redundant `if/else` block in `_mark_descendants_blocked` where both branches execute the exact same code (`stack.extend(...)`). While the comment explains the reasoning, the conditional itself is unnecessary."
+        ]
+      }
+    }
+  ]
+}

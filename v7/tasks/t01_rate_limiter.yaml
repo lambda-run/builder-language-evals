@@ -1,0 +1,109 @@
+id: t01_rate_limiter
+name: "Token bucket rate limiter"
+domain: code_artifact
+
+# Three format-equivalent specs. Agent must produce a Python class
+# `RateLimiter` in `rate_limiter.py` matching the spec.
+
+builder: |
+  RateLimiter
+    .bucket(capacity: 10 tokens, refill: 2 per second, capped at capacity)
+    .method(try_consume(n) returns bool)
+        .effect(deduct n if available, else no-op)
+        .raise(ValueError on n < 0)
+        .accept(n = 0 always returns True)
+    .method(available_tokens returns int, accounts for elapsed refill)
+    .method(reset returns None, restores to full capacity)
+
+markdown: |
+  # Token Bucket Rate Limiter
+
+  Implement a `RateLimiter` class with a token bucket model.
+
+  ## Bucket
+  - Capacity: 10 tokens
+  - Refill rate: 2 tokens per second
+  - Refill is capped at capacity (no overflow)
+
+  ## Methods
+  - `try_consume(n: int) -> bool`
+    - If `n` tokens are available, deduct them and return True
+    - Otherwise, return False (do not partially consume)
+    - `n == 0` always returns True
+    - Raise `ValueError` if `n < 0`
+  - `available_tokens() -> int`
+    - Returns the current number of available tokens, accounting for refill since last check
+  - `reset() -> None`
+    - Restores the bucket to full capacity
+
+prose: |
+  Implement a Python class named RateLimiter that models a token bucket. The bucket
+  has a capacity of 10 tokens and refills at 2 tokens per second, capped at the
+  capacity (no overflow above 10).
+
+  It should expose three methods. try_consume(n) takes an integer n; if n tokens
+  are available, it deducts them and returns True; otherwise it returns False
+  without partially consuming. Calling it with n=0 should always return True.
+  If n is negative, raise a ValueError.
+
+  available_tokens() returns the current number of tokens, accounting for any
+  refill that has happened since the last interaction.
+
+  reset() restores the bucket to its full capacity and returns None.
+
+# Gold tests are run by tests.py in the sandbox. Each True is +1.
+# 10 assertions total.
+gold_tests: |
+  import time
+  from rate_limiter import RateLimiter
+
+  results = []
+  def check(name, ok):
+      results.append((name, bool(ok)))
+
+  # 1: initial state
+  rl = RateLimiter()
+  check("initial available is 10", rl.available_tokens() == 10)
+
+  # 2: consume 5 succeeds
+  check("try_consume(5) returns True", rl.try_consume(5) is True)
+
+  # 3: 5 left
+  check("after consuming 5, available is 5", rl.available_tokens() == 5)
+
+  # 4: cannot consume more than available (no partial)
+  check("try_consume(10) returns False when only 5 available", rl.try_consume(10) is False)
+
+  # 5: still 5 left (no partial consume on failure)
+  check("after failed try_consume, available unchanged at 5", rl.available_tokens() == 5)
+
+  # 6: refill works
+  time.sleep(1.05)
+  v = rl.available_tokens()
+  check("after ~1s, available is 7 (5 + 2 refill)", 6 <= v <= 8)
+
+  # 7: refill caps at capacity
+  time.sleep(5)
+  check("after long wait, available capped at 10", rl.available_tokens() == 10)
+
+  # 8: try_consume(0) returns True
+  check("try_consume(0) returns True", rl.try_consume(0) is True)
+
+  # 9: negative raises
+  raised = False
+  try:
+      rl.try_consume(-1)
+  except ValueError:
+      raised = True
+  check("try_consume(-1) raises ValueError", raised)
+
+  # 10: reset
+  rl.try_consume(10)  # drain
+  rl.reset()
+  check("after reset, available is 10", rl.available_tokens() == 10)
+
+  passed = sum(1 for _, ok in results if ok)
+  total = len(results)
+  print(f"PASS_COUNT={passed}/{total}")
+  for name, ok in results:
+      print(f"  {'PASS' if ok else 'FAIL'}: {name}")

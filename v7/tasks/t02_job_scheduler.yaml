@@ -1,0 +1,222 @@
+id: t02_job_scheduler
+name: "Job scheduler with deps, retry, backoff, priority, cycles, blocked propagation"
+domain: code_artifact_complex
+
+builder: |
+  JobScheduler
+    .submit(job, deduplicate by id)
+    .run
+        .order(by deps, then priority desc at same ready level)
+        .cycle(raise CycleError if deps form a cycle)
+    .retry(max 3 attempts per job, exponential backoff: 0s, 0.1s, 0.4s)
+    .on_fail(after retries exhausted, mark transitive downstream as "blocked", never attempted)
+    .status(job_id)
+        .returns("pending" | "running" | "retrying" | "succeeded" | "failed" | "blocked")
+
+markdown: |
+  # Job Scheduler
+
+  Implement a `JobScheduler` class that runs jobs respecting dependencies, priority, and a retry policy.
+
+  ## Job model
+  A `Job` is a dataclass / namedtuple with fields:
+  - `id: str`
+  - `priority: int` (higher = run earlier among ready siblings)
+  - `deps: list[str]` (other job ids this job depends on)
+  - `func: Callable[[], None]` (returns None on success, raises on failure)
+
+  ## API
+  - `submit(job: Job) -> None` — enqueue. Submitting the same `id` twice is a silent no-op (deduplication).
+  - `run() -> None` — execute all submitted jobs.
+  - `status(job_id: str) -> str` — return the job's current state.
+
+  ## Run order
+  - A job runs only after all its dependencies are `succeeded`.
+  - Among jobs ready at the same dependency level, order by `priority` descending.
+
+  ## Cycle detection
+  - If submitted jobs form a dependency cycle, `run()` raises `CycleError`.
+
+  ## Retry policy
+  - Each job gets up to 3 attempts (1 initial + up to 2 retries).
+  - Exponential backoff between attempts: sleep 0s before attempt 1, 0.1s before attempt 2, 0.4s before attempt 3.
+  - A job is `succeeded` once any attempt does not raise.
+  - A job is `failed` once all 3 attempts have raised.
+
+  ## Blocked propagation
+  - When a job becomes `failed`, every job that transitively depends on it is marked `blocked` and never attempted.
+
+  ## Status values (exact strings)
+  `pending`, `running`, `retrying`, `succeeded`, `failed`, `blocked`
+
+prose: |
+  Implement a Python class named JobScheduler that runs a collection of jobs while respecting their dependencies, priority, and a retry policy.
+
+  A Job is a dataclass (or namedtuple) with four fields: id (a string), priority (an integer, where higher means run earlier among siblings ready at the same dependency level), deps (a list of other job ids this job depends on), and func (a callable taking no args that returns None on success and raises on failure).
+
+  The scheduler exposes three methods. submit(job) enqueues a job; submitting the same id twice is a silent no-op (deduplication). run() executes all submitted jobs. status(job_id) returns the current state of the job as a string — one of pending, running, retrying, succeeded, failed, or blocked.
+
+  Run ordering: a job runs only after all its dependencies have succeeded. Among jobs ready at the same dependency level, order by priority descending.
+
+  If submitted jobs form a dependency cycle, run() raises CycleError.
+
+  Retry policy: each job gets up to three attempts. The backoff between attempts is exponential — sleep zero seconds before the first attempt, 0.1 seconds before the second, and 0.4 seconds before the third. A job becomes succeeded once any attempt does not raise; a job becomes failed once all three attempts have raised.
+
+  If a job becomes failed after all retries are exhausted, every job that transitively depends on it is marked blocked and never attempted.
+
+  The status strings must be exactly: pending, running, retrying, succeeded, failed, blocked.
+
+# Gold tests are written into the sandbox before scoring.
+gold_tests: |
+  import time
+  from job_scheduler import JobScheduler, Job, CycleError
+
+  results = []
+  def check(name, ok, info=""):
+      results.append((name, bool(ok), info))
+
+  # Helpers ---
+  def succeed():
+      pass
+  class Counter:
+      def __init__(self, fail_n_times):
+          self.n = fail_n_times
+          self.calls = 0
+      def __call__(self):
+          self.calls += 1
+          if self.calls <= self.n:
+              raise RuntimeError(f"fail #{self.calls}")
+
+  call_log = []
+  def make_logger(label):
+      def f():
+          call_log.append(label)
+      return f
+
+  # 1: empty run
+  s = JobScheduler()
+  s.run()
+  check("empty run does not raise", True)
+
+  # 2: single succeeding job
+  s = JobScheduler()
+  s.submit(Job(id="a", priority=0, deps=[], func=succeed))
+  s.run()
+  check("single job succeeds", s.status("a") == "succeeded", s.status("a"))
+
+  # 3: dependency order — A then B
+  s = JobScheduler()
+  call_log.clear()
+  s.submit(Job(id="a", priority=0, deps=[], func=make_logger("a")))
+  s.submit(Job(id="b", priority=0, deps=["a"], func=make_logger("b")))
+  s.run()
+  check("A runs before B (dep order)", call_log == ["a", "b"], str(call_log))
+
+  # 4: priority desc at same ready level
+  s = JobScheduler()
+  call_log.clear()
+  s.submit(Job(id="lo", priority=1, deps=[], func=make_logger("lo")))
+  s.submit(Job(id="hi", priority=10, deps=[], func=make_logger("hi")))
+  s.submit(Job(id="mid", priority=5, deps=[], func=make_logger("mid")))
+  s.run()
+  check("priority desc at same level", call_log == ["hi", "mid", "lo"], str(call_log))
+
+  # 5: cycle detection raises CycleError
+  s = JobScheduler()
+  s.submit(Job(id="a", priority=0, deps=["b"], func=succeed))
+  s.submit(Job(id="b", priority=0, deps=["a"], func=succeed))
+  raised = False
+  try:
+      s.run()
+  except CycleError:
+      raised = True
+  check("cycle raises CycleError", raised)
+
+  # 6: retry on transient failure — fails twice, succeeds 3rd
+  s = JobScheduler()
+  c = Counter(fail_n_times=2)
+  s.submit(Job(id="a", priority=0, deps=[], func=c))
+  s.run()
+  check("retry succeeds on 3rd attempt", s.status("a") == "succeeded" and c.calls == 3, f"status={s.status('a')} calls={c.calls}")
+
+  # 7: retry exhaustion — fails all 3
+  s = JobScheduler()
+  c = Counter(fail_n_times=99)
+  s.submit(Job(id="a", priority=0, deps=[], func=c))
+  s.run()
+  check("retry exhaust → failed after 3 attempts", s.status("a") == "failed" and c.calls == 3, f"status={s.status('a')} calls={c.calls}")
+
+  # 8: backoff timing — failing 3x should take ~0.5s (0 + 0.1 + 0.4)
+  s = JobScheduler()
+  c = Counter(fail_n_times=99)
+  s.submit(Job(id="a", priority=0, deps=[], func=c))
+  t0 = time.time()
+  s.run()
+  elapsed = time.time() - t0
+  check("backoff total ~0.5s for 3 fails", 0.4 <= elapsed <= 1.0, f"elapsed={elapsed:.3f}s")
+
+  # 9: failed job blocks immediate downstream
+  s = JobScheduler()
+  s.submit(Job(id="a", priority=0, deps=[], func=Counter(99)))
+  s.submit(Job(id="b", priority=0, deps=["a"], func=succeed))
+  s.run()
+  check("downstream of failed job is blocked", s.status("a") == "failed" and s.status("b") == "blocked", f"a={s.status('a')} b={s.status('b')}")
+
+  # 10: transitive block — A fails, B(A) blocked, C(B) blocked
+  s = JobScheduler()
+  s.submit(Job(id="a", priority=0, deps=[], func=Counter(99)))
+  s.submit(Job(id="b", priority=0, deps=["a"], func=succeed))
+  s.submit(Job(id="c", priority=0, deps=["b"], func=succeed))
+  s.run()
+  check("transitive block (A fail → B blocked → C blocked)", s.status("c") == "blocked", s.status("c"))
+
+  # 11: deduplication — submit same id twice, runs once
+  s = JobScheduler()
+  call_log.clear()
+  s.submit(Job(id="a", priority=0, deps=[], func=make_logger("a")))
+  s.submit(Job(id="a", priority=99, deps=[], func=make_logger("a-dup")))  # ignored
+  s.run()
+  check("submit same id twice → runs once", call_log == ["a"], str(call_log))
+
+  # 12: diamond — A→B, A→C, B,C→D. D runs after both.
+  s = JobScheduler()
+  call_log.clear()
+  s.submit(Job(id="a", priority=0, deps=[], func=make_logger("a")))
+  s.submit(Job(id="b", priority=0, deps=["a"], func=make_logger("b")))
+  s.submit(Job(id="c", priority=0, deps=["a"], func=make_logger("c")))
+  s.submit(Job(id="d", priority=0, deps=["b", "c"], func=make_logger("d")))
+  s.run()
+  check("diamond — D runs last", call_log[0] == "a" and call_log[-1] == "d" and set(call_log[1:3]) == {"b","c"}, str(call_log))
+
+  # 13: status values use exact strings
+  s = JobScheduler()
+  s.submit(Job(id="a", priority=0, deps=[], func=succeed))
+  s.submit(Job(id="b", priority=0, deps=[], func=Counter(99)))
+  s.submit(Job(id="c", priority=0, deps=["b"], func=succeed))
+  s.run()
+  check("status uses exact strings", s.status("a") == "succeeded" and s.status("b") == "failed" and s.status("c") == "blocked",
+        f"a={s.status('a')} b={s.status('b')} c={s.status('c')}")
+
+  # 14: independent jobs all succeed
+  s = JobScheduler()
+  for i in range(5):
+      s.submit(Job(id=f"j{i}", priority=0, deps=[], func=succeed))
+  s.run()
+  check("5 independent jobs all succeed", all(s.status(f"j{i}") == "succeeded" for i in range(5)))
+
+  # 15: long chain runs in order
+  s = JobScheduler()
+  call_log.clear()
+  prev = None
+  for i in range(5):
+      s.submit(Job(id=f"j{i}", priority=0, deps=[prev] if prev else [], func=make_logger(f"j{i}")))
+      prev = f"j{i}"
+  s.run()
+  check("long chain in order", call_log == [f"j{i}" for i in range(5)], str(call_log))
+
+  passed = sum(1 for _, ok, _ in results if ok)
+  total = len(results)
+  print(f"PASS_COUNT={passed}/{total}")
+  for name, ok, info in results:
+      tag = "PASS" if ok else "FAIL"
+      print(f"  {tag}: {name}" + (f" — {info}" if not ok else ""))

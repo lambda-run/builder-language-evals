@@ -11,3 +11,7 @@ artifacts/
 
 # Old single-runner prototype lives in archive/. Keep .gitignored if it bulks
 # up — but for now we're committing it as a record of v0.
+v7/.venv/
+v7/logs/
+v7/sandbox/
+v7/scripts/__pycache__/
